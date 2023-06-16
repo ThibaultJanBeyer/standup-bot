@@ -1,4 +1,5 @@
 const { App } = require('@slack/bolt');
+const schedule = require('node-schedule');
 require('dotenv').config();
 
 const token = process.env.SLACK_BOT_TOKEN;
@@ -8,6 +9,11 @@ const app = new App({
   socketMode: true,
   appToken: process.env.SLACK_APP_TOKEN
 });
+
+async function getWorkspaceId() {
+  const result = await app.client.auth.test({ token });
+  return result.team_id;
+}
 
 const questions = [
   ':arrow_left: What did you do since last standup?',
@@ -270,10 +276,16 @@ async function writeUserMessage(channel, thread, member, answers) {
 
 (async () => {
   await app.start(process.env.PORT || 3000);
+  const workspaceId = await getWorkspaceId();
+  console.log(`The workspace ID is ${workspaceId}`);
 
   // Schedule a function to run at 7 AM every working day
-  app.schedule('0 7 * * 1-5', startStandup, { channel: process.env.CHANNEL_ID });
+  schedule.scheduleJob('0 7 * * 1-5', function() {
+    startStandup({ channel: process.env.CHANNEL_ID })
+  });
 
   // Schedule post-standup message to be sent at 11 AM every working day
-  app.schedule('0 11 * * 1-5', postStandup, { channel: process.env.CHANNEL_ID });
+  schedule.scheduleJob('0 11 * * 1-5', function() {
+    postStandup({ channel: process.env.CHANNEL_ID })
+  });
 })();
