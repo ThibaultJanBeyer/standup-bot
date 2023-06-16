@@ -1,21 +1,26 @@
 display_information:
-  name: Getting Started Bolt App
+  name: Slack Standup Bot
 features:
   app_home:
     home_tab_enabled: false
     messages_tab_enabled: true
     messages_tab_read_only_enabled: false
   bot_user:
-    display_name: BoltApp
+    display_name: SSB
     always_online: true
 oauth_config:
   scopes:
     bot:
       - channels:history
       - channels:join
-      - commands
+      - channels:read
       - chat:write
+      - chat:write.customize
+      - commands
       - im:history
+      - im:read
+      - im:write
+      - users:read
 settings:
   event_subscriptions:
     bot_events:
