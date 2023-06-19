@@ -23,10 +23,11 @@ async function startStandup({ channel }) {
   conversationState = {};
 
   const botUserId = (await app.client.auth.test({ token })).user_id;
-  const members = await app.client.conversations.members({
-    token,
-    channel
-  });
+  // const members = await app.client.conversations.members({
+  //   token,
+  //   channel
+  // });
+  const members = { members: ["U0563UJ72LC", "U04MGH8KAE7", "D04MKKYQR0U", "D057PDX2D5F"] }; // hardcoded to us for now
   for (const member of members.members) {
     if (member === botUserId) continue;
     const conversation = await app.client.conversations.open({
