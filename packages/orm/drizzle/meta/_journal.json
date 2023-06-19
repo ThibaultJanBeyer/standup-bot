@@ -15,6 +15,13 @@
       "when": 1687032023359,
       "tag": "0001_lush_blob",
       "breakpoints": false
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1687178896925,
+      "tag": "0002_stiff_vermin",
+      "breakpoints": true
     }
   ]
 }

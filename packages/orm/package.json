@@ -16,15 +16,15 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "dotenv": "^16.0.3",
-    "drizzle-orm": "^0.26.0"
+    "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.27.0"
   },
   "devDependencies": {
     "dotenv-cli": "^7.2.1",
-    "drizzle-kit": "^0.18.0",
+    "drizzle-kit": "^0.19.1",
     "ts-node": "^10.9.1"
   },
   "optionalDependencies": {
-    "postgres": "^3.3.4"
+    "postgres": "^3.3.5"
   }
 }
