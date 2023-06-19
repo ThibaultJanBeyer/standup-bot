@@ -1,0 +1,30 @@
+{
+  "name": "@ssb/orm",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "ts-node": "ts-node -O \"{\\\"module\\\":\\\"commonjs\\\"}\"",
+    "generate": "pnpm with-env drizzle-kit generate:pg --config=drizzle.config.ts",
+    "build": "pnpm generate & pnpm migrate",
+    "migrate": "pnpm with-env ts-node --transpile-only ./src/migrate.ts",
+    "push": "pnpm with-env drizzle-kit push:pg --config=drizzle.config.ts",
+    "pull": "pnpm with-env drizzle-kit introspect:pg --config=drizzle.config.ts",
+    "drop": "pnpm with-env drizzle-kit drop --config=drizzle.config.ts",
+    "seed": "pnpm with-env ts-node --transpile-only ./src/seed.ts",
+    "clean": "rm -rf .turbo node_modules",
+    "with-env": "dotenv -e ../../.env --"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "drizzle-orm": "^0.26.0"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.2.1",
+    "drizzle-kit": "^0.18.0",
+    "ts-node": "^10.9.1"
+  },
+  "optionalDependencies": {
+    "postgres": "^3.3.4"
+  }
+}

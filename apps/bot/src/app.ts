@@ -1,6 +1,12 @@
-const { App } = require('@slack/bolt');
-const schedule = require('node-schedule');
-require('dotenv').config();
+import { App } from '@slack/bolt';
+import schedule from 'node-schedule';
+
+type Answer = {
+  question: string,
+  client_msg_id: string,
+  channel: string,
+  questionMessageTs: string
+}
 
 const token = process.env.SLACK_BOT_TOKEN;
 
@@ -22,22 +28,32 @@ const questions = [
   ':raised_hands: How are you feeling today?',
 ];
 
-let conversationState = {};
+let conversationState = {} as {
+  [userId: string]: {
+    initMessageTs: string;
+    answers: Answer[] | null;
+  }
+};
 
-async function startStandup({ channel }) {
+async function startStandup({ channel }: { channel: string }) {
   conversationState = {};
-
+  
   const botUserId = (await app.client.auth.test({ token })).user_id;
   const members = await app.client.conversations.members({
     token,
     channel
   });
+
+  if(!members?.members) return
+
   for (const member of members.members) {
     if (member === botUserId) continue;
     const conversation = await app.client.conversations.open({
       token,
       users: member
     });
+
+    if(!conversation?.channel?.id) continue
 
     const initMessage = await app.client.chat.postMessage({
       token,
@@ -78,7 +94,7 @@ async function startStandup({ channel }) {
     });
 
     conversationState[member] = {
-      initMessageTs: initMessage.ts,
+      initMessageTs: initMessage.ts!,
       answers: []
     };
   }
@@ -87,8 +103,9 @@ async function startStandup({ channel }) {
 app.action('not_working_today_click', async ({ body, ack, say }) => {
   // Acknowledge the action
   await ack();
-  const channel = body.channel.id;
-  const ts = body.message.ts;
+  const channel = body?.channel?.id;
+  const ts = (body as any).message.ts;
+  if(!channel || !ts) return
   await app.client.chat.update({
     token,
     channel,
@@ -110,8 +127,9 @@ app.action('not_working_today_click', async ({ body, ack, say }) => {
 app.action('start_standup_click', async ({ body, ack }) => {
   // Acknowledge the action
   await ack();
-  const channel = body.channel.id;
-  const ts = body.message.ts;
+  const channel = body?.channel?.id;
+  const ts = (body as any).message.ts;
+  if(!channel || !ts) return
   await app.client.chat.update({
     token,
     channel,
@@ -130,10 +148,11 @@ app.action('start_standup_click', async ({ body, ack }) => {
     token,
     users: body.user.id
   });
+  if(!conversation?.channel?.id) return
   await askQuestion(conversation.channel.id, body.user.id, 0);
 });
 
-async function askQuestion(channel, member, index) {
+async function askQuestion(channel: string, member: string, index: number) {
   if (index >= questions.length) {
     await app.client.chat.postMessage({
       token,
@@ -149,24 +168,24 @@ async function askQuestion(channel, member, index) {
   });
   if (index === questions.length) return;
   await app.message(async (props) => {
-    const { event, message } = props;
+    const { event, message } = props as any;
     if(event.channel !== channel // not in the same channel
       || event.thread_ts // we don't want to track thread messages
       || !message.client_msg_id // already tracked answer
-      || conversationState[member].answers.some(answer => answer.client_msg_id === message.client_msg_id))
-      return false
-    conversationState[member].answers.push({ 
+      || conversationState[member].answers!.some(answer => answer.client_msg_id === message.client_msg_id))
+      return
+    conversationState[member].answers!.push({ 
       question: questions[index],
       client_msg_id: message.client_msg_id,
       channel,
-      questionMessageTs: questionMessage.ts
+      questionMessageTs: questionMessage.ts!
     });
     await askQuestion(channel, member, ++index);
-    return true
+    return
   });
 }
 
-async function postStandup({ channel }) {
+async function postStandup({ channel }: { channel: string }) {
   const result = await app.client.chat.postMessage({
     token,
     channel,
@@ -175,19 +194,19 @@ async function postStandup({ channel }) {
 
   for (const member in conversationState) {
     const answers = conversationState[member].answers;
-    await writeUserMessage(channel, result.ts, member, answers);
+    await writeUserMessage(channel, result.ts!, member, answers);
 
     const conversation = await app.client.conversations.open({
       token,
       users: member
     });
+    if(!conversation?.channel?.id || answers === null) continue
     if(answers.length < questions.length)
       await app.client.chat.postMessage({
         token,
         channel: conversation.channel.id,
         text: 'Standup Concluded.',
       });
-    if(answers === null) continue;
     await app.client.chat.update({
       token,
       channel: conversation.channel.id,
@@ -205,16 +224,16 @@ async function postStandup({ channel }) {
   }
 }
 
-async function writeUserMessage(channel, thread, member, answers) {
-  let blocks = [];
+async function writeUserMessage(channel: string, thread_ts: string, member: string, answers: Answer[] | null) {
+  let blocks: any = [];
 
   // get user to impersonate
   const result = await app.client.users.info({
     token,
     user: member
   });
-  const icon_url = result.user.profile.image_512;
-  const username = result.user.profile.display_name_normalized;
+  const icon_url = result?.user?.profile?.image_512;
+  const username = result?.user?.profile?.display_name_normalized;
 
   if(answers === null) {
     blocks.push({
@@ -240,7 +259,7 @@ async function writeUserMessage(channel, thread, member, answers) {
         oldest: answer.questionMessageTs,
         inclusive: true,
       });
-      const answerMessage = conversation.messages.find(message => message.client_msg_id === answer.client_msg_id);
+      const answerMessage = conversation?.messages?.find(message => message.client_msg_id === answer.client_msg_id);
       const noAnswer = !answerMessage || !answerMessage.text || answerMessage.text === '' || questions.includes(answerMessage.text);
       if(noAnswer) continue;
       blocks.push({
@@ -268,7 +287,7 @@ async function writeUserMessage(channel, thread, member, answers) {
     channel,
     username,
     icon_url,
-    thread_ts: thread,
+    thread_ts,
     text: 'Standup Report',
     blocks
   });
@@ -281,11 +300,11 @@ async function writeUserMessage(channel, thread, member, answers) {
 
   // Schedule a function to run at 7 AM every working day
   schedule.scheduleJob('0 7 * * 1-5', function() {
-    startStandup({ channel: process.env.CHANNEL_ID })
+    startStandup({ channel: process.env.CHANNEL_ID! })
   });
 
   // Schedule post-standup message to be sent at 11 AM every working day
   schedule.scheduleJob('0 11 * * 1-5', function() {
-    postStandup({ channel: process.env.CHANNEL_ID })
+    postStandup({ channel: process.env.CHANNEL_ID! })
   });
 })();

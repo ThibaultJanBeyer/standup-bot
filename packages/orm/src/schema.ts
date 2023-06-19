@@ -18,6 +18,7 @@ export type NewDeletedRecord = InferModel<
 
 export const Standups = pgTable("standups", {
   id: uuid("id").defaultRandom().notNull().primaryKey(),
+  name: text("name").notNull(),
   workspaceId: text("workspace_id").notNull(),
   channelId: text("channel_id").notNull(),
   scheduleCron: text("schedule_cron").notNull(),

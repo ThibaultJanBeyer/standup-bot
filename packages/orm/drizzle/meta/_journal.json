@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1687031654223,
+      "tag": "0000_quick_reptil",
+      "breakpoints": false
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1687032023359,
+      "tag": "0001_lush_blob",
+      "breakpoints": false
+    }
+  ]
+}
