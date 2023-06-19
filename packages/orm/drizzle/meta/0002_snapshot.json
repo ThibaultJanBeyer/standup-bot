@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "03233734-f680-4974-add6-3d7b98e3f3d9",
+  "id": "529726e0-296a-4b83-ac3e-99d199cc3599",
   "prevId": "e35e8114-8bd2-416b-a5f6-6790ca094a50",
   "tables": {
     "deleted_records": {
@@ -165,12 +165,6 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "workspace": {
-          "name": "workspace",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
         "slack_id": {
           "name": "slack_id",
           "type": "text",
@@ -198,9 +192,27 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "unique_idx": {
+          "name": "unique_idx",
+          "columns": [
+            "slack_id",
+            "clerk_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
-      "compositePrimaryKeys": {}
+      "compositePrimaryKeys": {
+        "users_id_slack_id_clerk_id": {
+          "name": "users_id_slack_id_clerk_id",
+          "columns": [
+            "id",
+            "slack_id",
+            "clerk_id"
+          ]
+        }
+      }
     },
     "workspaces": {
       "name": "workspaces",
@@ -225,12 +237,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "app_token": {
-          "name": "app_token",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -246,9 +252,25 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "unique_idx": {
+          "name": "unique_idx",
+          "columns": [
+            "workspace_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
-      "compositePrimaryKeys": {}
+      "compositePrimaryKeys": {
+        "workspaces_id_workspace_id": {
+          "name": "workspaces_id_workspace_id",
+          "columns": [
+            "id",
+            "workspace_id"
+          ]
+        }
+      }
     }
   },
   "enums": {},

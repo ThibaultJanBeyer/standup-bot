@@ -1,5 +1,5 @@
 import { InferModel, relations } from "drizzle-orm";
-import { jsonb, pgTable, uuid, text, primaryKey, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
+import { jsonb, pgTable, uuid, text, primaryKey, timestamp, uniqueIndex, boolean } from "drizzle-orm/pg-core";
 
 export const DeletedRecords = pgTable("deleted_records", {
   id: uuid("id").defaultRandom().notNull().primaryKey(),
@@ -58,11 +58,14 @@ export const Workspaces = pgTable("workspaces", {
   id: uuid("id").defaultRandom().notNull().primaryKey(),
   workspaceId: text("workspace_id").notNull(),
   botToken: text("bot_token").notNull(),
-  appToken: text("app_token").notNull(),
   // members => relation
   // standups => relation
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (workspaces) => {
+  return {
+    uniqueIdx: uniqueIndex("unique_idx").on(workspaces.workspaceId),
+  };
 });
 
 export type Workspace = InferModel<typeof Workspaces>;
@@ -76,20 +79,20 @@ export const WorkspaceRelations = relations(Workspaces, ({ many }) => ({
 export const Users = pgTable("users", {
   id: uuid("id").defaultRandom().notNull().primaryKey(),
   // relation
-  workspace: uuid("workspace").notNull(),
   slackId: text("slack_id").notNull(),
   clerkId: text("clerk_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (users) => {
+  return {
+    uniqueIdx: uniqueIndex("unique_idx").on(users.slackId, users.clerkId),
+  };
 });
 
 export type User = InferModel<typeof Users>;
 export type NewUser = InferModel<typeof Users, "insert">;
 
-export const UsersRelations = relations(Users, ({ one, many }) => ({
-  workspace: one(Workspaces, {
-		fields: [Users.workspace],
-		references: [Workspaces.id],
-	}),
+export const UsersRelations = relations(Users, ({ many }) => ({
+  workspace: many(Workspaces),
   standups: many(Standups),
 }));

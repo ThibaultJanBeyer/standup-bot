@@ -1,15 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-import { db, eq } from "@/lib/orm";
-
-export const POST = async (request: Request) => {
+export const GET = async (req: NextRequest) => {
   return NextResponse.json({
     message: "Hello World",
-  }, { status: 200 });
-};
-
-export const GET = async () => {
-  return NextResponse.json({
-    message: "Hello World",
+    ip: req.ip,
+    geo: req.geo,
   }, { status: 200 });
 };

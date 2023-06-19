@@ -1,3 +1,4 @@
+# ASK URL https://slack.com/oauth/v2/authorize?scope=channels:history,channels:join,channels:read,chat:write,chat:write.customize,commands,im:history,im:read,im:write,users:read&client_id=5436666161782.5443327556930
 display_information:
   name: Slack Standup Bot
 features:
@@ -16,7 +17,6 @@ oauth_config:
       - channels:read
       - chat:write
       - chat:write.customize
-      - commands
       - im:history
       - im:read
       - im:write
