@@ -10,11 +10,6 @@ const app = new App({
   appToken: process.env.SLACK_APP_TOKEN
 });
 
-async function getWorkspaceId() {
-  const result = await app.client.auth.test({ token });
-  return result.team_id;
-}
-
 const questions = [
   ':arrow_left: What did you do since last standup?',
   ':sunny: What do you plan to work on today?',
@@ -276,8 +271,6 @@ async function writeUserMessage(channel, thread, member, answers) {
 
 (async () => {
   await app.start(process.env.PORT || 3000);
-  const workspaceId = await getWorkspaceId();
-  console.log(`The workspace ID is ${workspaceId}`);
 
   // Schedule a function to run at 7 AM every working day
   schedule.scheduleJob('0 7 * * 1-5', function() {
