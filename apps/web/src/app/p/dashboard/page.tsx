@@ -1,4 +1,4 @@
-import { db, Standups, Standup } from "@/lib/orm";
+import { db, Standup, Standups } from "@/lib/orm";
 
 const fetchStandups = async (): Promise<Standup[]> => {
   try {

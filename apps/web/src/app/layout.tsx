@@ -49,7 +49,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <head />
@@ -65,15 +69,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           afterSignInUrl={`/`}
           afterSignUpUrl={`/`}
         >
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-            >
-              <SiteHeader />
-              <div className="relative flex flex-1 flex-col">{children}</div>
-              <SiteFooter />
-            </ThemeProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <SiteHeader />
+            <div className="relative flex flex-1 flex-col">{children}</div>
+            <SiteFooter />
+          </ThemeProvider>
         </ClerkProvider>
       </body>
     </html>

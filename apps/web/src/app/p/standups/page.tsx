@@ -1,7 +1,9 @@
 import React from "react";
-import { Button } from "@ssb/ui/button";
-import { db, Standups, Standup } from "@/lib/orm";
 import Link from "next/link";
+
+import { Button } from "@ssb/ui/button";
+
+import { db, Standup, Standups } from "@/lib/orm";
 
 const fetchStandups = async (): Promise<Standup[]> => {
   try {
@@ -20,7 +22,7 @@ export default async function StandupList() {
         <Link href={`/standups/create`}>Create New Standup</Link>
       </Button>
       {standups.map((standup) => {
-        return (standup.name);
+        return standup.name;
       })}
     </main>
   );

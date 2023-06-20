@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server";
 import { authMiddleware } from "@clerk/nextjs";
 
-const privateRoutesRegexp = /^\/[^/]+\/(account|dashboard|standups)/g;
+const privateRoutesRegexp = /\/p\//g;
 
 export default authMiddleware({
   publicRoutes: (req) => {
-    console.log('DADADA', req.nextUrl.pathname);
     const isPrivate = privateRoutesRegexp.test(req.nextUrl.pathname);
+    console.log("publicRoutes", !isPrivate);
     return !isPrivate;
   },
   afterAuth(auth, req, res) {
+    console.log("afterAuth");
+
     if (!auth.userId && !auth.isPublicRoute) {
       const signInUrl = new URL(`/auth/sign-in`, req.url);
       signInUrl.searchParams.set("redirect_url", req.url);
@@ -19,5 +21,5 @@ export default authMiddleware({
 });
 
 export const config = {
-  matcher: ["/((?!api|.*\\..*|_next).*)"],
+  matcher: ["/((?!.*\\..*|_next).*)"],
 };

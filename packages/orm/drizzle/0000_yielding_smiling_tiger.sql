@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS "standups" (
 	"channel_id" text NOT NULL,
 	"schedule_cron" text NOT NULL,
 	"summary_cron" text NOT NULL,
-	"author_id" uuid NOT NULL,
-	"members" uuid[] NOT NULL,
+	"author_id" text NOT NULL,
+	"members" text[] NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS "workspaces" (
 --> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "unique_idx" ON "users" ("slack_id","clerk_id","workspace_id");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "unique_idx" ON "workspaces" ("workspace_id");
+
 
 -- BASE FUNCTIONS
 --> Create a timestamp function

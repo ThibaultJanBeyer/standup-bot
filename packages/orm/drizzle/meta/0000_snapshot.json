@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "ef619761-8a69-43d3-ade0-e868f31e4fb2",
+  "id": "0908f595-9814-47e8-b324-d03e0ff9045e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "deleted_records": {
@@ -137,13 +137,13 @@
         },
         "author_id": {
           "name": "author_id",
-          "type": "uuid",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "members": {
           "name": "members",
-          "type": "uuid[]",
+          "type": "text[]",
           "primaryKey": false,
           "notNull": true
         },

@@ -19,6 +19,7 @@
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.5",
     "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-select": "^1.2.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@tanstack/react-table": "^8.9.2",
     "class-variance-authority": "^0.6.0",
@@ -51,6 +52,7 @@
     "./globals.css": "./src/globals.css",
     "./input": "./src/input",
     "./label": "./src/label",
+    "./select": "./src/select",
     "./skeleton": "./src/skeleton",
     "./table": "./src/table",
     "./tailwindConfig": "./src/tailwindConfig.js",
@@ -90,6 +92,9 @@
       ],
       "label": [
         "./src/label"
+      ],
+      "select": [
+        "./src/select"
       ],
       "skeleton": [
         "./src/skeleton"
