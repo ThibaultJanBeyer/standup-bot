@@ -27,7 +27,7 @@ async function startStandup({ channel }) {
   //   token,
   //   channel
   // });
-  const members = { members: ["U0563UJ72LC", "U04MGH8KAE7", "D04MKKYQR0U", "D057PDX2D5F"] }; // hardcoded to us for now
+  const members = { members: ["U056W8Q5V71", "U04MGH8KAE7", "U04MVQV9M17", "U0563UJ72LC"] }; // hardcoded to us for now
   for (const member of members.members) {
     if (member === botUserId) continue;
     const conversation = await app.client.conversations.open({
@@ -276,7 +276,7 @@ async function writeUserMessage(channel, thread, member, answers) {
   console.info('The current time on this server is:', new Date())
 
   // Schedule a function to run at 7 AM every working day
-  schedule.scheduleJob('30 05 * * 1-5', function() {
+  schedule.scheduleJob('25 08 * * 1-5', function() {
     startStandup({ channel: process.env.CHANNEL_ID })
   });
 
