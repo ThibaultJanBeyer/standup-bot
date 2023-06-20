@@ -1,14 +1,16 @@
 import { NextResponse, NextRequest } from "next/server";
+import { WebClient } from "@slack/web-api";
 import { parse } from "url";
 
-import { db, eq, Workspaces } from "@/lib/orm";
+import { db, eq, Users, Workspaces } from "@/lib/orm";
 
 // ASK
 export const GET = async (req: NextRequest) => {
   const { query } = parse(req.url || '', true);
   const code = query.code as string;
-  const state = query.state as string;
+  // const state = query.state as string; for XSRF
 
+  // Slack OAuth
   const response = await fetch("https://slack.com/api/oauth.v2.access", {
     method: "POST",
     headers: {
@@ -31,18 +33,29 @@ export const GET = async (req: NextRequest) => {
 
   const { access_token, team } = data;
 
-  // Update if exists
-  const workspace = await db.update(Workspaces).set({
+  // Workspace
+  await db.insert(Workspaces).values({
+    workspaceId: team.id,
     botToken: access_token,
-  }).where(eq(Workspaces.workspaceId, team.id)).returning().execute();
-  if(!workspace?.length) {
-    await db.insert(Workspaces).values({
-      workspaceId: team.id,
-      botToken: access_token,
-    }).execute();
+  })
+  .onConflictDoUpdate({ target: Workspaces.workspaceId, set: { botToken: access_token } })
+  .execute();
+
+  // Users from Workspace
+  const client = new WebClient(access_token);
+  const userList = await client.users.list();
+  if (!response.ok) {
+    console.error(response);
+    return NextResponse.error();
+  }
+  if(userList?.members?.length) {
+    const members = userList.members.map(member => ({ slackId: member.id, workspaceId: team.id }));
+    await db.insert(Users)
+      .values(members)
+      .onConflictDoUpdate({ target: Users.slackId, set: { workspaceId: team.id } })
+      .execute();
   }
 
-  const url = req.nextUrl.clone()   
-  
+  const url = req.nextUrl.clone()
   return NextResponse.redirect(url.origin);
 };

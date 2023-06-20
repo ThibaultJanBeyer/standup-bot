@@ -14,9 +14,10 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.21.1",
+    "@portabletext/react": "^3.0.2",
+    "@slack/web-api": "^6.8.1",
     "@ssb/orm": "workspace:*",
     "@ssb/ui": "workspace:*",
-    "@portabletext/react": "^3.0.2",
     "next": "13.4.6",
     "next-sanity": "^4.3.3",
     "next-themes": "^0.2.1",

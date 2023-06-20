@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { authMiddleware } from "@clerk/nextjs";
 
-const privateRoutesRegexp = /^\/[^/]+\/(account|private)/g;
+const privateRoutesRegexp = /^\/[^/]+\/(account|dashboard|standups)/g;
 
 export default authMiddleware({
   publicRoutes: (req) => {
+    console.log('DADADA', req.nextUrl.pathname);
     const isPrivate = privateRoutesRegexp.test(req.nextUrl.pathname);
     return !isPrivate;
   },

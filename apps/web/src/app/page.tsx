@@ -7,7 +7,7 @@ export default async function Home() {
         <p>Welcome</p>
         <div>
           <a 
-            href={`https://slack.com/oauth/v2/authorize?scope=channels%3Ahistory%2Cchannels%3Ajoin%2Cchannels%3Aread%2Cchat%3Awrite%2Cchat%3Awrite.customize%2Cim%3Ahistory%2Cim%3Aread%2Cim%3Awrite%2Cusers%3Aread&amp;user_scope=&amp;redirect_uri=${encodeURIComponent(process.env.SLACK_REDIRECT_URI!)}&amp;client_id=5436666161782.5443327556930`}
+            href={`https://slack.com/oauth/v2/authorize?scope=channels%3Ahistory%2Cchannels%3Ajoin%2Cchannels%3Aread%2Cchat%3Awrite%2Cchat%3Awrite.customize%2Cim%3Ahistory%2Cim%3Aread%2Cim%3Awrite%2Cusers%3Aread&user_scope=&redirect_uri=${encodeURIComponent(process.env.SLACK_REDIRECT_URI!)}&client_id=${process.env.SLACK_CLIENT_ID!}`}
             style={{
               alignItems: 'center',
               color: '#000',

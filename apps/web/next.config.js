@@ -7,6 +7,9 @@ module.exports = async (phase, { defaultConfig }) => {
   const nextConfig = {
     ...defaultConfig,
     reactStrictMode: true,
+    experimental: {
+      serverActions: true,
+    },
     webpack(config) {
       config.plugins.push(
         require("unplugin-icons/webpack")({

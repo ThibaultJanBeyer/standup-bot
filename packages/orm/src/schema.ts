@@ -1,5 +1,11 @@
 import { InferModel, relations } from "drizzle-orm";
-import { jsonb, pgTable, uuid, text, primaryKey, timestamp, uniqueIndex, boolean } from "drizzle-orm/pg-core";
+import { jsonb, pgTable, uuid, text, timestamp, uniqueIndex, boolean, customType } from "drizzle-orm/pg-core";
+
+const uuidArray = customType<{ data: string[] }>({
+  dataType() {
+    return 'uuid[]';
+  },
+});
 
 export const DeletedRecords = pgTable("deleted_records", {
   id: uuid("id").defaultRandom().notNull().primaryKey(),
@@ -23,10 +29,24 @@ export const Standups = pgTable("standups", {
   channelId: text("channel_id").notNull(),
   scheduleCron: text("schedule_cron").notNull(),
   summaryCron: text("summary_cron").notNull(),
+  authorId: uuid("author_id").notNull(),
+  members: uuidArray("members").notNull(),
   // questions => relation
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export const StandupsRelations = relations(Standups, ({ many, one }) => ({
+	questions: many(Questions),
+  author: one(Users, {
+    fields: [Standups.authorId],
+    references: [Users.id],
+  }),
+  workspaceId: one(Workspaces, {
+    fields: [Standups.workspaceId],
+    references: [Workspaces.workspaceId],
+  }),
+}));
 
 export type Standup = InferModel<typeof Standups>;
 export type NewStandup = InferModel<typeof Standups, "insert">;
@@ -41,11 +61,6 @@ export const Questions = pgTable("questions", {
 
 export type Question = InferModel<typeof Questions>;
 export type NewQuestion = InferModel<typeof Questions, "insert">;
-
-export const StandupsRelations = relations(Standups, ({ many }) => ({
-	questions: many(Questions),
-	members: many(Users),
-}));
 
 export const QuestionsRelations = relations(Questions, ({ one }) => ({
 	standupId: one(Standups, {
@@ -79,20 +94,25 @@ export const WorkspaceRelations = relations(Workspaces, ({ many }) => ({
 export const Users = pgTable("users", {
   id: uuid("id").defaultRandom().notNull().primaryKey(),
   // relation
-  slackId: text("slack_id").notNull(),
-  clerkId: text("clerk_id").notNull(),
+  slackId: text("slack_id"),
+  clerkId: text("clerk_id"),
+  workspaceId: text("workspace_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (users) => {
   return {
-    uniqueIdx: uniqueIndex("unique_idx").on(users.slackId, users.clerkId),
+    uniqueIdx: uniqueIndex("unique_idx").on(users.slackId, users.clerkId, users.workspaceId),
   };
 });
 
 export type User = InferModel<typeof Users>;
 export type NewUser = InferModel<typeof Users, "insert">;
 
-export const UsersRelations = relations(Users, ({ many }) => ({
+export const UsersRelations = relations(Users, ({ many, one }) => ({
   workspace: many(Workspaces),
   standups: many(Standups),
+  workspaceId: one(Workspaces, {
+    fields: [Users.workspaceId],
+    references: [Workspaces.workspaceId],
+  }),
 }));
