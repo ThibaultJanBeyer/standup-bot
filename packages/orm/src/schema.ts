@@ -37,6 +37,7 @@ export const Standups = pgTable("standups", {
   summaryCron: text("summary_cron").notNull(),
   authorId: text("author_id").notNull(),
   members: textArray("members").notNull(),
+  // author => relation
   // questions => relation
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

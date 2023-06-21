@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { Standup } from "@ssb/orm";
+import { Standup, User } from "@ssb/orm";
 import { Button } from "@ssb/ui/button";
 import {
   Table,
@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@ssb/ui/table";
 
-type Data = Standup & { author: { name: string } };
+type Data = Standup & { author?: User };
 
 async function getStandups(): Promise<Data[]> {
   const res = await fetch(`/api/standups`, {
@@ -30,7 +30,7 @@ async function getStandups(): Promise<Data[]> {
   return data.standups;
 }
 
-export default async function StandupList() {
+export default function StandupList() {
   const [standups, setStandups] = React.useState<Data[]>([]);
 
   // @TODO refactor to server action for SSR
@@ -72,7 +72,7 @@ function StandupTable({ data }: { data: Data[] }) {
                 {standup.name}
               </Link>
             </TableCell>
-            <TableCell>{standup.author.name}</TableCell>
+            <TableCell>{standup.author?.id || standup.authorId}</TableCell>
             <TableCell>{standup.createdAt.toLocaleString()}</TableCell>
           </TableRow>
         ))}

@@ -15,7 +15,7 @@ export const GET = async (
     const user = await getUser(req);
     const standup = await db.query.Standups.findFirst({
       with: {
-        workspace: true,
+        author: true,
       },
       // make sure user can only retrieve standups from their workspace
       where: and(
@@ -25,14 +25,19 @@ export const GET = async (
     });
     if (!standup) throw new Error("No standup found");
 
-    const { workspace, ...rest } = standup;
-    const client = new WebClient(workspace.botToken);
-    const author = await client.users.info({ user: standup.authorId });
-
     return NextResponse.json(
       {
-        ...rest,
-        authorName: author.user?.name,
+        name: standup.name,
+        channelId: standup.channelId,
+        scheduleCron: standup.scheduleCron,
+        summaryCron: standup.summaryCron,
+        id: standup.id,
+        author: {
+          id: standup.author?.id || standup.authorId,
+        },
+        createdAt: standup.createdAt,
+        updatedAt: standup.updatedAt,
+        members: standup.members,
       },
       { status: 200 },
     );

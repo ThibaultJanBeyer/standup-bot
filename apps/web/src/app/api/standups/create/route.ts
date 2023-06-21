@@ -24,7 +24,7 @@ export const POST = async (req: NextRequest) => {
       standup = await db
         .insert(Standups)
         .values({
-          authorId: user.id,
+          authorId: user.slackId!,
           workspaceId: user.workspace.id,
           ...data,
         })

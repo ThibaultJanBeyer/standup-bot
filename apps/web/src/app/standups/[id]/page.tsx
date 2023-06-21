@@ -22,11 +22,12 @@ type Data = {
   summaryCron: string;
   id: string;
   workspaceId: string;
-  authorId: string;
+  author: {
+    id: string;
+  };
   createdAt: Date;
   updatedAt: Date;
   members: string[];
-  authorName: string;
 };
 
 async function getData(id?: string): Promise<Data> {
@@ -39,12 +40,13 @@ async function getData(id?: string): Promise<Data> {
   });
   if (!res.ok) throw new Error("Failed to fetch data");
   const data: Data = await res.json();
+  console.log("data", data);
   return data;
 }
 
 const schema = zod.object(standupsFormFieldsSchema).strict();
 
-export default async ({ params: { id } }: { params: { id: string } }) => {
+export default ({ params: { id } }: { params: { id: string } }) => {
   const [data, setData] = useState<Data>();
   const router = useRouter();
   const form = useForm({
@@ -66,6 +68,8 @@ export default async ({ params: { id } }: { params: { id: string } }) => {
       setData(data);
     })();
   }, []);
+
+  console.log("data", data);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const updateStandup: Omit<NewStandup, "workspaceId" | "authorId"> = {
@@ -98,7 +102,7 @@ export default async ({ params: { id } }: { params: { id: string } }) => {
         <h1 className="m-10 text-center text-lg">
           Update {data?.name || "loading…"}
         </h1>
-        {data && (
+        {!!data?.id && (
           <Form.Root onSubmit={form.handleSubmit(onSubmit)}>
             <StandupsFormFields {...form} />
             <Form.Submit asChild>

@@ -42,7 +42,7 @@ export default () => {
       body: JSON.stringify(newStandup),
     })
       .then((ok) => ok.json())
-      .then((ok) => router.push(`/standups/${ok.id}`))
+      .then((ok) => router.push(`/standups`))
       .catch((err) => {
         console.error(err);
       });
