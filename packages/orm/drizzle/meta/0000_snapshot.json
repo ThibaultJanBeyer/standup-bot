@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "0908f595-9814-47e8-b324-d03e0ff9045e",
+  "id": "c4d65f6f-715f-464f-b680-9b933879da3e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "deleted_records": {
@@ -193,7 +193,7 @@
           "name": "workspace_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",

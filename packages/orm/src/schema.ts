@@ -107,7 +107,7 @@ export const Users = pgTable(
     id: uuid("id").defaultRandom().notNull().primaryKey(),
     slackId: text("slack_id"),
     clerkId: text("clerk_id"),
-    workspaceId: text("workspace_id").notNull(),
+    workspaceId: text("workspace_id"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },

@@ -47,6 +47,8 @@ export const GET = async (req: NextRequest) => {
       })
       .execute();
 
+    console.log("a");
+
     // Users from Workspace
     const client = new WebClient(access_token);
     const userList = await client.users.list();

@@ -3,20 +3,13 @@ import { WebClient } from "@slack/web-api";
 
 import { db, eq, Standups, Users } from "@/lib/orm";
 
+import getUser from "../getUser";
+
 export const GET = async (req: NextRequest) => {
   try {
-    const slackId = req.nextUrl.searchParams.get("slackId");
-    if (!slackId) throw new Error("slackId is required");
-
-    const user = await db.query.Users.findFirst({
-      with: {
-        workspace: true,
-      },
-      where: eq(Users.slackId, slackId),
-    });
-    if (!user) throw new Error("User not found");
+    const user = await getUser(req);
     const standups = await db.query.Standups.findMany({
-      where: eq(Standups.workspaceId, user.workspaceId),
+      where: eq(Standups.workspaceId, user.workspace.id),
     });
 
     const client = new WebClient(user.workspace.botToken);
@@ -25,7 +18,6 @@ export const GET = async (req: NextRequest) => {
 
     return NextResponse.json(
       {
-        slackId,
         standups: standups.map((standup) => {
           const author = userList.members?.find(
             (member) => member.id === standup.authorId,

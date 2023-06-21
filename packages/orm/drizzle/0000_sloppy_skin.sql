@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"slack_id" text UNIQUE,
 	"clerk_id" text UNIQUE,
-	"workspace_id" text NOT NULL,
+	"workspace_id" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
@@ -47,7 +47,6 @@ CREATE TABLE IF NOT EXISTS "workspaces" (
 --> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "unique_idx" ON "users" ("slack_id","clerk_id","workspace_id");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "unique_idx" ON "workspaces" ("workspace_id");
-
 
 -- BASE FUNCTIONS
 --> Create a timestamp function

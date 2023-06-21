@@ -1,8 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Form from "@radix-ui/react-form";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -19,7 +17,6 @@ import StandupsFormFields, {
 const schema = zod.object(standupsFormFieldsSchema).strict();
 
 export default () => {
-  const { user } = useUser();
   const router = useRouter();
   const form = useForm({
     resolver: zodResolver(schema),
@@ -27,15 +24,15 @@ export default () => {
   });
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const newStandup: Omit<NewStandup, "workspaceId"> = {
+    const newStandup: Omit<NewStandup, "workspaceId" | "authorId"> = {
       name: data.name,
       channelId: data.channelId,
       scheduleCron: data.scheduleCron,
       summaryCron: data.summaryCron,
-      authorId: user!.externalAccounts[0].providerUserId,
       members: data.members,
     };
 
+    // @TODO refactor to server action for SSR
     fetch("/api/standups/create", {
       method: "POST",
       headers: {

@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
 
 import { Standup } from "@ssb/orm";
 import { Button } from "@ssb/ui/button";
@@ -18,8 +17,8 @@ import {
 
 type Data = Standup & { author: { name: string } };
 
-async function getStandups(id?: string): Promise<Data[]> {
-  const res = await fetch(`/api/standups?slackId=${id}`, {
+async function getStandups(): Promise<Data[]> {
+  const res = await fetch(`/api/standups`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -31,18 +30,16 @@ async function getStandups(id?: string): Promise<Data[]> {
   return data.standups;
 }
 
-export default function StandupList() {
-  const { user } = useUser();
-  const [standups, setStandups] = useState<Data[]>([]);
+export default async function StandupList() {
+  const [standups, setStandups] = React.useState<Data[]>([]);
 
-  // unfortunately useUser create an infinite loop on async components, so we need to use useEffect
-  useEffect(() => {
-    if (!user) return;
+  // @TODO refactor to server action for SSR
+  React.useEffect(() => {
     (async () => {
-      const data = await getStandups(user.externalAccounts[0].providerUserId);
+      const data = await getStandups();
       setStandups(data);
     })();
-  }, [user]);
+  }, []);
 
   return (
     <main>

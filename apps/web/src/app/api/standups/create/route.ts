@@ -3,6 +3,8 @@ import * as z from "zod";
 
 import { db, eq, Standups, Users } from "@/lib/orm";
 
+import getUser from "../../getUser";
+
 const schema = z.object({
   id: z.string().optional(),
   name: z.string(),
@@ -10,25 +12,20 @@ const schema = z.object({
   scheduleCron: z.string(),
   summaryCron: z.string(),
   members: z.array(z.string()),
-  authorId: z.string(),
 });
 
 export const POST = async (req: NextRequest) => {
   try {
-    const { authorId, id, ...data } = schema.parse(await req.json());
+    const user = await getUser(req);
+    const { id, ...data } = schema.parse(await req.json());
 
     let standup;
     if (!id) {
-      const user = await db
-        .select()
-        .from(Users)
-        .where(eq(Users.slackId, authorId))
-        .execute();
       standup = await db
         .insert(Standups)
         .values({
-          authorId,
-          workspaceId: user[0].workspaceId,
+          authorId: user.id,
+          workspaceId: user.workspace.id,
           ...data,
         })
         .returning()
@@ -37,7 +34,7 @@ export const POST = async (req: NextRequest) => {
       standup = await db
         .update(Standups)
         .set({
-          authorId,
+          authorId: user.id,
           ...data,
         })
         .where(eq(Standups.id, id))

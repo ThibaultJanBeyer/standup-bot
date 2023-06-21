@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Form from "@radix-ui/react-form";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -30,8 +29,8 @@ type Data = {
   authorName: string;
 };
 
-async function getData(slackId?: string, id?: string): Promise<Data> {
-  const res = await fetch(`/api/standups/${id}?slackId=${slackId}`, {
+async function getData(id?: string): Promise<Data> {
+  const res = await fetch(`/api/standups/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -45,8 +44,7 @@ async function getData(slackId?: string, id?: string): Promise<Data> {
 
 const schema = zod.object(standupsFormFieldsSchema).strict();
 
-export default ({ params: { id } }: { params: { id: string } }) => {
-  const { user } = useUser();
+export default async ({ params: { id } }: { params: { id: string } }) => {
   const [data, setData] = useState<Data>();
   const router = useRouter();
   const form = useForm({
@@ -54,11 +52,10 @@ export default ({ params: { id } }: { params: { id: string } }) => {
     mode: "onChange",
   });
 
-  // unfortunately useUser create an infinite loop on async components, so we need to use useEffect
+  // @TODO refactor to server action for SSR
   useEffect(() => {
-    if (!user) return;
     (async () => {
-      const data = await getData(user.externalAccounts[0].providerUserId, id);
+      const data = await getData(id);
       form.reset({
         name: data?.name,
         channelId: data?.channelId,
@@ -68,16 +65,15 @@ export default ({ params: { id } }: { params: { id: string } }) => {
       });
       setData(data);
     })();
-  }, [user]);
+  }, []);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const updateStandup: Omit<NewStandup, "workspaceId"> = {
+    const updateStandup: Omit<NewStandup, "workspaceId" | "authorId"> = {
       id,
       name: data.name,
       channelId: data.channelId,
       scheduleCron: data.scheduleCron,
       summaryCron: data.summaryCron,
-      authorId: user!.externalAccounts[0].providerUserId,
       members: data.members,
     };
 

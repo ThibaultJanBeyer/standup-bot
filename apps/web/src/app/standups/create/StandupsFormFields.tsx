@@ -1,14 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
-import { zodResolver } from "@hookform/resolvers/zod";
 import * as Form from "@radix-ui/react-form";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import * as zod from "zod";
 
-import { Button } from "@ssb/ui/button";
 import { Input } from "@ssb/ui/input";
 
 type Data = {
@@ -16,8 +12,8 @@ type Data = {
   name: string;
 };
 
-async function getChannels(id?: string): Promise<Data[]> {
-  const res = await fetch(`/api/slack/channels?slackId=${id}`, {
+async function getChannels(): Promise<Data[]> {
+  const res = await fetch(`/api/slack/channels`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -28,9 +24,9 @@ async function getChannels(id?: string): Promise<Data[]> {
   const data: { channels: Data[] } = await res.json();
   return data.channels;
 }
-async function getUsers(id?: string, channelId?: string): Promise<Data[]> {
+async function getUsers(channelId?: string): Promise<Data[]> {
   const res = await fetch(
-    `/api/slack/users-by-channel?slackId=${id}&channelId=${channelId}`,
+    `/api/slack/users-by-channel?channelId=${channelId}`,
     {
       method: "GET",
       headers: {
@@ -63,30 +59,25 @@ type Props = {
 };
 
 export default ({ register, formState: { errors }, watch }: Props) => {
-  const { user } = useUser();
   const [channels, setChannels] = useState<Data[]>([]);
   const [users, setUsers] = useState<Data[]>([]);
   const selectedChannel = watch("channelId");
 
-  // unfortunately useUser create an infinite loop on async components, so we need to use useEffect
+  // @TODO refactor to server action for SSR
   useEffect(() => {
-    if (!user) return;
     (async () => {
-      const data = await getChannels(user.externalAccounts[0].providerUserId);
+      const data = await getChannels();
       setChannels(data);
     })();
-  }, [user]);
+  }, []);
 
   useEffect(() => {
-    if (!user || !selectedChannel) return;
+    if (!selectedChannel) return;
     (async () => {
-      const data = await getUsers(
-        user.externalAccounts[0].providerUserId,
-        selectedChannel,
-      );
+      const data = await getUsers(selectedChannel);
       setUsers(data);
     })();
-  }, [user, selectedChannel]);
+  }, [selectedChannel]);
 
   return (
     <>
