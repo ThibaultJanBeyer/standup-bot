@@ -290,7 +290,7 @@ async function writeUserMessage(channel, thread, member, answers) {
   console.info("The current time on this server is:", new Date());
 
   // Schedule a function to run at 7 AM every working day
-  schedule.scheduleJob("00 09 * * 1-5", function () {
+  schedule.scheduleJob("02 09 * * 1-5", function () {
     startStandup({ channel: process.env.CHANNEL_ID });
   });
 
