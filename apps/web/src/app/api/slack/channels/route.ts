@@ -21,7 +21,7 @@ export const GET = async (req: NextRequest) => {
     return NextResponse.json(
       {
         slackId,
-        channels: getChannels(client),
+        channels: (await getChannels(client)).channels,
       },
       { status: 200 },
     );

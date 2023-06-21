@@ -8,7 +8,7 @@ import * as Form from "@radix-ui/react-form";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import * as zod from "zod";
 
-import { Input } from "@ssb/ui/input";
+import { Button } from "@ssb/ui/button";
 
 import { NewStandup } from "@/lib/orm";
 
@@ -52,13 +52,6 @@ export default ({ params: { id } }: { params: { id: string } }) => {
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "onChange",
-    defaultValues: {
-      name: data?.name,
-      channelId: data?.channelId,
-      scheduleCron: data?.scheduleCron,
-      summaryCron: data?.summaryCron,
-      members: data?.members,
-    },
   });
 
   // unfortunately useUser create an infinite loop on async components, so we need to use useEffect
@@ -66,12 +59,20 @@ export default ({ params: { id } }: { params: { id: string } }) => {
     if (!user) return;
     (async () => {
       const data = await getData(user.externalAccounts[0].providerUserId, id);
+      form.reset({
+        name: data?.name,
+        channelId: data?.channelId,
+        scheduleCron: data?.scheduleCron,
+        summaryCron: data?.summaryCron,
+        members: data?.members,
+      });
       setData(data);
     })();
   }, [user]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const newStandup: Omit<NewStandup, "workspaceId"> = {
+    const updateStandup: Omit<NewStandup, "workspaceId"> = {
+      id,
       name: data.name,
       channelId: data.channelId,
       scheduleCron: data.scheduleCron,
@@ -80,13 +81,13 @@ export default ({ params: { id } }: { params: { id: string } }) => {
       members: data.members,
     };
 
-    fetch(`/api/standups/${id}`, {
+    fetch("/api/standups/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
-      body: JSON.stringify(newStandup),
+      body: JSON.stringify(updateStandup),
     })
       .then((ok) => ok.json())
       .then((ok) => router.push(`/standups`))
@@ -96,10 +97,20 @@ export default ({ params: { id } }: { params: { id: string } }) => {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Form.Root onSubmit={form.handleSubmit(onSubmit)}>
-        <StandupsFormFields {...form} />
-      </Form.Root>
+    <main className="flex min-h-screen flex-col items-center justify-between p-10">
+      <div>
+        <h1 className="m-10 text-center text-lg">
+          Update {data?.name || "loading…"}
+        </h1>
+        {data && (
+          <Form.Root onSubmit={form.handleSubmit(onSubmit)}>
+            <StandupsFormFields {...form} />
+            <Form.Submit asChild>
+              <Button type="submit">Update Standup</Button>
+            </Form.Submit>
+          </Form.Root>
+        )}
+      </div>
     </main>
   );
 };

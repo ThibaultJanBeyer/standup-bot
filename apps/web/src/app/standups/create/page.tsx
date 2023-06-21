@@ -8,6 +8,8 @@ import * as Form from "@radix-ui/react-form";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import * as zod from "zod";
 
+import { Button } from "@ssb/ui/button";
+
 import { NewStandup } from "@/lib/orm";
 
 import StandupsFormFields, {
@@ -53,6 +55,9 @@ export default () => {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <Form.Root onSubmit={form.handleSubmit(onSubmit)}>
         <StandupsFormFields {...form} />
+        <Form.Submit asChild>
+          <Button type="submit">Create Standup</Button>
+        </Form.Submit>
       </Form.Root>
     </main>
   );

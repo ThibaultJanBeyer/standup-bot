@@ -109,19 +109,24 @@ export default ({ register, formState: { errors }, watch }: Props) => {
           </Form.Message>
         )}
         <Form.Control asChild>
-          <select
-            {...register("channelId")}
-            className="block w-full rounded-md border-2 border-solid border-gray-300 p-3"
-          >
-            <option key={""} value={""}>
-              Select a channel
-            </option>
-            {channels.map((channel) => (
-              <option key={channel.slackId} value={channel.slackId}>
-                {channel.name}
+          {channels.length ? (
+            <select
+              {...register("channelId")}
+              className="block w-full rounded-md border-2 border-solid border-gray-300 p-3"
+              defaultValue={selectedChannel}
+            >
+              <option key={""} value={""}>
+                Select a channel
               </option>
-            ))}
-          </select>
+              {channels.map((channel) => (
+                <option key={channel.slackId} value={channel.slackId}>
+                  {channel.name}
+                </option>
+              ))}
+            </select>
+          ) : (
+            "Loading..."
+          )}
         </Form.Control>
       </Form.Field>
       <Form.Field name="members" className="mb-5">
@@ -175,9 +180,6 @@ export default ({ register, formState: { errors }, watch }: Props) => {
           <Input {...register("summaryCron")} defaultValue="0 11 * * 1-5" />
         </Form.Control>
       </Form.Field>
-      <Form.Submit asChild>
-        <Button type="submit">Create Standup</Button>
-      </Form.Submit>
     </>
   );
 };

@@ -3,9 +3,12 @@ import { WebClient } from "@slack/web-api";
 
 import { and, db, eq, Standups, Users } from "@/lib/orm";
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (
+  req: NextRequest,
+  { params }: { params: { id: string } },
+) => {
   try {
-    const id = req.query.id as string;
+    const id = params.id;
     if (!id) throw new Error("id is required");
     const slackId = req.nextUrl.searchParams.get("slackId");
     if (!slackId) throw new Error("slackId is required");

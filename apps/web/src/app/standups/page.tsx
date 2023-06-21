@@ -44,8 +44,6 @@ export default function StandupList() {
     })();
   }, [user]);
 
-  console.log(standups);
-
   return (
     <main>
       <div className="text-center">
