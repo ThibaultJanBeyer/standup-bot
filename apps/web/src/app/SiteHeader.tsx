@@ -35,32 +35,36 @@ export function SiteHeader() {
         </Button>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-2">
-            <ThemeToggle />
             {isLoaded ? (
               isSignedIn ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="gap-2">
-                      <IconUserCircle />
-                      {user.fullName || user.emailAddresses[0].emailAddress}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href="/account">
-                        <IconSettings className="mr-2" />
-                        Settings
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onSelect={() => signOut().then(() => replace(`/`))}
-                    >
-                      <IconLogout className="mr-2" />
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <>
+                  <Button asChild variant="secondary">
+                    <Link href={`/standups`}>Standups</Link>
+                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="gap-2">
+                        <IconUserCircle />
+                        {user.fullName || user.emailAddresses[0].emailAddress}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link href="/account">
+                          <IconSettings className="mr-2" />
+                          Settings
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onSelect={() => signOut().then(() => replace(`/`))}
+                      >
+                        <IconLogout className="mr-2" />
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </>
               ) : (
                 <>
                   <Button asChild>
@@ -74,6 +78,7 @@ export function SiteHeader() {
                 <Skeleton className="h-6 w-28" />{" "}
               </>
             )}
+            <ThemeToggle />
           </nav>
         </div>
       </div>

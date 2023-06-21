@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { WebClient } from "@slack/web-api";
 
-import { db, eq, Users } from "@/lib/orm";
+import { db, eq, Standups, Users } from "@/lib/orm";
 
 export const GET = async (req: NextRequest) => {
   try {
@@ -15,22 +15,26 @@ export const GET = async (req: NextRequest) => {
       where: eq(Users.slackId, slackId),
     });
     if (!user) throw new Error("User not found");
+    const standups = await db.query.Standups.findMany({
+      where: eq(Standups.workspaceId, user.workspaceId),
+    });
 
-    // Users from Workspace
     const client = new WebClient(user.workspace.botToken);
-    const channelList = await client.conversations.list();
-    if (!channelList.ok) throw channelList;
-    const channels = channelList?.channels?.flatMap((channel) => [
-      {
-        slackId: channel.id,
-        name: channel.name,
-      },
-    ]);
+    const userList = await client.users.list();
+    if (!userList.ok) throw new Error("No users found");
 
     return NextResponse.json(
       {
         slackId,
-        channels,
+        standups: standups.map((standup) => {
+          const author = userList.members?.find(
+            (member) => member.id === standup.authorId,
+          );
+          return {
+            ...standup,
+            author: { name: author?.name || standup.authorId },
+          };
+        }),
       },
       { status: 200 },
     );

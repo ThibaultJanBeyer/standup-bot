@@ -48,7 +48,7 @@ export const StandupsRelations = relations(Standups, ({ many, one }) => ({
     fields: [Standups.authorId],
     references: [Users.slackId],
   }),
-  workspaceId: one(Workspaces, {
+  workspace: one(Workspaces, {
     fields: [Standups.workspaceId],
     references: [Workspaces.workspaceId],
   }),

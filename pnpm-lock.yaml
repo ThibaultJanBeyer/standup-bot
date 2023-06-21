@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -100,6 +100,9 @@ importers:
       '@ssb/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      dayjs:
+        specifier: ^1.11.7
+        version: 1.11.7
       multiselect-react-dropdown:
         specifier: ^2.0.25
         version: 2.0.25(react@18.2.0)
@@ -4410,6 +4413,10 @@ packages:
 
   /date-now@1.0.1:
     resolution: {integrity: sha512-yiizelQCqYLUEVT4zqYihOW6Ird7Qyc6fD3Pv5xGxk4+Jz0rsB1dMN2KyNV6jgOHYh5K+sPGCSOknQN4Upa3pg==}
+    dev: false
+
+  /dayjs@1.11.7:
+    resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
     dev: false
 
   /debounce@1.0.0:

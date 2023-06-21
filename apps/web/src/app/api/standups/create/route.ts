@@ -20,15 +20,16 @@ export const POST = async (req: NextRequest) => {
       .from(Users)
       .where(eq(Users.slackId, authorId))
       .execute();
-    await db
+    const standup = await db
       .insert(Standups)
       .values({
-        authorId: user[0].id,
+        authorId,
         workspaceId: user[0].workspaceId,
         ...data,
       })
+      .returning()
       .execute();
-    return NextResponse.redirect(`/p/standups`);
+    return NextResponse.json({ id: standup[0].id });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json({ error: error.message }, { status: 500 });
