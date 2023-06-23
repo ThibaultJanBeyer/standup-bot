@@ -13,14 +13,14 @@ All you need to work with this project is a supported version of [Node.js](https
 
 ### Updating
 
-This package is a dependency for our guides and other example apps. There are many ways to configure a sample app. We prefer to keep a single version of `app.js` which should be consistent with the instructions and code blocks on the [Bolt JS Getting Started guide](https://slack.dev/bolt-js/tutorial/getting-started). This reduces the possibility of drift ocurring between multiple versions. 
+This package is a dependency for our guides and other example apps. There are many ways to configure a sample app. We prefer to keep a single version of `app.js` which should be consistent with the instructions and code blocks on the [Bolt JS Getting Started guide](https://slack.dev/bolt-js/tutorial/getting-started). This reduces the possibility of drift ocurring between multiple versions.
 
 When making changes to this repo, it's also important to keep all of our other guides and apps up-to-date.
 
 When updating this package, please ensure the following are also updated:
 
 - Guides found at [slackapi/bolt-js/docs/](https://github.com/slackapi/bolt-js/tree/main/docs)
-- Example apps at [slackapi/bolt-js/examples/getting-started-*](https://github.com/slackapi/bolt-js/tree/main/examples).
+- Example apps at [slackapi/bolt-js/examples/getting-started-\*](https://github.com/slackapi/bolt-js/tree/main/examples).
 
 ### Testing
 
@@ -29,22 +29,25 @@ This package does not have unit tests but has implemented the command `npm test`
 ### Releasing
 
 1.  Create the commit for the release:
-    *  Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `package.json`.
-    *  Update any dependency versions 
-    *  Confirm tests pass by running `npm test`
-    *  Commit with a message including the new version number. For example `v2.2.0`.
-    *  Tag the commit with the version number. For example `git tag 2.2.0`.
+
+    - Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `package.json`.
+    - Update any dependency versions
+    - Confirm tests pass by running `npm test`
+    - Commit with a message including the new version number. For example `v2.2.0`.
+    - Tag the commit with the version number. For example `git tag 2.2.0`.
 
 2.  Merge into main repository
-    *  Create a pull request with the commit that was just made. Be certain to include the tag. For
-       example: `git push username main:rel-v1.0.8 && git push --tags username`.
-    *  Once tests pass and a reviewer has approved, merge the pull request. You will also want to
-       update your local `main` branch.
-    *  Push the new tag up to origin `git push --tags origin`.
+
+    - Create a pull request with the commit that was just made. Be certain to include the tag. For
+      example: `git push username main:rel-v1.0.8 && git push --tags username`.
+    - Once tests pass and a reviewer has approved, merge the pull request. You will also want to
+      update your local `main` branch.
+    - Push the new tag up to origin `git push --tags origin`.
 
 3.  Distribute the release
-    *  At the moment this package is not distributed on npm.
-    *  It is only downloaded or cloned from GitHub.
+
+    - At the moment this package is not distributed on npm.
+    - It is only downloaded or cloned from GitHub.
 
 4.  (Slack Internal) Communicate the release internally. Include a link to the GitHub Release.
 
