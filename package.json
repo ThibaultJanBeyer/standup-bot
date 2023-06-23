@@ -2,6 +2,9 @@
   "name": "simple-standup-bot",
   "version": "1.0.0",
   "description": "Dead Simple Standup Bot for Slack",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "turbo run build",
     "start": "turbo run build && turbo run start",
