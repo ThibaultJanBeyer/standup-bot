@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Dead Simple Standup Bot for Slack",
   "engines": {
-    "node": ">=20.2.0"
+    "node": ">=19 <20"
   },
   "scripts": {
     "build": "turbo run build",
