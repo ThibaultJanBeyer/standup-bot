@@ -4,6 +4,7 @@
   "description": "Dead Simple Standup Bot for Slack",
   "scripts": {
     "build": "turbo run build",
+    "start": "turbo run build && turbo run start",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

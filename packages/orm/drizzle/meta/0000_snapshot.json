@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "8fde167c-3942-46a0-99f3-c02653f69656",
+  "id": "4687d4e7-6b43-45cb-ac50-ceeabbd59eda",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "answers": {
@@ -233,6 +233,12 @@
         },
         "slack_id": {
           "name": "slack_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "slack_name": {
+          "name": "slack_name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
