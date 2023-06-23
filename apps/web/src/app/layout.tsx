@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
       default: "SSB",
       template: "%s | SSB",
     },
-    description: "Slack Standup Bot",
+    description: "Simple Standup Bot",
     themeColor: [
       { media: "(prefers-color-scheme: light)", color: "white" },
       { media: "(prefers-color-scheme: dark)", color: "black" },
@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       siteName: "SSB",
       title: "SSB",
-      description: "Slack Standup Bot",
+      description: "Simple Standup Bot",
       images: [
         {
           url: "/api/cms/og",

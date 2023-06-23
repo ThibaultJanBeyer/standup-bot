@@ -21,6 +21,7 @@
     "@ssb/orm": "workspace:*",
     "@ssb/ui": "workspace:*",
     "dayjs": "^1.11.7",
+    "inngest": "^2.1.0",
     "multiselect-react-dropdown": "^2.0.25",
     "next": "13.4.6",
     "next-sanity": "^4.3.3",
