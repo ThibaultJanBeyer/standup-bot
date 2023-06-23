@@ -76,6 +76,30 @@ export const QuestionsRelations = relations(Questions, ({ one }) => ({
   }),
 }));
 
+export const Answers = pgTable("answers", {
+  id: uuid("id").defaultRandom().notNull().primaryKey(),
+  authorId: text("author_id").notNull(),
+  questionId: uuid("question_id").notNull(),
+  questionMsgId: text("question_msg_id").notNull(),
+  clientMsgId: text("client_msg_id").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type Answer = InferModel<typeof Answers>;
+export type NewAnswer = InferModel<typeof Answers, "insert">;
+
+export const AnswersRelations = relations(Answers, ({ one }) => ({
+  author: one(Users, {
+    fields: [Answers.authorId],
+    references: [Users.slackId],
+  }),
+  question: one(Questions, {
+    fields: [Answers.questionId],
+    references: [Questions.id],
+  }),
+}));
+
 export const Workspaces = pgTable(
   "workspaces",
   {

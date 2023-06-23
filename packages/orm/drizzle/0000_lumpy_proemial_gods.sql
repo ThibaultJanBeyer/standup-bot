@@ -1,3 +1,13 @@
+CREATE TABLE IF NOT EXISTS "answers" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"author_id" text NOT NULL,
+	"question_id" uuid NOT NULL,
+	"question_msg_id" text NOT NULL,
+	"client_msg_id" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "deleted_records" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"data" jsonb NOT NULL,
@@ -48,6 +58,7 @@ CREATE TABLE IF NOT EXISTS "workspaces" (
 CREATE UNIQUE INDEX IF NOT EXISTS "unique_idx" ON "users" ("slack_id","clerk_id","workspace_id");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "unique_idx" ON "workspaces" ("workspace_id");
 
+
 -- BASE FUNCTIONS
 --> Create a timestamp function
 CREATE OR REPLACE FUNCTION trigger_set_timestamp()
@@ -74,6 +85,9 @@ $$;
 CREATE TRIGGER set_timestamp BEFORE UPDATE ON questions 
 FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
 
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON answers 
+FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
+
 CREATE TRIGGER set_timestamp BEFORE UPDATE ON standups 
 FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
 
@@ -86,9 +100,17 @@ FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
 CREATE TRIGGER set_timestamp BEFORE UPDATE ON workspaces 
 FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
 
+CREATE TRIGGER deleted_record_insert AFTER DELETE ON workspaces
+FOR EACH ROW EXECUTE FUNCTION deleted_record_insert();
+
+CREATE TRIGGER deleted_record_insert AFTER DELETE ON users
+FOR EACH ROW EXECUTE FUNCTION deleted_record_insert();
+
+CREATE TRIGGER deleted_record_insert AFTER DELETE ON answers
+FOR EACH ROW EXECUTE FUNCTION deleted_record_insert();
+
 CREATE TRIGGER deleted_record_insert AFTER DELETE ON questions
 FOR EACH ROW EXECUTE FUNCTION deleted_record_insert();
 
 CREATE TRIGGER deleted_record_insert AFTER DELETE ON standups
 FOR EACH ROW EXECUTE FUNCTION deleted_record_insert();
-
