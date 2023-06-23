@@ -20,7 +20,7 @@ export const GET = async (
       // make sure user can only retrieve standups from their workspace
       where: and(
         eq(Standups.id, id),
-        eq(Standups.workspaceId, user.workspace.id),
+        eq(Standups.workspaceId, user.workspaceId!),
       ),
     });
     if (!standup) throw new Error("No standup found");

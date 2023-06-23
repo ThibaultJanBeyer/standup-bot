@@ -25,7 +25,7 @@ export const POST = async (req: NextRequest) => {
         .insert(Standups)
         .values({
           authorId: user.slackId!,
-          workspaceId: user.workspace.id,
+          workspaceId: user.workspaceId!,
           ...data,
         })
         .returning()
@@ -41,6 +41,20 @@ export const POST = async (req: NextRequest) => {
         .returning()
         .execute();
     }
+
+    const internal = await fetch("http://localhost:3001/bot/slack/init", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": process.env.COMMUNICATION_TOKEN!,
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        standupId: standup[0].id,
+      }),
+    });
+
+    console.info(await internal.json());
 
     return NextResponse.json({ id: standup[0].id });
   } catch (error: any) {

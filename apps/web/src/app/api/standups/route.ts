@@ -12,7 +12,7 @@ export const GET = async (req: NextRequest) => {
       with: {
         author: true,
       },
-      where: eq(Standups.workspaceId, user.workspace.id),
+      where: eq(Standups.workspaceId, user.workspaceId!),
     });
 
     return NextResponse.json(
