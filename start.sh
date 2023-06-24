@@ -1,4 +1,9 @@
 #!/bin/bash
+CONFIG="./package.json"
+HOST="standupbotcom"
+IMG_NAME="ssb"
+IMG_VER=`cat ${CONFIG} | grep '"version"' | awk 'BEGIN{FS="\""} {print $4}'`
+
 docker stop $(docker ps -aq)
 docker rm $(docker ps -aq)
 docker rmi $(docker images -q)

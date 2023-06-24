@@ -59,3 +59,23 @@ http {
 systemctl restart nginx
 nginx -s reload
 ```
+
+### Deployment
+
+Locally:
+
+```
+./build.sh
+```
+
+- Don’t forget to log in `docker login`
+- And change `HOST="standupbotcom"` and `IMG_NAME="ssb"` to your own repository
+
+On the server:
+
+```
+./start.sh
+```
+
+- Don’t forget to log in `docker login`
+- And change `HOST="standupbotcom"` and `IMG_NAME="ssb"` to your own repository
