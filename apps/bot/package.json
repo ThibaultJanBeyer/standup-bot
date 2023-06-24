@@ -5,9 +5,10 @@
   "main": "src/app.ts",
   "scripts": {
     "dev": "pnpm with-env nodemon src/app.ts",
-    "start": "pnpm with-env pm2 src/app.ts",
+    "start": "pnpm with-env ts-node src/app.ts",
     "production": "pm2 start npm --name 'ssb' -- start",
-    "with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -e ../../.env --",
+    "clean": "rm -rf .turbo node_modules"
   },
   "license": "MIT",
   "dependencies": {

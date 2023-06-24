@@ -1,0 +1,13 @@
+node_modules/
+**/node_modules
+.vercel
+**/.vercel
+.next
+**/.next
+
+dev.Dockerfile
+prod.Dockerfile
+Dockerfile
+README.md
+node_modules
+npm-debug.log

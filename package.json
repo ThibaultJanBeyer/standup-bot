@@ -1,19 +1,22 @@
 {
   "name": "simple-standup-bot",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Dead Simple Standup Bot for Slack",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
+    "clean": "turbo daemon clean && rm -rf node_modules",
+    "clean:workspaces": "turbo clean",
     "build": "turbo run build",
     "start": "turbo run build && turbo run start",
-    "production": "turbo run build && turbo run production",
+    "production": "turbo run production",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "migrate": "turbo run migrate",
-    "generate": "turbo run generate"
+    "generate": "turbo run generate",
+    "docker:build": "./build.sh"
   },
   "license": "MIT",
   "dependencies": {
