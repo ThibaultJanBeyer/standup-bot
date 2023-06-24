@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
 
-import { db, eq, User, Users } from "@/lib/orm";
+import { db, eq, Users } from "@/lib/orm";
 
 export default async (req: NextRequest) => {
   const { userId } = getAuth(req);

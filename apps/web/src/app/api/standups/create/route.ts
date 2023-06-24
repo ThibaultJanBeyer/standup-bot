@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as z from "zod";
 
-import { db, eq, Standups, Users } from "@/lib/orm";
-
-import getUser from "../../getUser";
+import getUser from "@/lib/getUser";
+import { db, eq, Standups } from "@/lib/orm";
 
 const schema = z.object({
   id: z.string().optional(),

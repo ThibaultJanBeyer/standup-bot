@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { WebClient } from "@slack/web-api";
 
+import getUser from "@/lib/getUser";
 import { and, db, eq, Standups } from "@/lib/orm";
-
-import getUser from "../../getUser";
 
 export const GET = async (
   req: NextRequest,
