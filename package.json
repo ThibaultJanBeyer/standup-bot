@@ -9,7 +9,7 @@
     "clean": "turbo daemon clean && rm -rf node_modules",
     "clean:workspaces": "turbo clean",
     "build": "turbo run build",
-    "start": "turbo run build && turbo run start",
+    "start": "turbo run start",
     "production": "turbo run production",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
