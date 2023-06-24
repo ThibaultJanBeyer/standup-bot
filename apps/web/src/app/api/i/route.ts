@@ -9,7 +9,7 @@ export const GET = async (req: NextRequest) => {
     const { query } = parse(req.url || "", true);
     const code = query.code as string;
     const state = query.state as string; // for XSRF
-    console.log("code", code, state);
+    if (state !== process.env.SLACK_CODE!) throw new Error("Invalid State");
 
     // Slack OAuth
     const response = await fetch("https://slack.com/api/oauth.v2.access", {

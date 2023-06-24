@@ -11,7 +11,8 @@ export default async function Home() {
           <a
             href={`https://slack.com/oauth/v2/authorize?scope=channels%3Ahistory%2Cchannels%3Ajoin%2Cchannels%3Aread%2Cchat%3Awrite%2Cchat%3Awrite.customize%2Cim%3Ahistory%2Cim%3Aread%2Cim%3Awrite%2Cusers%3Aread&user_scope=&redirect_uri=${encodeURIComponent(
               process.env.SLACK_REDIRECT_URI!,
-            )}&client_id=${process.env.SLACK_CLIENT_ID!}&state=3453223`}
+            )}&client_id=${process.env.SLACK_CLIENT_ID!}&state=${process.env
+              .SLACK_CODE!}`}
             style={{
               alignItems: "center",
               color: "#000",
