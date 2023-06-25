@@ -20,21 +20,20 @@ jobs:
         run: echo "The version was ${{ steps.get-version.outputs.version }}"
       - name: Configure .env file
         run: |
-          touch .env.production
-          echo PROD_SLACK_APP_TOKEN=$PROD_SLACK_APP_TOKEN >> .env.production
-          echo PROD_CLERK_SECRET_KEY=$PROD_CLERK_SECRET_KEY >> .env.production
-          echo PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY >> .env.production
-          echo PROD_DATABASE_URL=$PROD_DATABASE_URL >> .env.production
-          echo PROD_SLACK_CLIENT_ID=$PROD_SLACK_CLIENT_ID >> .env.production
-          echo PROD_SLACK_CLIENT_SECRET=$PROD_SLACK_CLIENT_SECRET >> .env.production
-          echo PROD_SLACK_CODE=$PROD_SLACK_CODE >> .env.production
-          echo PROD_COMMUNICATION_TOKEN=$PROD_COMMUNICATION_TOKEN >> .env.production
-          echo NEXT_PUBLIC_CLERK_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_SIGN_IN_URL >> .env.production
-          echo NEXT_PUBLIC_CLERK_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_URL >> .env.production
-          echo NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL >> .env.production
-          echo NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL >> .env.production
-          echo SLACK_REDIRECT_URI=$SLACK_REDIRECT_URI >> .env.production
-          ls -a
+          touch .env
+          echo PROD_SLACK_APP_TOKEN=$PROD_SLACK_APP_TOKEN >> .env
+          echo PROD_CLERK_SECRET_KEY=$PROD_CLERK_SECRET_KEY >> .env
+          echo PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY >> .env
+          echo PROD_DATABASE_URL=$PROD_DATABASE_URL >> .env
+          echo PROD_SLACK_CLIENT_ID=$PROD_SLACK_CLIENT_ID >> .env
+          echo PROD_SLACK_CLIENT_SECRET=$PROD_SLACK_CLIENT_SECRET >> .env
+          echo PROD_SLACK_CODE=$PROD_SLACK_CODE >> .env
+          echo PROD_COMMUNICATION_TOKEN=$PROD_COMMUNICATION_TOKEN >> .env
+          echo NEXT_PUBLIC_CLERK_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_SIGN_IN_URL >> .env
+          echo NEXT_PUBLIC_CLERK_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_URL >> .env
+          echo NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL >> .env
+          echo NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL >> .env
+          echo SLACK_REDIRECT_URI=$SLACK_REDIRECT_URI >> .env
         shell: bash
         env:
           PROD_SLACK_APP_TOKEN: ${{secrets.PROD_SLACK_APP_TOKEN}}
