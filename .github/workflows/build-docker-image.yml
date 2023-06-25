@@ -30,14 +30,14 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_PROD_SLACK_APP_TOKEN: ${{secrets.PROD_SLACK_APP_TOKEN}}
-          envkey_PROD_CLERK_SECRET_KEY: ${{secrets.PROD_CLERK_SECRET_KEY}}
-          envkey_PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{secrets.PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}}
-          envkey_PROD_DATABASE_URL: ${{secrets.PROD_DATABASE_URL}}
-          envkey_PROD_SLACK_CLIENT_ID: ${{secrets.PROD_SLACK_CLIENT_ID}}
-          envkey_PROD_SLACK_CLIENT_SECRET: ${{secrets.PROD_SLACK_CLIENT_SECRET}}
-          envkey_PROD_SLACK_CODE: ${{secrets.PROD_SLACK_CODE}}
-          envkey_PROD_COMMUNICATION_TOKEN: ${{secrets.PROD_COMMUNICATION_TOKEN}}
+          envkey_SLACK_APP_TOKEN: ${{secrets.PROD_SLACK_APP_TOKEN}}
+          envkey_CLERK_SECRET_KEY: ${{secrets.PROD_CLERK_SECRET_KEY}}
+          envkey_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{secrets.PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}}
+          envkey_DATABASE_URL: ${{secrets.PROD_DATABASE_URL}}
+          envkey_SLACK_CLIENT_ID: ${{secrets.PROD_SLACK_CLIENT_ID}}
+          envkey_SLACK_CLIENT_SECRET: ${{secrets.PROD_SLACK_CLIENT_SECRET}}
+          envkey_SLACK_CODE: ${{secrets.PROD_SLACK_CODE}}
+          envkey_COMMUNICATION_TOKEN: ${{secrets.PROD_COMMUNICATION_TOKEN}}
           envkey_NEXT_PUBLIC_CLERK_SIGN_IN_URL: /auth/sign-in
           envkey_NEXT_PUBLIC_CLERK_SIGN_UP_URL: /auth/sign-in
           envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
