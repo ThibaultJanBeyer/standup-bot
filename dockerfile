@@ -5,7 +5,7 @@ RUN         npm install -g pm2
 
 WORKDIR     /var/www
 COPY        . .
-COPY        ./.env.production ./.env
+COPY        .env.production ./.env
 RUN         pnpm install
 RUN         pnpm build
 
