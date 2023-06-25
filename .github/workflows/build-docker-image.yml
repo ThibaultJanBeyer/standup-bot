@@ -34,7 +34,7 @@ jobs:
           echo NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL >> .env.production
           echo NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL >> .env.production
           echo SLACK_REDIRECT_URI=$SLACK_REDIRECT_URI >> .env.production
-          cat .env.production
+          ls -a
         shell: bash
         env:
           PROD_SLACK_APP_TOKEN: ${{secrets.PROD_SLACK_APP_TOKEN}}
