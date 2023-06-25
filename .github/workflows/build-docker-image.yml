@@ -27,39 +27,58 @@ jobs:
         with:
           username: standupbotcom
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Configure .env.production file
-        run: |
-          touch .env.production
-          echo PROD_SLACK_APP_TOKEN=$PROD_SLACK_APP_TOKEN >> .env.production
-          echo PROD_CLERK_SECRET_KEY=$PROD_CLERK_SECRET_KEY >> .env.production
-          echo PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY >> .env.production
-          echo PROD_DATABASE_URL=$PROD_DATABASE_URL >> .env.production
-          echo PROD_SLACK_CLIENT_ID=$PROD_SLACK_CLIENT_ID >> .env.production
-          echo PROD_SLACK_CLIENT_SECRET=$PROD_SLACK_CLIENT_SECRET >> .env.production
-          echo PROD_SLACK_CODE=$PROD_SLACK_CODE >> .env.production
-          echo PROD_COMMUNICATION_TOKEN=$PROD_COMMUNICATION_TOKEN >> .env.production
-          echo NEXT_PUBLIC_CLERK_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_SIGN_IN_URL >> .env.production
-          echo NEXT_PUBLIC_CLERK_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_URL >> .env.production
-          echo NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL >> .env.production
-          echo NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL >> .env.production
-          echo SLACK_REDIRECT_URI=$SLACK_REDIRECT_URI >> .env.production
-          ls -a
-          cat .env.production
-        shell: bash
-        env:
-          PROD_SLACK_APP_TOKEN: ${{secrets.PROD_SLACK_APP_TOKEN}}
-          PROD_CLERK_SECRET_KEY: ${{secrets.PROD_CLERK_SECRET_KEY}}
-          PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{secrets.PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}}
-          PROD_DATABASE_URL: ${{secrets.PROD_DATABASE_URL}}
-          PROD_SLACK_CLIENT_ID: ${{secrets.PROD_SLACK_CLIENT_ID}}
-          PROD_SLACK_CLIENT_SECRET: ${{secrets.PROD_SLACK_CLIENT_SECRET}}
-          PROD_SLACK_CODE: ${{secrets.PROD_SLACK_CODE}}
-          PROD_COMMUNICATION_TOKEN: ${{secrets.PROD_COMMUNICATION_TOKEN}}
-          NEXT_PUBLIC_CLERK_SIGN_IN_URL: /auth/sign-in
-          NEXT_PUBLIC_CLERK_SIGN_UP_URL: /auth/sign-in
-          NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
-          NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
-          SLACK_REDIRECT_URI: https://standup-bot.com/api/i
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_PROD_SLACK_APP_TOKEN: ${{secrets.PROD_SLACK_APP_TOKEN}}
+          envkey_PROD_CLERK_SECRET_KEY: ${{secrets.PROD_CLERK_SECRET_KEY}}
+          envkey_PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{secrets.PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}}
+          envkey_PROD_DATABASE_URL: ${{secrets.PROD_DATABASE_URL}}
+          envkey_PROD_SLACK_CLIENT_ID: ${{secrets.PROD_SLACK_CLIENT_ID}}
+          envkey_PROD_SLACK_CLIENT_SECRET: ${{secrets.PROD_SLACK_CLIENT_SECRET}}
+          envkey_PROD_SLACK_CODE: ${{secrets.PROD_SLACK_CODE}}
+          envkey_PROD_COMMUNICATION_TOKEN: ${{secrets.PROD_COMMUNICATION_TOKEN}}
+          envkey_NEXT_PUBLIC_CLERK_SIGN_IN_URL: /auth/sign-in
+          envkey_NEXT_PUBLIC_CLERK_SIGN_UP_URL: /auth/sign-in
+          envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
+          envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
+          envkey_SLACK_REDIRECT_URI: https://standup-bot.com/api/i
+          file_name: .env.production
+          fail_on_empty: true
+          sort_keys: true
+      # - name: Configure .env.production file
+      #   run: |
+      #     touch .env.production
+      #     echo PROD_SLACK_APP_TOKEN=$PROD_SLACK_APP_TOKEN >> .env.production
+      #     echo PROD_CLERK_SECRET_KEY=$PROD_CLERK_SECRET_KEY >> .env.production
+      #     echo PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY >> .env.production
+      #     echo PROD_DATABASE_URL=$PROD_DATABASE_URL >> .env.production
+      #     echo PROD_SLACK_CLIENT_ID=$PROD_SLACK_CLIENT_ID >> .env.production
+      #     echo PROD_SLACK_CLIENT_SECRET=$PROD_SLACK_CLIENT_SECRET >> .env.production
+      #     echo PROD_SLACK_CODE=$PROD_SLACK_CODE >> .env.production
+      #     echo PROD_COMMUNICATION_TOKEN=$PROD_COMMUNICATION_TOKEN >> .env.production
+      #     echo NEXT_PUBLIC_CLERK_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_SIGN_IN_URL >> .env.production
+      #     echo NEXT_PUBLIC_CLERK_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_URL >> .env.production
+      #     echo NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL >> .env.production
+      #     echo NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL >> .env.production
+      #     echo SLACK_REDIRECT_URI=$SLACK_REDIRECT_URI >> .env.production
+      #     ls -a
+      #     cat .env.production
+      #   shell: bash
+      #   env:
+      #     PROD_SLACK_APP_TOKEN: ${{secrets.PROD_SLACK_APP_TOKEN}}
+      #     PROD_CLERK_SECRET_KEY: ${{secrets.PROD_CLERK_SECRET_KEY}}
+      #     PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{secrets.PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}}
+      #     PROD_DATABASE_URL: ${{secrets.PROD_DATABASE_URL}}
+      #     PROD_SLACK_CLIENT_ID: ${{secrets.PROD_SLACK_CLIENT_ID}}
+      #     PROD_SLACK_CLIENT_SECRET: ${{secrets.PROD_SLACK_CLIENT_SECRET}}
+      #     PROD_SLACK_CODE: ${{secrets.PROD_SLACK_CODE}}
+      #     PROD_COMMUNICATION_TOKEN: ${{secrets.PROD_COMMUNICATION_TOKEN}}
+      #     NEXT_PUBLIC_CLERK_SIGN_IN_URL: /auth/sign-in
+      #     NEXT_PUBLIC_CLERK_SIGN_UP_URL: /auth/sign-in
+      #     NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
+      #     NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
+      #     SLACK_REDIRECT_URI: https://standup-bot.com/api/i
       - name: List all files
         run: ls -a
       - name: Build and push
