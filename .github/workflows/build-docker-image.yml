@@ -43,7 +43,8 @@ jobs:
           echo NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL >> .env.production
           echo NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL >> .env.production
           echo SLACK_REDIRECT_URI=$SLACK_REDIRECT_URI >> .env.production
-          ls
+          ls -a
+          cat .env.production
         shell: bash
         env:
           PROD_SLACK_APP_TOKEN: ${{secrets.PROD_SLACK_APP_TOKEN}}
@@ -60,7 +61,7 @@ jobs:
           NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
           SLACK_REDIRECT_URI: https://standup-bot.com/api/i
       - name: List all files
-        run: ls
+        run: ls -a
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
