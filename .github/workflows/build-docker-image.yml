@@ -6,7 +6,7 @@ on:
       - "main"
 
 jobs:
-  docker:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
@@ -70,7 +70,10 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
+          script_stop: true
           script: |
-            cd slack-standup-bot
+            ls -al
+            whoami
+            cd simple-standup-bot
             ggl
             ./start.sh
