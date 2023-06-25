@@ -18,6 +18,36 @@ jobs:
           path: .
       - name: Print the version
         run: echo "The version was ${{ steps.get-version.outputs.version }}"
+      - name: Configure .env file
+        run: |
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_SLACK_APP_TOKEN']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_CLERK_SECRET_KEY']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_DATABASE_URL']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_SLACK_CLIENT_ID']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_SLACK_CLIENT_SECRET']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_SLACK_CODE']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_COMMUNICATION_TOKEN']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['NEXT_PUBLIC_CLERK_SIGN_IN_URL']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['NEXT_PUBLIC_CLERK_SIGN_UP_URL']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL']); file.close()"
+          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['SLACK_REDIRECT_URI']); file.close()"
+        shell: bash
+        env:
+          PROD_SLACK_APP_TOKEN: ${{secrets.PROD_SLACK_APP_TOKEN}}
+          PROD_CLERK_SECRET_KEY: ${{secrets.PROD_CLERK_SECRET_KEY}}
+          PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{secrets.PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}}
+          PROD_DATABASE_URL: ${{secrets.PROD_DATABASE_URL}}
+          PROD_SLACK_CLIENT_ID: ${{secrets.PROD_SLACK_CLIENT_ID}}
+          PROD_SLACK_CLIENT_SECRET: ${{secrets.PROD_SLACK_CLIENT_SECRET}}
+          PROD_SLACK_CODE: ${{secrets.PROD_SLACK_CODE}}
+          PROD_COMMUNICATION_TOKEN: ${{secrets.PROD_COMMUNICATION_TOKEN}}
+          NEXT_PUBLIC_CLERK_SIGN_IN_URL: /auth/sign-in
+          NEXT_PUBLIC_CLERK_SIGN_UP_URL: /auth/sign-in
+          NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
+          NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
+          SLACK_REDIRECT_URI: https://standup-bot.com/api/i
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
