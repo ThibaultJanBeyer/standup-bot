@@ -10,7 +10,7 @@
     "clean:workspaces": "turbo clean",
     "build": "turbo run build",
     "start": "turbo run start",
-    "manual:production": "turbo run production",
+    "production": "turbo run production",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
