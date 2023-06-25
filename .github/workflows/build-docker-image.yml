@@ -58,6 +58,8 @@ jobs:
         with:
           username: standupbotcom
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: List all files
+        run: ls
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
