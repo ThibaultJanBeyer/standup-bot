@@ -9,6 +9,9 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -23,4 +26,17 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: standupbotcom/ssb:latest
+          tags: |
+            standupbotcom/ssb:latest
+            standupbotcom/ssb:${{ steps.package-version.outputs.current-version}}
+            standupbotcom/ssb:${{ github.sha }}
+      - name: applying new image on prod
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd slack-standup-bot
+            ggl
+            ./start.sh
