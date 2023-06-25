@@ -43,7 +43,7 @@ jobs:
           envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
           envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
           envkey_SLACK_REDIRECT_URI: https://standup-bot.com/api/i
-          file_name: .env.production
+          file_name: production
           fail_on_empty: true
           sort_keys: true
       - name: List all files
