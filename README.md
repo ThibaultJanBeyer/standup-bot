@@ -61,22 +61,12 @@ systemctl restart nginx
 nginx -s reload
 ```
 
-### Deployment
+### Continuous Deployment
 
-Locally:
+Happens automatically and continuously via github workflows. Basically:
 
-```
-./build.sh
-```
-
-- Don’t forget to log in `docker login`
-- And change `HOST="standupbotcom"` and `IMG_NAME="ssb"` to your own repository
-
-On the server:
-
-```
-./start.sh
-```
-
-- Don’t forget to log in `docker login`
-- And change `HOST="standupbotcom"` and `IMG_NAME="ssb"` to your own repository
+- Create .env file with github envs
+- Build docker image & push to private repository (important that is is private because it holds the secrets in env file)
+- SSH into machine
+- Stop old container, run new container (@TODO: update to have zero downtime)
+  It uses the `build.sh` and `start.sh` scripts
