@@ -44,21 +44,26 @@ jobs:
           envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
           envkey_SLACK_REDIRECT_URI: https://standup-bot.com/api/i
           file_name: .env.production
+          directory: ./
           fail_on_empty: true
           sort_keys: true
-      - name: List all files
+      - name: Publish docker image
         run: |
           ls -a
           cat .env.production
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          platforms: linux/amd64,linux/arm64
-          tags: |
-            standupbotcom/ssb:latest
-            standupbotcom/ssb:${{ steps.get-version.outputs.version }}
-            standupbotcom/ssb:${{ github.sha }}
+          docker build . -f ./dockerfile --platform linux/amd64 -t standupbotcom/ssb:latest -t standupbotcom/ssb:${{ steps.get-version.outputs.version }} -t standupbotcom/ssb:${{ github.sha }}
+          docker push standupbotcom/ssb:latest
+          docker push standupbotcom/ssb:${{ steps.get-version.outputs.version }}
+          docker push standupbotcom/ssb:${{ github.sha }}
+      # - name: Build and push
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     push: true
+      #     platforms: linux/amd64,linux/arm64
+      #     tags: |
+      #       standupbotcom/ssb:latest
+      #       standupbotcom/ssb:${{ steps.get-version.outputs.version }}
+      #       standupbotcom/ssb:${{ github.sha }}
       - name: applying new image on prod
         uses: appleboy/ssh-action@v0.1.10
         with:
