@@ -21,19 +21,19 @@ jobs:
       - name: Configure .env file
         run: |
           touch .env.production
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_SLACK_APP_TOKEN']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_CLERK_SECRET_KEY']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_DATABASE_URL']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_SLACK_CLIENT_ID']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_SLACK_CLIENT_SECRET']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_SLACK_CODE']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_COMMUNICATION_TOKEN']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['NEXT_PUBLIC_CLERK_SIGN_IN_URL']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['NEXT_PUBLIC_CLERK_SIGN_UP_URL']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL']); file.close()"
-          python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['SLACK_REDIRECT_URI']); file.close()"
+          echo PROD_SLACK_APP_TOKEN=$PROD_SLACK_APP_TOKEN >> .env.production
+          echo PROD_CLERK_SECRET_KEY=$PROD_CLERK_SECRET_KEY >> .env.production
+          echo PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY >> .env.production
+          echo PROD_DATABASE_URL=$PROD_DATABASE_URL >> .env.production
+          echo PROD_SLACK_CLIENT_ID=$PROD_SLACK_CLIENT_ID >> .env.production
+          echo PROD_SLACK_CLIENT_SECRET=$PROD_SLACK_CLIENT_SECRET >> .env.production
+          echo PROD_SLACK_CODE=$PROD_SLACK_CODE >> .env.production
+          echo PROD_COMMUNICATION_TOKEN=$PROD_COMMUNICATION_TOKEN >> .env.production
+          echo NEXT_PUBLIC_CLERK_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_SIGN_IN_URL >> .env.production
+          echo NEXT_PUBLIC_CLERK_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_URL >> .env.production
+          echo NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL >> .env.production
+          echo NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL >> .env.production
+          echo SLACK_REDIRECT_URI=$SLACK_REDIRECT_URI >> .env.production
           cat .env.production
         shell: bash
         env:
