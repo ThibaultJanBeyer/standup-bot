@@ -80,7 +80,9 @@ jobs:
       #     NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
       #     SLACK_REDIRECT_URI: https://standup-bot.com/api/i
       - name: List all files
-        run: ls -a
+        run: |
+          ls -a
+          cat .env.production
       - name: Build and push
         uses: docker/build-push-action@v4
         with:

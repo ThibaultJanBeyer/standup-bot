@@ -4,10 +4,3 @@ node_modules/
 **/.vercel
 .next
 **/.next
-
-dev.Dockerfile
-prod.Dockerfile
-Dockerfile
-README.md
-node_modules
-npm-debug.log
