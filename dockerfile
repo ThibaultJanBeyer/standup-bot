@@ -11,4 +11,4 @@ RUN         pnpm build
 
 EXPOSE      3000
 
-ENTRYPOINT  ["pnpm", "start"]
+ENTRYPOINT  ["pnpm", "production"]
