@@ -30,19 +30,6 @@ type Data = {
   members: string[];
 };
 
-async function getData(id?: string): Promise<Data> {
-  const res = await fetch(`/api/standups/${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to fetch data");
-  const data: Data = await res.json();
-  return data;
-}
-
 const schema = zod.object(standupsFormFieldsSchema).strict();
 
 export default ({ params: { id } }: { params: { id: string } }) => {
@@ -55,17 +42,25 @@ export default ({ params: { id } }: { params: { id: string } }) => {
 
   // @TODO refactor to server action for SSR
   useEffect(() => {
-    (async () => {
-      const data = await getData(id);
-      form.reset({
-        name: data?.name,
-        channelId: data?.channelId,
-        scheduleCron: data?.scheduleCron,
-        summaryCron: data?.summaryCron,
-        members: data?.members,
-      });
-      setData(data);
-    })();
+    fetch(`/api/standups/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((ok) => ok.json())
+      .then((data) => {
+        form.reset({
+          name: data?.name,
+          channelId: data?.channelId,
+          scheduleCron: data?.scheduleCron,
+          summaryCron: data?.summaryCron,
+          members: data?.members,
+        });
+        setData(data);
+      })
+      .catch((err) => console.error(err));
   }, []);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -93,6 +88,22 @@ export default ({ params: { id } }: { params: { id: string } }) => {
       });
   };
 
+  const onDelete = () => {
+    if (!confirm("Are you sure you want to delete this standup?")) return;
+    fetch(`/api/standups/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((ok) => ok.json())
+      .then((ok) => router.push(`/standups`))
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-10">
       <div>
@@ -102,9 +113,14 @@ export default ({ params: { id } }: { params: { id: string } }) => {
         {!!data?.id && (
           <Form.Root onSubmit={form.handleSubmit(onSubmit)}>
             <StandupsFormFields {...form} />
-            <Form.Submit asChild>
-              <Button type="submit">Update Standup</Button>
-            </Form.Submit>
+            <div className="grid grid-cols-2 gap-10">
+              <Form.Submit asChild>
+                <Button type="submit">Update Standup</Button>
+              </Form.Submit>
+              <Button onClick={onDelete} variant={"destructive"}>
+                Delete Standup
+              </Button>
+            </div>
           </Form.Root>
         )}
       </div>

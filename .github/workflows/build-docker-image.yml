@@ -43,13 +43,13 @@ jobs:
           envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
           envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
           envkey_SLACK_REDIRECT_URI: https://standup-bot.com/api/i
-          file_name: production
+          file_name: .env.production
           fail_on_empty: true
           sort_keys: true
       - name: List all files
         run: |
           ls -a
-          cat production
+          cat .env.production
       - name: Build and push
         uses: docker/build-push-action@v4
         with:

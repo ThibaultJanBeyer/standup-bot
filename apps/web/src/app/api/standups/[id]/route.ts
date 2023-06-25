@@ -39,3 +39,27 @@ export const GET = async (
     { status: 200 },
   );
 };
+
+export const DELETE = async (
+  req: NextRequest,
+  { params }: { params: { id: string } },
+) => {
+  const id = params.id;
+  if (!id) throw new Error("id is required");
+  const user = await getUser(req);
+  const deleted = await db
+    .delete(Standups)
+    .where(
+      and(eq(Standups.id, id), eq(Standups.workspaceId, user.workspaceId!)),
+    )
+    .returning()
+    .execute();
+
+  return NextResponse.json(
+    {
+      id,
+      deleted,
+    },
+    { status: 200 },
+  );
+};
