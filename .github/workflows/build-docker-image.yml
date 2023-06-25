@@ -49,7 +49,7 @@ jobs:
       - name: List all files
         run: |
           ls -a
-          cat .env.production
+          cat production
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
