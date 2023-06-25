@@ -6,7 +6,10 @@ export default async function Home() {
   return (
     <main className="flex flex-1 flex-col items-center justify-between py-24">
       <div className="container z-10 items-center justify-between font-mono text-sm">
-        <p>Welcome</p>
+        <p>
+          Welcome, please install the bot (if not already installed). Otherwise
+          login to continue.
+        </p>
         <div>
           <a
             href={`https://slack.com/oauth/v2/authorize?scope=channels%3Ahistory%2Cchannels%3Ajoin%2Cchannels%3Aread%2Cchat%3Awrite%2Cchat%3Awrite.customize%2Cim%3Ahistory%2Cim%3Aread%2Cim%3Awrite%2Cusers%3Aread&user_scope=&redirect_uri=${encodeURIComponent(

@@ -75,5 +75,5 @@ jobs:
             ls -al
             whoami
             cd simple-standup-bot
-            ggl
+            git pull
             ./start.sh
