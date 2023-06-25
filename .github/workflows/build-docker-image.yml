@@ -20,7 +20,6 @@ jobs:
         run: echo "The version was ${{ steps.get-version.outputs.version }}"
       - name: Configure .env file
         run: |
-          ls
           touch .env.production
           python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_SLACK_APP_TOKEN']); file.close()"
           python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_CLERK_SECRET_KEY']); file.close()"
