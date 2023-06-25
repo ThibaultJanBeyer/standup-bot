@@ -101,21 +101,16 @@ export class StandupBot {
     const app = this.app!;
     this.conversationState = {};
     const token = this.token!;
-    const channel = this.channel!;
+    const members = this.members!;
 
     if (this.isConnected) await this.disconnect();
     await this.connect();
 
     const botUserId = (await app.client.auth.test({ token })).user_id;
-    const members = await app.client.conversations.members({
-      token,
-      channel,
-    });
 
-    if (!members?.members) return;
-
-    for (const member of members.members) {
+    for (const member of members) {
       if (member === botUserId) continue;
+      console.log("Starting standup for", member);
       const conversation = await app.client.conversations.open({
         token,
         users: member,

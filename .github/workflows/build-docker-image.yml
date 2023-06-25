@@ -40,8 +40,8 @@ jobs:
           envkey_COMMUNICATION_TOKEN: ${{secrets.PROD_COMMUNICATION_TOKEN}}
           envkey_NEXT_PUBLIC_CLERK_SIGN_IN_URL: /auth/sign-in
           envkey_NEXT_PUBLIC_CLERK_SIGN_UP_URL: /auth/sign-in
-          envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
-          envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
+          envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /standups
+          envkey_NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /standups
           envkey_SLACK_REDIRECT_URI: https://standup-bot.com/api
           file_name: .env.production
           directory: ./
