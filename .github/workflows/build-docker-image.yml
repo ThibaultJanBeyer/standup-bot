@@ -9,9 +9,15 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: package.json info
-        id: info
-        uses: jaywcjlove/github-action-package@main
+      - name: checkout repository
+        uses: actions/checkout@v3
+      - name: get version
+        id: get-version
+        uses: beaconbrigade/package-json-version@v0.3
+        with:
+          path: .
+      - name: Print the version
+        run: echo "The version was ${{ steps.get-version.outputs.version }}"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -28,7 +34,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: |
             standupbotcom/ssb:latest
-            standupbotcom/ssb:${{ steps.info.outputs.version }}
+            standupbotcom/ssb:${{ steps.get-version.outputs.version }}
             standupbotcom/ssb:${{ github.sha }}
       - name: applying new image on prod
         uses: appleboy/ssh-action@v0.1.10
