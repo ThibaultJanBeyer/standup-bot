@@ -11,7 +11,7 @@ export default async (req: NextRequest) => {
       workspace: true,
     },
     where: eq(Users.clerkId, userId),
-  });
+  }).execute();
   if (!user) throw new Error("User not found");
   if (!user.workspace) throw new Error("User has no workspace");
   return {

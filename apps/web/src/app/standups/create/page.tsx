@@ -32,6 +32,8 @@ export default () => {
       members: data.members,
     };
 
+    console.info("standups");
+
     // @TODO refactor to server action for SSR
     fetch("/api/standups/create", {
       method: "POST",

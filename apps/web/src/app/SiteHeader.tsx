@@ -32,9 +32,11 @@ export function SiteHeader() {
       fetch("/api/me", {
         method: "GET",
         credentials: "include",
-      }).catch((err) => {
-        console.error(err);
-      });
+      })
+        .then((ok) => console.info("ME", ok))
+        .catch((err) => {
+          console.error(err);
+        });
   }, [isSignedIn]);
 
   return (

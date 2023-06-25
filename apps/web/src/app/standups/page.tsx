@@ -18,6 +18,7 @@ import {
 type Data = Standup & { author?: User };
 
 async function getStandups(): Promise<Data[]> {
+  console.info("standups");
   const res = await fetch(`/api/standups`, {
     method: "GET",
     headers: {
@@ -25,8 +26,12 @@ async function getStandups(): Promise<Data[]> {
     },
     credentials: "include",
   });
+  console.info("standups res", res);
+
   if (!res.ok) throw new Error("Failed to fetch data");
+  console.info("standups data parsing");
   const data: { standups: Data[] } = await res.json();
+  console.info("standups data", data);
   return data.standups;
 }
 

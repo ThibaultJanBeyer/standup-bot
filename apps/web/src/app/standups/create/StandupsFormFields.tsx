@@ -12,34 +12,6 @@ type Data = {
   name: string;
 };
 
-async function getChannels(): Promise<Data[]> {
-  const res = await fetch(`/api/slack/channels`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to fetch data");
-  const data: { channels: Data[] } = await res.json();
-  return data.channels;
-}
-async function getUsers(channelId?: string): Promise<Data[]> {
-  const res = await fetch(
-    `/api/slack/users-by-channel?channelId=${channelId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    },
-  );
-  if (!res.ok) throw new Error("Failed to fetch data");
-  const data: { users: Data[] } = await res.json();
-  return data.users;
-}
-
 export const schema = {
   name: zod.string().nonempty({ message: "Name is required" }),
   channelId: zod.string().nonempty({ message: "Channel ID is required" }),
@@ -65,18 +37,30 @@ export default ({ register, formState: { errors }, watch }: Props) => {
 
   // @TODO refactor to server action for SSR
   useEffect(() => {
-    (async () => {
-      const data = await getChannels();
-      setChannels(data);
-    })();
+    fetch(`/api/slack/channels`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((ok) => ok.json())
+      .then((data) => setChannels(data.channels))
+      .catch((err) => console.error(err));
   }, []);
 
   useEffect(() => {
     if (!selectedChannel) return;
-    (async () => {
-      const data = await getUsers(selectedChannel);
-      setUsers(data);
-    })();
+    fetch(`/api/slack/users-by-channel?channelId=${selectedChannel}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((ok) => ok.json())
+      .then((data) => setUsers(data.users))
+      .catch((err) => console.error(err));
   }, [selectedChannel]);
 
   return (

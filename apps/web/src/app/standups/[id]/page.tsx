@@ -40,7 +40,6 @@ async function getData(id?: string): Promise<Data> {
   });
   if (!res.ok) throw new Error("Failed to fetch data");
   const data: Data = await res.json();
-  console.log("data", data);
   return data;
 }
 
@@ -68,8 +67,6 @@ export default ({ params: { id } }: { params: { id: string } }) => {
       setData(data);
     })();
   }, []);
-
-  console.log("data", data);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const updateStandup: Omit<NewStandup, "workspaceId" | "authorId"> = {

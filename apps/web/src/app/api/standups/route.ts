@@ -11,7 +11,7 @@ export const GET = async (req: NextRequest) => {
         author: true,
       },
       where: eq(Standups.workspaceId, user.workspaceId!),
-    });
+    }).execute();
 
     return NextResponse.json(
       {
