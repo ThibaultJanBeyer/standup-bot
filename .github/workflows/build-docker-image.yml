@@ -20,6 +20,8 @@ jobs:
         run: echo "The version was ${{ steps.get-version.outputs.version }}"
       - name: Configure .env file
         run: |
+          ls
+          touch .env.production
           python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_SLACK_APP_TOKEN']); file.close()"
           python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_CLERK_SECRET_KEY']); file.close()"
           python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['PROD_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY']); file.close()"
@@ -33,6 +35,7 @@ jobs:
           python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL']); file.close()"
           python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL']); file.close()"
           python -c "import os; file = open('.env.production', 'w'); file.write(os.environ['SLACK_REDIRECT_URI']); file.close()"
+          cat .env.production
         shell: bash
         env:
           PROD_SLACK_APP_TOKEN: ${{secrets.PROD_SLACK_APP_TOKEN}}
