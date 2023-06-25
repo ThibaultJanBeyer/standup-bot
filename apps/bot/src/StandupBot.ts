@@ -110,7 +110,6 @@ export class StandupBot {
 
     for (const member of members) {
       if (member === botUserId) continue;
-      console.log("Starting standup for", member);
       const conversation = await app.client.conversations.open({
         token,
         users: member,
