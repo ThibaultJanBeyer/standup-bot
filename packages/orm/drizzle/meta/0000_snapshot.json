@@ -1,63 +1,9 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "4687d4e7-6b43-45cb-ac50-ceeabbd59eda",
+  "id": "e74c286d-ebed-44ba-bcdb-bdc70fe9ebb2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "answers": {
-      "name": "answers",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "author_id": {
-          "name": "author_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "question_id": {
-          "name": "question_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "question_msg_id": {
-          "name": "question_msg_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "client_msg_id": {
-          "name": "client_msg_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {}
-    },
     "deleted_records": {
       "name": "deleted_records",
       "schema": "",
@@ -83,48 +29,6 @@
         },
         "table_name": {
           "name": "table_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {}
-    },
-    "questions": {
-      "name": "questions",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "standup_id": {
-          "name": "standup_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "question_text": {
-          "name": "question_text",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -197,6 +101,12 @@
         },
         "members": {
           "name": "members",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "questions": {
+          "name": "questions",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true

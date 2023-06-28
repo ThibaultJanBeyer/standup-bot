@@ -43,7 +43,7 @@ export default function StandupList() {
   }, []);
 
   return (
-    <main>
+    <main className="mx-auto w-full max-w-5xl">
       <div className="text-center">
         <Button asChild className="mx-auto my-10">
           <Link href={`/standups/create`}>Create New Standup</Link>
@@ -67,24 +67,31 @@ function StandupTable({ data }: { data: Data[] }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((standup) => (
-          <TableRow key={standup.id}>
-            <TableCell className="font-medium">
-              <Link href={`/standups/${standup.id}`} className="block">
-                {standup.name}
-              </Link>
-            </TableCell>
-            <TableCell>{standup.author?.id || standup.authorId}</TableCell>
-            <TableCell>{standup.createdAt.toLocaleString()}</TableCell>
-            <TableCell>
-              <Button asChild>
+        {data.map((standup) => {
+          const createdAt = new Date(standup.createdAt as any as string);
+          return (
+            <TableRow key={standup.id}>
+              <TableCell className="font-medium">
                 <Link href={`/standups/${standup.id}`} className="block">
-                  Open
+                  {standup.name}
                 </Link>
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
+              </TableCell>
+              <TableCell>
+                {standup.author?.slackName ||
+                  standup.author?.id ||
+                  standup.authorId}
+              </TableCell>
+              <TableCell>{createdAt.toLocaleString()}</TableCell>
+              <TableCell>
+                <Button asChild>
+                  <Link href={`/standups/${standup.id}`} className="block">
+                    Open
+                  </Link>
+                </Button>
+              </TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );

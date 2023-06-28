@@ -20,9 +20,9 @@ app.post("/bot/slack/init", async (req: Request, res: Response) => {
 
   if (standups[standupId]) await standups[standupId].teardown();
 
-  const bot = new StandupBot({ standupId });
+  const bot = new StandupBot();
   standups[standupId] = bot;
-  await bot.init();
+  await bot.init({ standupId });
 
   res.status(200).json({ message: "ok" });
 });

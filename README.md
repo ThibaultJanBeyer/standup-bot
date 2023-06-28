@@ -6,7 +6,7 @@
 - neon.tech as db and drizzle as orm
 - Icons using https://icones.js.org/collection/lucide via unplugin icons
 - next.js for the app using mostly https://ui.shadcn.com/ for components
-- Running on digitalocean instance monitoring via pm2 https://app.pm2.io/bucket/6495c91365be89c1f189e947/backend/overview/servers
+- Running on digitalocean instance
 - https via cloudflare
 
 ## Server resources

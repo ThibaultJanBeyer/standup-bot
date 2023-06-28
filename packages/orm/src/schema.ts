@@ -37,14 +37,13 @@ export const Standups = pgTable("standups", {
   summaryCron: text("summary_cron").notNull(),
   authorId: text("author_id").notNull(),
   members: textArray("members").notNull(),
+  questions: textArray("questions").notNull(),
   // author => relation
-  // questions => relation
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const StandupsRelations = relations(Standups, ({ many, one }) => ({
-  questions: many(Questions),
   author: one(Users, {
     fields: [Standups.authorId],
     references: [Users.slackId],
@@ -57,48 +56,6 @@ export const StandupsRelations = relations(Standups, ({ many, one }) => ({
 
 export type Standup = InferModel<typeof Standups>;
 export type NewStandup = InferModel<typeof Standups, "insert">;
-
-export const Questions = pgTable("questions", {
-  id: uuid("id").defaultRandom().notNull().primaryKey(),
-  standupId: uuid("standup_id").notNull(),
-  questionText: text("question_text").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type Question = InferModel<typeof Questions>;
-export type NewQuestion = InferModel<typeof Questions, "insert">;
-
-export const QuestionsRelations = relations(Questions, ({ one }) => ({
-  standupId: one(Standups, {
-    fields: [Questions.standupId],
-    references: [Standups.id],
-  }),
-}));
-
-export const Answers = pgTable("answers", {
-  id: uuid("id").defaultRandom().notNull().primaryKey(),
-  authorId: text("author_id").notNull(),
-  questionId: uuid("question_id").notNull(),
-  questionMsgId: text("question_msg_id").notNull(),
-  clientMsgId: text("client_msg_id").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export type Answer = InferModel<typeof Answers>;
-export type NewAnswer = InferModel<typeof Answers, "insert">;
-
-export const AnswersRelations = relations(Answers, ({ one }) => ({
-  author: one(Users, {
-    fields: [Answers.authorId],
-    references: [Users.slackId],
-  }),
-  question: one(Questions, {
-    fields: [Answers.questionId],
-    references: [Questions.id],
-  }),
-}));
 
 export const Workspaces = pgTable(
   "workspaces",

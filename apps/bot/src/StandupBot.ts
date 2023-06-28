@@ -21,7 +21,7 @@ type SlackActionObject = SlackActionMiddlewareArgs<SlackAction> &
   AllMiddlewareArgs<StringIndexed>;
 
 export class StandupBot {
-  id: string;
+  id: string = "";
   channel: string = "";
   members?: string[];
   questions: string[] = [
@@ -45,11 +45,9 @@ export class StandupBot {
   notButtonId = `no_${randomUUID()}`;
   startButtonId = `start_${randomUUID()}`;
 
-  constructor({ standupId }: { standupId: string }) {
+  async init({ standupId }: { standupId: string }) {
     this.id = standupId;
-  }
 
-  async init() {
     const standup = await db.query.Standups.findFirst({
       with: {
         workspace: true,
@@ -61,6 +59,7 @@ export class StandupBot {
     this.token = standup.workspace.botToken;
     this.channel = standup.channelId;
     this.members = standup.members;
+    this.questions = standup.questions;
 
     this.app = new App({
       token: this.token,
@@ -215,7 +214,6 @@ export class StandupBot {
       token: this.token,
       users: body.user.id,
     });
-
     if (!conversation?.channel?.id) return;
     await this.askQuestion(conversation.channel.id, body.user.id, 0);
   };
