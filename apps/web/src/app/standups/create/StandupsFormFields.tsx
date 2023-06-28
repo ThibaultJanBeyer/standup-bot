@@ -2,9 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import * as Form from "@radix-ui/react-form";
-import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
+import {
+  Control,
+  FieldErrors,
+  FieldValues,
+  useFieldArray,
+  UseFormRegister,
+  UseFormWatch,
+} from "react-hook-form";
 import * as zod from "zod";
 
+import { Button } from "@ssb/ui/button";
 import { Input } from "@ssb/ui/input";
 
 type Data = {
@@ -14,12 +22,16 @@ type Data = {
 
 export const schema = {
   name: zod.string().nonempty({ message: "Name is required" }),
+  questions: zod.string().nonempty({ message: "Questions required" }),
+  // zod
+  //   .array(zod.string())
+  //   .nonempty({ message: "Questions are required" }),
+  scheduleCron: zod.string().nonempty({ message: "Schedule cron is required" }),
+  summaryCron: zod.string().nonempty({ message: "Summary cron is required" }),
   channelId: zod.string().nonempty({ message: "Channel ID is required" }),
   members: zod
     .array(zod.string())
     .nonempty({ message: "Members are required" }),
-  scheduleCron: zod.string().nonempty({ message: "Schedule cron is required" }),
-  summaryCron: zod.string().nonempty({ message: "Summary cron is required" }),
 };
 
 type Props = {
@@ -27,13 +39,19 @@ type Props = {
   formState: {
     errors: FieldErrors<any>;
   };
+  control: Control<FieldValues, any>;
   watch: UseFormWatch<any>;
 };
 
-export default ({ register, formState: { errors }, watch }: Props) => {
+export default ({ register, formState: { errors }, control, watch }: Props) => {
   const [channels, setChannels] = useState<Data[]>([]);
   const [users, setUsers] = useState<Data[]>([]);
   const selectedChannel = watch("channelId");
+
+  // const { fields: questionFields, append } = useFieldArray({
+  //   name: "questions",
+  //   control,
+  // });
 
   // @TODO refactor to server action for SSR
   useEffect(() => {
@@ -76,8 +94,55 @@ export default ({ register, formState: { errors }, watch }: Props) => {
           <Input {...register("name")} />
         </Form.Control>
       </Form.Field>
+      <Form.Field name="scheduleCron" className="mb-5">
+        <Form.Label>
+          Cron expression to start the questionnaire (in UTC):
+        </Form.Label>
+        {Boolean(errors.scheduleCron?.message) && (
+          <Form.Message className="text-red-600">
+            {`(${errors.scheduleCron?.message})`}
+          </Form.Message>
+        )}
+        <Form.Control asChild>
+          <Input {...register("scheduleCron")} defaultValue="0 7 * * 1-5" />
+        </Form.Control>
+      </Form.Field>
+      <Form.Field name="summaryCron" className="mb-5">
+        <Form.Label>Cron expression to send the summary (in UTC):</Form.Label>
+        {Boolean(errors.summaryCron?.message) && (
+          <Form.Message className="text-red-600">
+            {`(${errors.summaryCron?.message})`}
+          </Form.Message>
+        )}
+        <Form.Control asChild>
+          <Input {...register("summaryCron")} defaultValue="0 11 * * 1-5" />
+        </Form.Control>
+      </Form.Field>
+      <Form.Field name="questions" className="mb-5">
+        <Form.Label>Questions the BOT is asking:</Form.Label>
+        {Boolean(errors.questions?.message) && (
+          <Form.Message className="text-red-600">
+            {`(${errors.questions?.message})`}
+          </Form.Message>
+        )}
+        <Form.Control asChild>
+          <Input
+            {...register("questions")}
+            defaultValue=":arrow_left: What did you do since last standup?,:sunny: What do you plan to work on today?,:speech_balloon: Any questions, blockers or other thoughts?,:raised_hands: How are you feeling today?"
+          />
+        </Form.Control>
+      </Form.Field>
+      {/* <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="mt-2"
+        onClick={() => append({ value: "" })}
+      >
+        Add URL
+      </Button> */}
       <Form.Field name="channelId" className="mb-5">
-        <Form.Label>Channel ID</Form.Label>
+        <Form.Label>Channel (where the summary gets posted)</Form.Label>
         {Boolean(errors.channelId?.message) && (
           <Form.Message className="text-red-600">
             {`(${errors.channelId?.message})`}
@@ -130,30 +195,6 @@ export default ({ register, formState: { errors }, watch }: Props) => {
             </select>
           </Form.Control>
         )}
-      </Form.Field>
-      <Form.Field name="scheduleCron" className="mb-5">
-        <Form.Label>
-          Cron expression to start the questionnaire (in UTC):
-        </Form.Label>
-        {Boolean(errors.scheduleCron?.message) && (
-          <Form.Message className="text-red-600">
-            {`(${errors.scheduleCron?.message})`}
-          </Form.Message>
-        )}
-        <Form.Control asChild>
-          <Input {...register("scheduleCron")} defaultValue="0 7 * * 1-5" />
-        </Form.Control>
-      </Form.Field>
-      <Form.Field name="summaryCron" className="mb-5">
-        <Form.Label>Cron expression to send the summary (in UTC):</Form.Label>
-        {Boolean(errors.summaryCron?.message) && (
-          <Form.Message className="text-red-600">
-            {`(${errors.summaryCron?.message})`}
-          </Form.Message>
-        )}
-        <Form.Control asChild>
-          <Input {...register("summaryCron")} defaultValue="0 11 * * 1-5" />
-        </Form.Control>
       </Form.Field>
     </>
   );

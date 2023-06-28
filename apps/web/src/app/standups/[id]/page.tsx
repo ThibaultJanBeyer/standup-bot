@@ -64,6 +64,12 @@ export default ({ params: { id } }: { params: { id: string } }) => {
   }, []);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    if (
+      !confirm(
+        "Caution if your standup is currently running it might break the flow. Continue?",
+      )
+    )
+      return;
     const updateStandup: Omit<NewStandup, "workspaceId" | "authorId"> = {
       id,
       name: data.name,
@@ -71,6 +77,7 @@ export default ({ params: { id } }: { params: { id: string } }) => {
       scheduleCron: data.scheduleCron,
       summaryCron: data.summaryCron,
       members: data.members,
+      questions: data.questions.split(","),
     };
 
     fetch("/api/standups/create", {
@@ -117,7 +124,7 @@ export default ({ params: { id } }: { params: { id: string } }) => {
               <Form.Submit asChild>
                 <Button type="submit">Update Standup</Button>
               </Form.Submit>
-              <Button onClick={onDelete} variant={"destructive"}>
+              <Button onClick={onDelete} type="button" variant={"destructive"}>
                 Delete Standup
               </Button>
             </div>

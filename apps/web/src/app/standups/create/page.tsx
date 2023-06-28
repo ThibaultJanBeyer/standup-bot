@@ -30,9 +30,8 @@ export default () => {
       scheduleCron: data.scheduleCron,
       summaryCron: data.summaryCron,
       members: data.members,
+      questions: data.questions.split(","),
     };
-
-    console.info("standups");
 
     // @TODO refactor to server action for SSR
     fetch("/api/standups/create", {

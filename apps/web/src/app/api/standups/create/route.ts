@@ -11,6 +11,7 @@ const schema = z.object({
   scheduleCron: z.string(),
   summaryCron: z.string(),
   members: z.array(z.string()),
+  questions: z.array(z.string()),
 });
 
 export const POST = async (req: NextRequest) => {
