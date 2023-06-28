@@ -1,5 +1,14 @@
 # Work in Progress
 
+## TODO
+
+- Beautiful UI
+- Bot needs to restart workflows on server reboot
+- A way to prevent overriding the bot while running (or only give a warning when bot is actually running)
+- Questions Array (multiple inputs fields instead of one string)
+
+## Info
+
 - A dead simple open source standup bot
 - Based on the [Getting Started ⚡️ Bolt](https://github.com/slackapi/bolt-js-getting-started-app) and [github copilot chat](https://github.com/github-copilot/chat_waitlist_signup/join) output
 - Rushed in a week
@@ -8,6 +17,16 @@
 - next.js for the app using mostly https://ui.shadcn.com/ for components
 - Running on digitalocean instance
 - https via cloudflare
+
+## Testing Slack integration on dev
+
+- Run a local-tunnel on `:3000`
+- Add to `SLACK_REDIRECT_URI` in `.env` file
+- Add redirect url in [the bots Redirect URLs list under oauth](https://api.slack.com/apps/A05D19MGCTC/oauth?)
+
+## Building locally
+
+- Run `./build.sh`
 
 ## Server resources
 

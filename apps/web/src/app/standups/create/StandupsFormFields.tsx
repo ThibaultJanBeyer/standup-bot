@@ -128,7 +128,7 @@ export default ({ register, formState: { errors }, control, watch }: Props) => {
         <Form.Control asChild>
           <Input
             {...register("questions")}
-            defaultValue=":arrow_left: What did you do since last standup?,:sunny: What do you plan to work on today?,:speech_balloon: Any questions, blockers or other thoughts?,:raised_hands: How are you feeling today?"
+            defaultValue=":arrow_left: What did you do since last standup?,:sunny: What do you plan to work on today?,:speech_balloon: Any questions or blockers or other thoughts?,:raised_hands: How are you feeling today?"
           />
         </Form.Control>
       </Form.Field>
