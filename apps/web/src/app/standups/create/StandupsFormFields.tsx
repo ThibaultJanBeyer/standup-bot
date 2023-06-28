@@ -48,10 +48,10 @@ export default ({ register, formState: { errors }, control, watch }: Props) => {
   const [users, setUsers] = useState<Data[]>([]);
   const selectedChannel = watch("channelId");
 
-  // const { fields: questionFields, append } = useFieldArray({
-  //   name: "questions",
-  //   control,
-  // });
+  const { fields: questionFields, append } = useFieldArray({
+    name: "questions",
+    control,
+  });
 
   // @TODO refactor to server action for SSR
   useEffect(() => {
@@ -132,7 +132,7 @@ export default ({ register, formState: { errors }, control, watch }: Props) => {
           />
         </Form.Control>
       </Form.Field>
-      {/* <Button
+      <Button
         type="button"
         variant="outline"
         size="sm"
@@ -140,7 +140,7 @@ export default ({ register, formState: { errors }, control, watch }: Props) => {
         onClick={() => append({ value: "" })}
       >
         Add URL
-      </Button> */}
+      </Button>
       <Form.Field name="channelId" className="mb-5">
         <Form.Label>Channel (where the summary gets posted)</Form.Label>
         {Boolean(errors.channelId?.message) && (

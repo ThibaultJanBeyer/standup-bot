@@ -14,13 +14,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ssb/ui/dropdown-menu";
+import {
+  LogOutIcon,
+  MoonIcon,
+  SettingsIcon,
+  SunIcon,
+  UserCircleIcon,
+} from "@ssb/ui/icons";
 import { Skeleton } from "@ssb/ui/skeleton";
-
-import IconLogout from "~icons/lucide/log-out";
-import IconMoon from "~icons/lucide/moon";
-import IconSettings from "~icons/lucide/settings";
-import IconSun from "~icons/lucide/sun";
-import IconUserCircle from "~icons/lucide/user-circle";
 
 export function SiteHeader() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -56,14 +57,14 @@ export function SiteHeader() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" className="gap-2">
-                        <IconUserCircle />
+                        <UserCircleIcon />
                         {user.fullName || user.emailAddresses[0].emailAddress}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem asChild>
                         <Link href="/account">
-                          <IconSettings className="mr-2" />
+                          <SettingsIcon className="mr-2" />
                           Settings
                         </Link>
                       </DropdownMenuItem>
@@ -71,7 +72,7 @@ export function SiteHeader() {
                       <DropdownMenuItem
                         onSelect={() => signOut().then(() => replace(`/`))}
                       >
-                        <IconLogout className="mr-2" />
+                        <LogOutIcon className="mr-2" />
                         Logout
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -107,8 +108,8 @@ function ThemeToggle() {
       size="sm"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
     >
-      <IconSun className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <IconMoon className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <SunIcon className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <MoonIcon className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
       <span className="sr-only">Toggle theme</span>
     </Button>
   );
