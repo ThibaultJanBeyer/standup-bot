@@ -10,6 +10,7 @@ export const GET = async (
   const id = params.id;
   if (!id) throw new Error("id is required");
   const user = await getUser(req);
+  if (user instanceof NextResponse) return user;
   const standup = await db.query.Standups.findFirst({
     with: {
       author: true,
@@ -24,17 +25,10 @@ export const GET = async (
 
   return NextResponse.json(
     {
-      name: standup.name,
-      channelId: standup.channelId,
-      scheduleCron: standup.scheduleCron,
-      summaryCron: standup.summaryCron,
-      id: standup.id,
+      ...standup,
       author: {
         id: standup.author?.id || standup.authorId,
       },
-      createdAt: standup.createdAt,
-      updatedAt: standup.updatedAt,
-      members: standup.members,
     },
     { status: 200 },
   );
@@ -47,6 +41,7 @@ export const DELETE = async (
   const id = params.id;
   if (!id) throw new Error("id is required");
   const user = await getUser(req);
+  if (user instanceof NextResponse) return user;
   const deleted = await db
     .delete(Standups)
     .where(

@@ -28,18 +28,6 @@ export function SiteHeader() {
   const { signOut } = useAuth();
   const { replace } = useRouter();
 
-  React.useEffect(() => {
-    if (isSignedIn)
-      fetch("/api/me", {
-        method: "GET",
-        credentials: "include",
-      })
-        .then((ok) => console.info("ME", ok))
-        .catch((err) => {
-          console.error(err);
-        });
-  }, [isSignedIn]);
-
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">

@@ -1,6 +1,5 @@
 import { InferModel, relations } from "drizzle-orm";
 import {
-  boolean,
   customType,
   jsonb,
   pgTable,

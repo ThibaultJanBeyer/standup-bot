@@ -2,43 +2,22 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
 import * as Form from "@radix-ui/react-form";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import * as zod from "zod";
+import { SubmitHandler } from "react-hook-form";
 
 import { Button } from "@ssb/ui/button";
 
 import { NewStandup } from "@/lib/orm";
 
-import StandupsFormFields, {
-  schema as standupsFormFieldsSchema,
-} from "../create/StandupsFormFields";
+import StandupsFormFields, { FormData } from "../create/StandupsFormFields";
 
-type Data = {
-  name: string;
-  channelId: string;
-  scheduleCron: string;
-  summaryCron: string;
+type APIStandupData = FormData & {
   id: string;
-  workspaceId: string;
-  author: {
-    id: string;
-  };
-  createdAt: Date;
-  updatedAt: Date;
-  members: string[];
 };
 
-const schema = zod.object(standupsFormFieldsSchema).strict();
-
 export default ({ params: { id } }: { params: { id: string } }) => {
-  const [data, setData] = useState<Data>();
+  const [data, setData] = useState<APIStandupData>();
   const router = useRouter();
-  const form = useForm({
-    resolver: zodResolver(schema),
-    mode: "onChange",
-  });
 
   // @TODO refactor to server action for SSR
   useEffect(() => {
@@ -50,26 +29,16 @@ export default ({ params: { id } }: { params: { id: string } }) => {
       credentials: "include",
     })
       .then((ok) => ok.json())
-      .then((data) => {
-        form.reset({
-          name: data?.name,
-          channelId: data?.channelId,
-          scheduleCron: data?.scheduleCron,
-          summaryCron: data?.summaryCron,
-          members: data?.members,
-        });
-        setData(data);
-      })
+      .then((data) =>
+        setData({
+          ...data,
+          questions: data.questions.map((q: string) => ({ value: q })),
+        }),
+      )
       .catch((err) => console.error(err));
   }, []);
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    if (
-      !confirm(
-        "Caution if your standup is currently running it might break the flow. Continue?",
-      )
-    )
-      return;
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     const updateStandup: Omit<NewStandup, "workspaceId" | "authorId"> = {
       id,
       name: data.name,
@@ -77,7 +46,7 @@ export default ({ params: { id } }: { params: { id: string } }) => {
       scheduleCron: data.scheduleCron,
       summaryCron: data.summaryCron,
       members: data.members,
-      questions: data.questions.split(","),
+      questions: data.questions.map((q) => q.value),
     };
 
     fetch("/api/standups/create", {
@@ -117,9 +86,8 @@ export default ({ params: { id } }: { params: { id: string } }) => {
         <h1 className="m-10 text-center text-lg">
           Update {data?.name || "loading…"}
         </h1>
-        {!!data?.id && (
-          <Form.Root onSubmit={form.handleSubmit(onSubmit)}>
-            <StandupsFormFields {...form} />
+        {Boolean(data?.id) && (
+          <StandupsFormFields onSubmit={onSubmit} data={data}>
             <div className="grid grid-cols-2 gap-10">
               <Form.Submit asChild>
                 <Button type="submit">Update Standup</Button>
@@ -128,7 +96,7 @@ export default ({ params: { id } }: { params: { id: string } }) => {
                 Delete Standup
               </Button>
             </div>
-          </Form.Root>
+          </StandupsFormFields>
         )}
       </div>
     </main>

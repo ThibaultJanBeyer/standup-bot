@@ -6,7 +6,16 @@ import {
   SlackActionMiddlewareArgs,
 } from "@slack/bolt";
 import { StringIndexed } from "@slack/bolt/dist/types/helpers";
-import schedule from "node-schedule";
+import { CronJob } from "cron";
+import {
+  BaseActionObject,
+  createMachine,
+  interpret,
+  Interpreter,
+  ResolveTypegenMeta,
+  ServiceMap,
+  TypegenDisabled,
+} from "xstate";
 
 import { db, eq, Standups } from "./orm";
 
@@ -23,7 +32,7 @@ type SlackActionObject = SlackActionMiddlewareArgs<SlackAction> &
 export class StandupBot {
   id: string = "";
   channel: string = "";
-  members?: string[];
+  members: string[] = [];
   questions: string[] = [
     ":arrow_left: What did you do since last standup?",
     ":sunny: What do you plan to work on today?",
@@ -39,28 +48,111 @@ export class StandupBot {
   };
   token: string = "";
   app?: App;
-  startJob?: schedule.Job;
-  postJob?: schedule.Job;
+  startJob?: CronJob;
+  postJob?: CronJob;
   isConnected: boolean = false;
   notButtonId = `no_${randomUUID()}`;
   startButtonId = `start_${randomUUID()}`;
+  stateMachine: StateMachineType;
 
-  async init({ standupId }: { standupId: string }) {
+  constructor({ standupId }: { standupId: string }) {
     this.id = standupId;
 
+    const machine = createMachine({
+      /** @xstate-layout N4IgpgJg5mDOIC5QCED2AXAdASQgGzAGIBlAFQEEAlUgbQAYBdRUAB1VgEt0PUA7ZkAA9EAVgBsmAOwAWEQGYRAJhFKl0xQE4ANCACeiMXMzyNADjka6pyXTnTJpkQF8nOtFgDqAQy4deUQgBFAFUAUTJsAHkAOWJ6JiQQNk5uPgFhBABGaSN7HI0HOkVTRUkFHX0suVNMOmlpM0yzDUtZMRc3DExvX38gsIiYuMyE1nZfNMSM6TpM2uVMzIdTMTE6OkkKxEzbTBXDUyWlNZzTDpB3bp9uPujI0gB9D0jKAGlsaIBxeIFkif4pogWlJiitpCU5JJNJJMlsEABaJZSBpyHaaESSMQaeztVwXLo9G4BO6PZ5vD7fEa-capAGgDJyMSSTBYgqYkSmcxMkRw+EzEEckrSMSOBQaOTnS64AiEAAKkTIP0Sf1p6UQiMwxREGkUYmkTQxBToGh5ekQiismGxkmamMUqJkkq68oiXzlCseABEYqElWMUjw6UJ1Ts5pk9SKRHVVhoDnDisyoyJ6jr1uHsdIXHjeKgIHABO5qQHJvSQw1MOHhY5o1i42aEZliprlNZwxzLCbJE6sNKwEX-mqEZCrQ5FtjY7qNOG4YZjBYSqYZlORE1Vt2rr0oP3VYCEIpG5rVjDUaUoYpdXCMVIoZyZCo1mZdeuXaQKdvA4PVrUzFjw1iLNI8bWMYdDJg0FqzFi9RZk4QA */
+      id: "Bot",
+      initial: "Idle",
+      context: {
+        submitted: 0,
+      },
+      states: {
+        Idle: {
+          on: {
+            START: {
+              target: "Waiting",
+            },
+            POST: "POSTING",
+          },
+        },
+        Waiting: {
+          on: {
+            QUESTIONS_ANSWERED: [
+              {
+                target: "Idle",
+                cond: (context) => context.submitted >= this.members.length - 1,
+                internal: false,
+              },
+              {
+                target: "Waiting",
+                actions: [(context) => context.submitted++],
+              },
+            ],
+            NOT_WORKING: [
+              {
+                target: "Idle",
+                cond: (context) => context.submitted >= this.members.length - 1,
+                internal: false,
+              },
+              {
+                target: "Waiting",
+                actions: [(context) => context.submitted++],
+              },
+            ],
+          },
+        },
+        POSTING: {
+          on: {
+            POST_DONE: "Idle",
+          },
+        },
+      },
+      schema: {
+        events: {} as
+          | { type: "START" }
+          | { type: "QUESTIONS_ANSWERED" }
+          | { type: "NOT_WORKING" }
+          | { type: "POST" }
+          | { type: "POST_DONE" },
+      },
+      predictableActionArguments: true,
+      preserveActionOrder: true,
+    });
+
+    this.stateMachine = interpret(machine);
+  }
+
+  async softUpdate() {
+    const checkStatus = async (check: number): Promise<Boolean> => {
+      const status = this.stateMachine.getSnapshot().value;
+      if (status === "Idle" || check >= 4320) {
+        // 12 hours
+        await this.teardown();
+        await this.init();
+        return true;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+      return await checkStatus(++check);
+    };
+
+    return checkStatus(0);
+  }
+
+  async init() {
     const standup = await db.query.Standups.findFirst({
       with: {
         workspace: true,
       },
       where: eq(Standups.id, this.id),
     });
-
     if (!standup?.workspace) throw new Error("No standup found");
+
     this.token = standup.workspace.botToken;
     this.channel = standup.channelId;
     this.members = standup.members;
     this.questions = standup.questions;
 
+    this.stateMachine.start();
     this.app = new App({
       token: this.token,
       socketMode: true,
@@ -73,18 +165,27 @@ export class StandupBot {
     this.app.action(this.notButtonId, this.notWorkingClickHandler);
     this.app.action(this.startButtonId, this.startStandupClickHandler);
 
-    // Schedule a function to run at 7 AM every working day
-    this.startJob = schedule.scheduleJob(
+    this.startJob = new CronJob(
       standup.scheduleCron,
       this.startStandup,
+      null,
+      true,
+      // "America/Los_Angeles", can be supplied in future versions
     );
-    this.postJob = schedule.scheduleJob(standup.summaryCron, this.postStandup);
+    this.postJob = new CronJob(
+      standup.summaryCron,
+      this.postStandup,
+      null,
+      true,
+      // "America/Los_Angeles", can be supplied in future versions
+    );
   }
 
   async teardown() {
-    await this.app!.stop();
-    this.startJob!.cancel();
-    this.postJob!.cancel();
+    this.stateMachine.stop();
+    await this.disconnect();
+    this.startJob!.stop();
+    this.postJob!.stop();
   }
 
   connect = async () => {
@@ -97,6 +198,8 @@ export class StandupBot {
   };
 
   startStandup = async () => {
+    this.stateMachine.send("START");
+
     const app = this.app!;
     this.conversationState = {};
     const token = this.token!;
@@ -188,6 +291,8 @@ export class StandupBot {
       channel,
       text: "Ok, see you tomorrow :wave:",
     });
+
+    this.stateMachine.send("NOT_WORKING");
   };
 
   startStandupClickHandler = async ({ body, ack }: SlackActionObject) => {
@@ -230,6 +335,7 @@ export class StandupBot {
         channel,
         text: "Thanks! Got it :muscle:",
       });
+      this.stateMachine.send("QUESTIONS_ANSWERED");
       return;
     }
     const questionMessage = await app.client.chat.postMessage({
@@ -262,6 +368,8 @@ export class StandupBot {
   };
 
   postStandup = async () => {
+    this.stateMachine.send("POST");
+
     const app = this.app!;
     const token = this.token;
     const channel = this.channel!;
@@ -308,6 +416,8 @@ export class StandupBot {
         ],
       });
     }
+
+    this.stateMachine.send("POST_DONE");
   };
 
   writeUserMessage = async (
@@ -366,7 +476,7 @@ export class StandupBot {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `${answer.question}\n${answerMessage.text}`,
+            text: `*${answer.question}*\n${answerMessage.text}`,
           },
         });
       }
@@ -395,3 +505,51 @@ export class StandupBot {
     });
   };
 }
+
+type StateMachineType = Interpreter<
+  {
+    submitted: number;
+  },
+  any,
+  | {
+      type: "START";
+    }
+  | {
+      type: "QUESTIONS_ANSWERED";
+    }
+  | {
+      type: "NOT_WORKING";
+    }
+  | {
+      type: "POST";
+    }
+  | {
+      type: "POST_DONE";
+    },
+  {
+    value: any;
+    context: {
+      submitted: number;
+    };
+  },
+  ResolveTypegenMeta<
+    TypegenDisabled,
+    | {
+        type: "START";
+      }
+    | {
+        type: "QUESTIONS_ANSWERED";
+      }
+    | {
+        type: "NOT_WORKING";
+      }
+    | {
+        type: "POST";
+      }
+    | {
+        type: "POST_DONE";
+      },
+    BaseActionObject,
+    ServiceMap
+  >
+>;
