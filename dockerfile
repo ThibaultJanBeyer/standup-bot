@@ -1,4 +1,4 @@
-FROM        node:20.10.0-alpine3.13
+FROM        node:20.3.1-alpine3.17
 
 RUN         npm install -g pnpm
 RUN         npm install -g pm2
