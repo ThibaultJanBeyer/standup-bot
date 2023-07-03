@@ -46,7 +46,7 @@ export function SiteHeader() {
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" className="gap-2">
                         <UserCircleIcon />
-                        {user.fullName || user.emailAddresses[0].emailAddress}
+                        {user.fullName || user.externalAccounts[0]!.firstName}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">

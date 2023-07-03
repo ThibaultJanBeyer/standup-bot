@@ -5,6 +5,8 @@ import { db, eq, Standups } from "@/lib/orm";
 
 export const GET = async (req: NextRequest) => {
   const user = await getUser(req);
+  if (user instanceof NextResponse) return user;
+
   const standups = await db.query.Standups.findMany({
     with: {
       author: true,

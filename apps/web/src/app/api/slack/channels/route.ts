@@ -12,6 +12,8 @@ import getChannels from "./getChannels";
 
 export const GET = async (req: NextRequest) => {
   const user = await getUser(req);
+  if (user instanceof NextResponse) return user;
+
   const key = `channels_${user.id}`;
   let channels: { slackId?: string; name?: string }[] = [];
   if (hasCachedItem(key)) channels = getCachedItem(key);

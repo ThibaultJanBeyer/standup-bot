@@ -242,8 +242,6 @@ importers:
         specifier: ^10.9.1
         version: 10.9.1(@types/node@20.3.2)(typescript@5.1.5)
 
-  packages/tsconfig: {}
-
   packages/ui:
     dependencies:
       '@radix-ui/react-alert-dialog':

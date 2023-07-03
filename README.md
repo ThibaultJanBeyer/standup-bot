@@ -17,6 +17,7 @@
 - next.js for the app using mostly https://ui.shadcn.com/ for components
 - Running on digitalocean instance
 - https via cloudflare
+- Using https://github.com/statelyai/xstate as state-machine for the bot
 
 ## Testing Slack integration on dev
 

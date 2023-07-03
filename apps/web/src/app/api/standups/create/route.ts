@@ -16,6 +16,8 @@ const schema = z.object({
 
 export const POST = async (req: NextRequest) => {
   const user = await getUser(req);
+  if (user instanceof NextResponse) return user;
+
   const { id, ...data } = schema.parse(await req.json());
 
   let standup;
@@ -49,11 +51,11 @@ export const POST = async (req: NextRequest) => {
     },
     credentials: "include",
     body: JSON.stringify({
-      standupId: standup[0].id,
+      standupId: standup[0]!.id,
     }),
   });
 
   console.info(await internal.json());
 
-  return NextResponse.json({ id: standup[0].id });
+  return NextResponse.json({ id: standup[0]!.id });
 };

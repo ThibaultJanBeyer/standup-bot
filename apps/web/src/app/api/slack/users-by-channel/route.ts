@@ -19,6 +19,8 @@ export const GET = async (req: NextRequest) => {
   if (hasCachedItem(key)) users = getCachedItem(key);
   else {
     const user = await getUser(req);
+    if (user instanceof NextResponse) return user;
+
     const client = new WebClient(user.workspace.botToken);
     users = await getUsersByChannel(client, channelId);
     cacheItem(key, users, 60 * 60);
