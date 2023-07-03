@@ -4,6 +4,8 @@
 
 - Beautiful UI
 - Bot needs to restart workflows on server reboot
+- Publish on Slack as official app
+- Cheap pricing on hosted (SAAS) version to cover server costs
 
 ## Info
 
