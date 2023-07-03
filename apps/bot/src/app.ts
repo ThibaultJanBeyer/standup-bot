@@ -27,6 +27,23 @@ app.post("/bot/slack/init", async (req: Request, res: Response) => {
   res.status(200).json({ message: "ok" });
 });
 
+app.delete("/bot/slack/init", async (req: Request, res: Response) => {
+  if (req.headers["x-api-key"] !== process.env.COMMUNICATION_TOKEN)
+    return res.status(401).json({ message: "Unauthorized" });
+
+  const standupId = req.body.standupId;
+  if (!standupId || typeof standupId !== "string")
+    return res.status(400).json({ message: "standupId is required" });
+
+  if (!standups[standupId]) {
+  } else {
+    await standups[standupId]!.teardown();
+    delete standups[standupId];
+  }
+
+  res.status(200).json({ message: "ok" });
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });

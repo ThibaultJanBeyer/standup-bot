@@ -43,7 +43,7 @@ export const POST = async (req: NextRequest) => {
       .execute();
   }
 
-  const internal = await fetch("http://localhost:3001/bot/slack/init", {
+  await fetch("http://localhost:3001/bot/slack/init", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -54,8 +54,6 @@ export const POST = async (req: NextRequest) => {
       standupId: standup[0]!.id,
     }),
   });
-
-  console.info(await internal.json());
 
   return NextResponse.json({ id: standup[0]!.id });
 };

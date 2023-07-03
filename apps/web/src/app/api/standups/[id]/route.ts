@@ -50,6 +50,18 @@ export const DELETE = async (
     .returning()
     .execute();
 
+  await fetch("http://localhost:3001/bot/slack/init", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Api-Key": process.env.COMMUNICATION_TOKEN!,
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      standupId: deleted[0]!.id,
+    }),
+  });
+
   return NextResponse.json(
     {
       id,
