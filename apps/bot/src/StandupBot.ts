@@ -285,7 +285,7 @@ export class StandupBot {
       ],
     });
 
-    this.conversationState[body.user.id].answers = null;
+    this.conversationState[body.user.id]!.answers = null;
     await this.app!.client.chat.postMessage({
       token: this.token,
       channel,
@@ -351,13 +351,13 @@ export class StandupBot {
         event.channel !== channel || // not in the same channel
         event.thread_ts || // we don't want to track thread messages
         !message.client_msg_id || // already tracked answer
-        conversationState[member].answers!.some(
+        conversationState[member]!.answers!.some(
           (answer) => answer.client_msg_id === message.client_msg_id,
         )
       )
         return;
-      conversationState[member].answers!.push({
-        question: questions[index],
+      conversationState[member]!.answers!.push({
+        question: questions[index]!,
         client_msg_id: message.client_msg_id,
         channel,
         questionMessageTs: questionMessage.ts!,
@@ -386,7 +386,7 @@ export class StandupBot {
     });
 
     for (const member in conversationState) {
-      const answers = conversationState[member].answers;
+      const answers = conversationState[member]!.answers;
       await this.writeUserMessage(channel, result.ts!, member, answers);
 
       const conversation = await app.client.conversations.open({
@@ -403,7 +403,7 @@ export class StandupBot {
       await app.client.chat.update({
         token,
         channel: conversation.channel.id,
-        ts: conversationState[member].initMessageTs,
+        ts: conversationState[member]!.initMessageTs,
         text: "Marked: standup concluded",
         blocks: [
           {
