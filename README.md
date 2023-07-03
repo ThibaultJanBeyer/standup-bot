@@ -4,8 +4,6 @@
 
 - Beautiful UI
 - Bot needs to restart workflows on server reboot
-- A way to prevent overriding the bot while running (or only give a warning when bot is actually running)
-- Questions Array (multiple inputs fields instead of one string)
 
 ## Info
 
