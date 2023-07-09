@@ -2,6 +2,8 @@ import { parse } from "url";
 import { NextRequest, NextResponse } from "next/server";
 import { WebClient } from "@slack/web-api";
 
+import { sql } from "@ssb/orm";
+
 import { db, Users, Workspaces } from "@/lib/orm";
 
 export const GET = async (req: NextRequest) => {
@@ -69,7 +71,10 @@ export const GET = async (req: NextRequest) => {
         .values(members)
         .onConflictDoUpdate({
           target: Users.slackId,
-          set: { workspaceId: team.id },
+          set: {
+            slackName: sql`EXCLUDED.slack_name`,
+            workspaceId: team.id,
+          },
         })
         .execute();
     }
