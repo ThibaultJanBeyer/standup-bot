@@ -47,23 +47,22 @@ jobs:
           directory: ./
           fail_on_empty: true
           sort_keys: true
-      - name: Build & Publish docker image
-        run: |
-          docker build . -f ./dockerfile --platform linux/amd64 -t standupbotcom/ssb:latest -t standupbotcom/ssb:${{ steps.get-version.outputs.version }} -t standupbotcom/ssb:${{ github.sha }}
-          docker push standupbotcom/ssb:latest
-          docker push standupbotcom/ssb:${{ steps.get-version.outputs.version }}
-          docker push standupbotcom/ssb:${{ github.sha }}
-      - name: applying new image on prod
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          script_stop: true
-          script: |
-            cd simple-standup-bot
-            git pull
-            git checkout dev
-            git pull
-            ./start.sh
-            git checkout main
+      # @TODO: make dev deploys possible
+      # - name: Build & Publish docker image
+      #   run: |
+      #     docker build . -f ./dockerfile --platform linux/amd64 -t standupbotcom/ssb:${{ github.sha }}
+      #     docker push standupbotcom/ssb:${{ github.sha }}
+      # - name: applying new image on prod
+      #   uses: appleboy/ssh-action@v0.1.10
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     key: ${{ secrets.KEY }}
+      #     script_stop: true
+      #     script: |
+      #       cd simple-standup-bot
+      #       git pull
+      #       git checkout dev
+      #       git pull
+      #       ./start.sh
+      #       git checkout main
