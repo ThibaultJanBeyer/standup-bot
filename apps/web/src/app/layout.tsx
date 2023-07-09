@@ -56,7 +56,18 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head />
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Inter:wght@400;600&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         className={cn(
           "flex min-h-screen flex-col bg-background font-sans antialiased",
@@ -71,7 +82,7 @@ export default async function RootLayout({
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <SiteHeader />
-            <div className="relative flex flex-1 flex-col">{children}</div>
+            {children}
             <SiteFooter />
           </ThemeProvider>
         </ClerkProvider>
