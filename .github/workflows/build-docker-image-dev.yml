@@ -48,6 +48,7 @@ jobs:
           fail_on_empty: true
           sort_keys: true
       # @TODO: make dev deploys possible
+      # i.e. could have a dev port and an env port for the app and dev port is not bound to the .com domain
       # - name: Build & Publish docker image
       #   run: |
       #     docker build . -f ./dockerfile --platform linux/amd64 -t standupbotcom/ssb:${{ github.sha }}
