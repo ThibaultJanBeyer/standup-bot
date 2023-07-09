@@ -34,7 +34,7 @@ export const Standups = pgTable("standups", {
   channelId: text("channel_id").notNull(),
   scheduleCron: text("schedule_cron").notNull(),
   summaryCron: text("summary_cron").notNull(),
-  authorId: text("author_id").notNull(),
+  authorId: uuid("author_id").notNull(),
   members: textArray("members").notNull(),
   questions: textArray("questions").notNull(),
   // author => relation
@@ -45,7 +45,7 @@ export const Standups = pgTable("standups", {
 export const StandupsRelations = relations(Standups, ({ many, one }) => ({
   author: one(Users, {
     fields: [Standups.authorId],
-    references: [Users.slackId],
+    references: [Users.id],
   }),
   workspace: one(Workspaces, {
     fields: [Standups.workspaceId],

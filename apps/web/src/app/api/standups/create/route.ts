@@ -22,16 +22,18 @@ export const POST = async (req: NextRequest) => {
 
   let standup;
   if (!id) {
+    // create
     standup = await db
       .insert(Standups)
       .values({
-        authorId: user.slackId!,
+        authorId: user.id,
         workspaceId: user.workspaceId!,
         ...data,
       })
       .returning()
       .execute();
   } else {
+    // update
     standup = await db
       .update(Standups)
       .set({

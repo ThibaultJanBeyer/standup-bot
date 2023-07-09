@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS "standups" (
 	"channel_id" text NOT NULL,
 	"schedule_cron" text NOT NULL,
 	"summary_cron" text NOT NULL,
-	"author_id" text NOT NULL,
+	"author_id" uuid NOT NULL,
 	"members" text[] NOT NULL,
 	"questions" text[] NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
