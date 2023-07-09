@@ -54,11 +54,16 @@ export const GET = async (req: NextRequest) => {
       return NextResponse.error();
     }
     if (userList?.members?.length) {
-      const members = userList.members.map((member) => ({
-        slackId: member.id || "",
-        slackName: member.name || "",
-        workspaceId: team.id,
-      }));
+      const members = userList.members.flatMap((member) => {
+        if (member.is_bot || member.name === "slackbot") return [];
+        return [
+          {
+            slackId: member.id || "",
+            slackName: member.name || "",
+            workspaceId: team.id,
+          },
+        ];
+      });
       await db
         .insert(Users)
         .values(members)

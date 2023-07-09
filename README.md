@@ -3,7 +3,9 @@
 ## TODO
 
 - Beautiful UI
-- Bot needs to restart workflows on server reboot
+- - UI: [Implement design](https://www.behance.net/gallery/174621639/Stand-Up-Slack-Bot-Landing-Page)
+- - UI: Loading states on polling API
+- Would be great if Bot could pick up where it started if it crashes in between
 - Publish on Slack as official app
 - Cheap pricing on hosted (SAAS) version to cover server costs
 

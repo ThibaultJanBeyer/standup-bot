@@ -1,22 +1,19 @@
 import { WebClient } from "@slack/web-api";
 
+import { db, Users } from "@/lib/orm";
+
 export default async (client: WebClient, channelId: string) => {
-  // Users from Workspace
-  const userList = await client.users.list();
-  if (!userList.ok) return [];
+  const userList = await db.select().from(Users).execute();
   const channelIds = await client.conversations.members({
     channel: channelId, // Replace with the ID of the channel you want to list members for
   });
   if (!channelIds.ok) return [];
-  const channelMembers = userList.members?.filter(
-    (member) =>
-      !member.is_bot &&
-      member.name !== "slackbot" &&
-      channelIds.members?.includes(member.id!),
+  const channelMembers = userList.filter(
+    (user) => user.slackId && channelIds.members?.includes(user.slackId),
   );
   const users = channelMembers?.map((member) => ({
-    slackId: member.id,
-    name: member.name,
+    slackId: member.slackId,
+    name: member.slackName,
   }));
   if (!users) return [];
 
