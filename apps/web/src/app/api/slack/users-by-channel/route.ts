@@ -15,7 +15,7 @@ export const GET = async (req: NextRequest) => {
   if (!channelId) throw new Error("channelId is required");
   const key = `users_${channelId}`;
 
-  let users: { slackId?: string; name?: string }[] = [];
+  let users: { slackId: string | null; name: string | null }[] = [];
   if (hasCachedItem(key)) users = getCachedItem(key);
   else {
     const user = await getUser(req);
