@@ -2,7 +2,7 @@ import { DetailedHTMLProps, HTMLAttributes } from "react";
 import Image from "next/image";
 
 import { Button } from "@ssb/ui/button";
-import { GithubIcon, SlackIcon } from "@ssb/ui/icons";
+import { CSlackIcon, GithubIcon } from "@ssb/ui/icons";
 
 import RoboHand from "../../public/robo-hand.png";
 
@@ -36,7 +36,7 @@ export const SectionInstall = ({
               .SLACK_CODE!}`}
             className="inline-flex items-center justify-center bg-white text-sm font-medium text-black shadow-md"
           >
-            <SlackIcon />
+            <CSlackIcon />
             Add to Slack
           </a>
           <Button variant="outlinePrimary" asChild>

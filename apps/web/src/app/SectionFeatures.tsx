@@ -27,9 +27,9 @@ export const SectionFeatures = ({
       </div>
       <div>
         <div className="mt-[-6rem] grid grid-cols-2 gap-10">
-          <FeatureCard variant="outlinePrimary" className="mt-[6rem]">
-            <FeatureCardHeader>25%</FeatureCardHeader>
-            <FeatureCardContent>
+          <FeatureCard variant="primary" className="mt-[6rem]">
+            <FeatureCardHeader variant="primary">25%</FeatureCardHeader>
+            <FeatureCardContent variant="primary">
               Increase in productivity due to streamlining
             </FeatureCardContent>
           </FeatureCard>
@@ -49,12 +49,9 @@ export const SectionFeatures = ({
               30% reduction in missed updates
             </FeatureCardContent>
           </FeatureCard>
-          <FeatureCard
-            variant="outlinePrimary"
-            className="mb-[3rem] mt-[-3rem]"
-          >
-            <FeatureCardHeader>2hs</FeatureCardHeader>
-            <FeatureCardContent>
+          <FeatureCard variant="primary" className="mb-[3rem] mt-[-3rem]">
+            <FeatureCardHeader variant="primary">2hs</FeatureCardHeader>
+            <FeatureCardContent variant="primary">
               Saves average of 2 hours per week
             </FeatureCardContent>
           </FeatureCard>

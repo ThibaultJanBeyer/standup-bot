@@ -65,7 +65,7 @@ export function SiteHeader() {
                     <Button variant="outline" asChild className="mr-5">
                       <Link href={`/auth/sign-in`}>Login</Link>
                     </Button>
-                    <Link href={`/auth/sign-in`}>Sign up today</Link>
+                    <Link href={`/auth/sign-in`}>Sign up</Link>
                   </>
                 )
               ) : (

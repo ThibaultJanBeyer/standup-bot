@@ -4,3 +4,9 @@
 
 @import "~@ssb/ui/globals.css";
 
+@layer base {
+  body {
+    background-image: url("/bubble-background.png");
+    background-size: cover;
+  }
+}
