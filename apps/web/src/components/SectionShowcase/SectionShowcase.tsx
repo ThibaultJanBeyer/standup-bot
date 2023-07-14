@@ -1,6 +1,10 @@
+"use client";
+
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 
 import { CArrowRightIcon, CIconHeart, CIconSearch } from "@ssb/ui/icons";
+
+import { useBreakpoint } from "@/lib/tailwind";
 
 import { FeatureCards } from "./FeatureCards";
 
@@ -8,13 +12,17 @@ export const SectionShowcase = ({
   className,
   ...props
 }: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>) => {
+  const isDesktop = useBreakpoint("lg");
   return (
     <section
-      className={`grid grid-cols-2 items-start gap-24 ${className}`}
+      className={`grid-areas-imageTextSlim lg:grid-areas-imageText grid items-start gap-24 ${className}`}
+      style={{
+        gridTemplate: isDesktop ? "'image text'" : "'text' 'image'",
+      }}
       {...props}
     >
-      <FeatureCards />
-      <div>
+      <FeatureCards style={{ gridArea: "image" }} />
+      <div style={{ gridArea: "text" }}>
         <h2 className="text-gradient mb-5 inline-block">Get Upped’</h2>
         <h3 className="font-headline mb-8 inline-block text-6xl">
           What makes Stand-Up Bot so special?

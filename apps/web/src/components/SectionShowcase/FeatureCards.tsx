@@ -1,14 +1,14 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { MotionStyle, motion, useScroll, useTransform } from "framer-motion";
 
 import { FeatureCard } from "@ssb/ui/featureCard";
 
-export const FeatureCards = () => {
+export const FeatureCards = ({ style }: { style?: MotionStyle }) => {
   const { scrollY } = useScroll();
   const yPosAnimUp = useTransform(scrollY, [0, 1000, 4000], [0, 0.001, -150]);
   return (
-    <motion.div style={{ y: yPosAnimUp }}>
+    <motion.div style={{ y: yPosAnimUp, ...style }}>
       <FeatureCard
         variant="primary"
         id="showcase-primary"

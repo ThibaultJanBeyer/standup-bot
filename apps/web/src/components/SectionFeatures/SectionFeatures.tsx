@@ -7,8 +7,11 @@ export const SectionFeatures = ({
   ...props
 }: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>) => {
   return (
-    <section className={`grid grid-cols-2 gap-24 ${className}`} {...props}>
-      <div>
+    <section
+      className={`grid lg:grid-cols-2 lg:gap-24 ${className}`}
+      {...props}
+    >
+      <div id="feature-anchor">
         <h2 className="text-gradient mb-5 inline-block">Features</h2>
         <h3 className="font-headline mb-8 inline-block text-6xl">
           Why Choose Stand-Up Bot?

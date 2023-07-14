@@ -17,7 +17,7 @@ export const SectionInstall = ({
 }: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>) => {
   return (
     <section
-      className={`grid grid-cols-2 items-end gap-24 ${className}`}
+      className={`grid items-end gap-24 lg:grid-cols-2 ${className}`}
       {...props}
     >
       <div>
@@ -33,11 +33,11 @@ export const SectionInstall = ({
           Make Stand-ups simple and automated. With your own bot, making it easy
           to catch up with projects.
         </p>
-        <div className="grid grid-cols-2 gap-10" id="install-cta">
+        <div className="grid gap-10 md:grid-cols-2" id="install-cta">
           <CTAButtons />
         </div>
       </div>
-      <div className="relative">
+      <div className="relative h-[200px]">
         <RoboHand />
       </div>
     </section>

@@ -16,7 +16,8 @@ export const RoboHand = () => {
 
   return (
     <motion.div
-      className="absolute w-[100%] min-w-[300px] max-w-[500px]"
+      className="pointer-events-none absolute w-[100%] min-w-[300px] max-w-[500px]"
+      aria-hidden
       style={{
         bottom: `${handTranslate.y}px`,
         left: `${handTranslate.x}px`,

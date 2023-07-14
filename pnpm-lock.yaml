@@ -112,6 +112,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.1.1
         version: 3.1.1(react-hook-form@7.45.1)
+      '@kodingdotninja/use-tailwind-breakpoint':
+        specifier: ^0.0.5
+        version: 0.0.5(react@18.2.0)
       '@portabletext/react':
         specifier: ^3.0.4
         version: 3.0.4(react@18.2.0)
@@ -1268,6 +1271,17 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@kodingdotninja/use-tailwind-breakpoint@0.0.5(react@18.2.0):
+    resolution: {integrity: sha512-7h52zL+l+14u9diyjVcGoS5NRIwrc6euIGlHDwtJXlrR3h31RNyTrOfimy7PJTvS4fFdNgbzyrNcGfhj3sDRfQ==}
+    peerDependencies:
+      react: '>=16.8'
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /@next/bundle-analyzer@13.4.7:
     resolution: {integrity: sha512-cIcU07u6WdDUF1nrFYOSPvx/pie8euxSnWB1Y/XMYj2g5ls+iyaDr/ChyZugD5hNW754x0NFy1CwzpObA0bffQ==}

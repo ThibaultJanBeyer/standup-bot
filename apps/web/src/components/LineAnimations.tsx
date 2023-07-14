@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-import { spacingTop } from "@/app/page";
-
 export const LineAnimations = () => {
   return (
     <>
@@ -105,11 +103,11 @@ export const LinearAnimationMiddle = () => {
   // const sizeAnim2 = useTransform(scrollY, [0, 600, 700], [0, 0.0001, 1]);
 
   const updatePos = () => {
-    const cta = document.querySelector("#install-cta") as HTMLElement;
+    const anchor = document.querySelector("#feature-anchor") as HTMLElement;
 
     setAnchor(() => ({
-      y: cta.offsetTop + cta.offsetHeight + spacingTop / 2,
-      x: cta.offsetLeft,
+      y: anchor.offsetTop - 200,
+      x: anchor.offsetLeft,
     }));
   };
 

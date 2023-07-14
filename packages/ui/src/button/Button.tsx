@@ -21,7 +21,7 @@ const buttonVariants = cva(
         // filter: drop-shadow(0px 0px 3.59618px #4DAAF8) drop-shadow(0px 0px 1.79809px #4DAAF8) drop-shadow(0px 0px 0.51374px #4DAAF8);
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+        ghost: "",
         link: "underline-offset-4 hover:underline text-primary",
       },
       size: {

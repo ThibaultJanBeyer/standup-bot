@@ -70,7 +70,7 @@ export default async function RootLayout({
       </head>
       <body
         className={cn(
-          "flex min-h-screen flex-col bg-background font-sans antialiased",
+          "flex min-h-screen flex-col overflow-x-hidden bg-background font-sans antialiased ",
           fontSans.variable,
         )}
       >

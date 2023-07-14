@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { Button } from "@ssb/ui/button";
 import { BotIcon } from "@ssb/ui/icons";
