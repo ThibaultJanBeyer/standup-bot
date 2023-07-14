@@ -33,7 +33,7 @@ export const LineAnimationTop = () => {
 
   if (!anchor) return null;
 
-  const initHeight = 640;
+  const initHeight = 585;
   const height =
     anchor.y - initHeight > 0 ? initHeight + anchor.y - initHeight : initHeight;
 
@@ -42,8 +42,8 @@ export const LineAnimationTop = () => {
       <svg
         className="absolute opacity-60"
         style={{
+          top: 0,
           left: `${anchor.x / 2 - 1.5}px`,
-          top: `${anchor.y - height}px`,
         }}
         width="3"
         height={height}
@@ -53,13 +53,13 @@ export const LineAnimationTop = () => {
       >
         <motion.line
           x1="1.5"
-          y1="-75"
+          y1="-3.03916e-10"
           x2="1.5"
           y2={height}
-          strokeWidth="3"
           stroke="url(#paint0_linear_479_26)"
+          strokeWidth="3"
           initial={{ pathLength: 0 }}
-          whileInView={{ pathLength: isInView ? 1 : 0 }}
+          animate={{ pathLength: isInView ? 1 : 0 }}
           transition={{ duration: 1, delay: 0.5 }}
         />
         <defs>
@@ -258,7 +258,7 @@ export const LineAnimationBottom = () => {
         onViewportEnter={() => setIsInView(true)}
         onViewportLeave={() => setIsInView(false)}
         transition={{
-          delay: 1,
+          delay: 1.3,
           damping: 8,
           type: "spring",
         }}
