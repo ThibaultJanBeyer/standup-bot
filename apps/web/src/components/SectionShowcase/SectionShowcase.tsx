@@ -1,7 +1,8 @@
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 
-import { FeatureCard } from "@ssb/ui/featureCard";
 import { CArrowRightIcon, CIconHeart, CIconSearch } from "@ssb/ui/icons";
+
+import { FeatureCards } from "./FeatureCards";
 
 export const SectionShowcase = ({
   className,
@@ -12,12 +13,7 @@ export const SectionShowcase = ({
       className={`grid grid-cols-2 items-start gap-24 ${className}`}
       {...props}
     >
-      <FeatureCard variant="primary" className="p-8 text-left">
-        <CartTextBlockTitle />
-        <CartTextBlock title="What Did You Do Yesterday?" />
-        <CartTextBlock title="What Are You Working on Today?" />
-        <CartTextBlock title="Any Questions, Blockers or Thoughts?" />
-      </FeatureCard>
+      <FeatureCards />
       <div>
         <h2 className="text-gradient mb-5 inline-block">Get Upped’</h2>
         <h3 className="font-headline mb-8 inline-block text-6xl">

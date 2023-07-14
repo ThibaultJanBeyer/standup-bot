@@ -67,6 +67,10 @@
     box-shadow: 0px 0px 10px #00f0ff, 0px 0px 8px #00f0ff, 0px 0px 6px #00f0ff,
       0px 0px 4px #00f0ff, 0px 0px 2px #00f0ff;
   }
+  .ball-shadow-dark {
+    box-shadow: 0px 0px 10px #ff77f9, 0px 0px 8px #ff77f9, 0px 0px 6px #ff77f9,
+      0px 0px 4px #ff77f9, 0px 0px 2px #ff77f9;
+  }
   .border-gradient {
     display: inline-block;
     position: relative;

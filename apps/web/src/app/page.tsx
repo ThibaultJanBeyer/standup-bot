@@ -1,14 +1,19 @@
 import React from "react";
 
-import { SectionFeatures } from "./SectionFeatures";
-import { SectionInstall } from "./SectionInstall";
-import { SectionShowcase } from "./SectionShowcase";
+import { LineAnimations } from "@/components/LineAnimations";
+
+import { SectionFeatures } from "../components/SectionFeatures/SectionFeatures";
+import { SectionInstall } from "../components/SectionInstall/SectionInstall";
+import { SectionShowcase } from "../components/SectionShowcase/SectionShowcase";
+
+export const spacingTop = 580;
 
 export default function Home() {
   return (
     <main className="w-full px-16 py-10">
-      <SectionInstall className="m-auto mb-[35rem] max-w-5xl" />
-      <SectionFeatures className="m-auto mb-80 max-w-5xl" />
+      <LineAnimations />
+      <SectionInstall className={`m-auto mb-[${spacingTop}px] max-w-5xl`} />
+      <SectionFeatures className="m-auto mb-[20rem] max-w-5xl" />
       <SectionShowcase className="m-auto mb-28 max-w-5xl" />
     </main>
   );
