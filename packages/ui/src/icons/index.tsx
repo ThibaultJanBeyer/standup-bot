@@ -50,9 +50,9 @@ export const CArrowRightIcon = () => (
         y2="20.6433"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#CE44C8" />
-        <stop offset="0.505208" stop-color="#036AFF" />
-        <stop offset="1" stop-color="#00F0FF" />
+        <stop stopColor="#CE44C8" />
+        <stop offset="0.505208" stopColor="#036AFF" />
+        <stop offset="1" stopColor="#00F0FF" />
       </linearGradient>
       <linearGradient
         id="paint1_linear_479_115"
@@ -62,9 +62,9 @@ export const CArrowRightIcon = () => (
         y2="11.4554"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#CE44C8" />
-        <stop offset="0.505208" stop-color="#036AFF" />
-        <stop offset="1" stop-color="#00F0FF" />
+        <stop stopColor="#CE44C8" />
+        <stop offset="0.505208" stopColor="#036AFF" />
+        <stop offset="1" stopColor="#00F0FF" />
       </linearGradient>
     </defs>
   </svg>
@@ -95,9 +95,9 @@ export const CIconSearch = () => (
         y2="27.1464"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#CE44C8" />
-        <stop offset="0.505208" stop-color="#036AFF" />
-        <stop offset="1" stop-color="#00F0FF" />
+        <stop stopColor="#CE44C8" />
+        <stop offset="0.505208" stopColor="#036AFF" />
+        <stop offset="1" stopColor="#00F0FF" />
       </linearGradient>
       <linearGradient
         id="paint1_linear_479_111"
@@ -107,9 +107,9 @@ export const CIconSearch = () => (
         y2="28.4478"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#CE44C8" />
-        <stop offset="0.505208" stop-color="#036AFF" />
-        <stop offset="1" stop-color="#00F0FF" />
+        <stop stopColor="#CE44C8" />
+        <stop offset="0.505208" stopColor="#036AFF" />
+        <stop offset="1" stopColor="#00F0FF" />
       </linearGradient>
     </defs>
   </svg>
@@ -126,9 +126,9 @@ export const CIconHeart = () => (
     <path
       d="M16.8673 26.7929C16.3914 26.9609 15.6074 26.9609 15.1314 26.7929C11.0716 25.407 2 19.6252 2 9.82565C2 5.49984 5.48585 2 9.78365 2C12.3315 2 14.5854 3.23195 15.9994 5.13586C17.4133 3.23195 19.6812 2 22.2151 2C26.5129 2 29.9988 5.49984 29.9988 9.82565C29.9988 19.6252 20.9272 25.407 16.8673 26.7929Z"
       stroke="url(#paint0_linear_479_109)"
-      stroke-width="2.09991"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2.09991"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <defs>
       <linearGradient
@@ -139,9 +139,9 @@ export const CIconHeart = () => (
         y2="26.9189"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#FA00FF" />
-        <stop offset="0.520833" stop-color="#036AFF" />
-        <stop offset="1" stop-color="#00F0FF" />
+        <stop stopColor="#FA00FF" />
+        <stop offset="0.520833" stopColor="#036AFF" />
+        <stop offset="1" stopColor="#00F0FF" />
       </linearGradient>
     </defs>
   </svg>

@@ -7,7 +7,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
+  "inline-flex items-center justify-center text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:scale-105 hover:underline  hover:box-shadow",
   {
     variants: {
       variant: {
@@ -16,10 +16,9 @@ const buttonVariants = cva(
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
           "border bg-white bg-opacity-10 border-input hover:bg-accent hover:text-accent-foreground rounded-md",
-        outlinePrimary: "border-gradient box-glow text-gradient-light",
+        outlinePrimary: "border-gradient box-glow text-blue",
         // filter: drop-shadow(0px 3.60313px 3.60313px rgba(0, 0, 0, 0.25));
         // filter: drop-shadow(0px 0px 3.59618px #4DAAF8) drop-shadow(0px 0px 1.79809px #4DAAF8) drop-shadow(0px 0px 0.51374px #4DAAF8);
-
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",

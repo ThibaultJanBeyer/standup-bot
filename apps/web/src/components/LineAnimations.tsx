@@ -58,7 +58,7 @@ export const LineAnimationTop = () => {
           y1="-75"
           x2="1.5"
           y2={height}
-          stroke-width="3"
+          strokeWidth="3"
           stroke="url(#paint0_linear_479_26)"
           initial={{ pathLength: 0 }}
           whileInView={{ pathLength: isInView ? 1 : 0 }}
@@ -145,7 +145,7 @@ export const LinearAnimationMiddle = () => {
         <motion.path
           d={`M${length} 2H35C16.7746 2 2 16.7746 2 35V${height}`}
           stroke="url(#paint0_linear_512_316)"
-          stroke-width="3"
+          strokeWidth="3"
           // style={{ pathLength: sizeAnim }}
           initial={{ pathLength: 0 }}
           animate={{ pathLength: isInView ? 1 : 0 }}
@@ -160,15 +160,15 @@ export const LinearAnimationMiddle = () => {
             y2="722.847"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#C27EB8" />
-            <stop offset="0.105557" stop-color="#CE8FC7" />
-            <stop offset="0.19268" stop-color="#675EBC" />
-            <stop offset="0.243654" stop-color="#432087" />
-            <stop offset="0.320837" stop-color="#533476" />
-            <stop offset="0.56291" stop-color="#4159B3" />
-            <stop offset="0.708805" stop-color="#4899F8" />
-            <stop offset="0.810077" stop-color="#4B7DE1" />
-            <stop offset="0.979212" stop-color="#CC44C9" />
+            <stop stopColor="#C27EB8" />
+            <stop offset="0.105557" stopColor="#CE8FC7" />
+            <stop offset="0.19268" stopColor="#675EBC" />
+            <stop offset="0.243654" stopColor="#432087" />
+            <stop offset="0.320837" stopColor="#533476" />
+            <stop offset="0.56291" stopColor="#4159B3" />
+            <stop offset="0.708805" stopColor="#4899F8" />
+            <stop offset="0.810077" stopColor="#4B7DE1" />
+            <stop offset="0.979212" stopColor="#CC44C9" />
           </linearGradient>
         </defs>
       </svg>
