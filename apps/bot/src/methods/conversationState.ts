@@ -24,6 +24,12 @@ export type UserState = {
     }[];
   };
   answers: Answer[] | null;
+  meta: {
+    username: string;
+    iconUrl: string;
+    statusEmoji: string;
+    statusText: string;
+  };
 };
 
 export type Answer = {
@@ -42,4 +48,10 @@ export const createConversationStateMember = () =>
       REPORT: [],
     },
     answers: [],
+    meta: {
+      username: "",
+      iconUrl: "",
+      statusEmoji: "",
+      statusText: "",
+    },
   } as UserState);

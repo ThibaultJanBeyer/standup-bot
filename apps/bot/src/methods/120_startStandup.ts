@@ -1,6 +1,6 @@
-import { randomUUID } from "crypto";
-
 import { StandupBot } from "@/StandupBot";
+
+import { typeSafeUserState } from "./utils";
 
 export const startStandup = async (
   BOT: StandupBot,
@@ -27,11 +27,12 @@ export const startStandup = async (
 
 export const handleUserMessage = (BOT: StandupBot) => async (props: any) => {
   const { event, message } = props;
-  const memberState = BOT.conversationState.users[message.user];
-  if (!memberState) return;
-  const botMessages = memberState.botMessages.START_STANDUP;
+  const userState = typeSafeUserState(BOT, event.user);
+  if (!userState) return;
+
+  const botMessages = userState.botMessages.START_STANDUP;
   const question = botMessages[botMessages.length - 1];
-  const anwers = memberState.answers;
+  const anwers = userState.answers;
 
   if (
     !anwers ||
@@ -59,7 +60,10 @@ const askQuestion = async (
   BOT: StandupBot,
   { channel, member }: { channel: string; member: string },
 ) => {
-  const answerIndex = BOT.conversationState.users[member]?.answers?.length || 0;
+  const userState = typeSafeUserState(BOT, member);
+  if (!userState) return;
+
+  const answerIndex = userState.answers?.length || 0;
 
   if (answerIndex >= BOT.questions.length)
     return await postFinal(BOT, { channel, member });
@@ -71,15 +75,17 @@ const postNextQuestion = async (
   BOT: StandupBot,
   { channel, member }: { channel: string; member: string },
 ) => {
-  const nextMessage =
-    BOT.conversationState.users[member]!.botMessages.START_STANDUP.length;
+  const userState = typeSafeUserState(BOT, member);
+  if (!userState) return;
+
+  const nextMessage = userState.botMessages.START_STANDUP.length;
 
   const message = await BOT.app!.client.chat.postMessage({
     token: BOT.token,
     channel,
     text: BOT.questions[nextMessage],
   });
-  BOT.conversationState.users[member]!.botMessages.START_STANDUP.push({
+  userState.botMessages.START_STANDUP.push({
     ts: message.ts!,
     message: BOT.questions[nextMessage] || "",
   });
@@ -89,12 +95,15 @@ const postFinal = async (
   BOT: StandupBot,
   { channel, member }: { channel: string; member: string },
 ) => {
+  const userState = typeSafeUserState(BOT, member);
+  if (!userState) return;
+
   const message = await BOT.app!.client.chat.postMessage({
     token: BOT.token,
     channel,
     text: "Thanks! Got it :muscle:",
   });
-  BOT.conversationState.users[member]!.botMessages.START_STANDUP.push({
+  userState.botMessages.START_STANDUP.push({
     ts: message.ts!,
   });
   BOT.botStateMachine.send("QUESTIONS_ANSWERED");
