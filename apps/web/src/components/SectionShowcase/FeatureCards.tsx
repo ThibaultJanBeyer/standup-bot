@@ -1,6 +1,7 @@
 "use client";
 
-import { MotionStyle, motion, useScroll, useTransform } from "framer-motion";
+import Link from "next/link";
+import { motion, MotionStyle, useScroll, useTransform } from "framer-motion";
 
 import { FeatureCard } from "@ssb/ui/featureCard";
 
@@ -56,9 +57,12 @@ const CartTextBlockTitle = () => {
       <div className="mb-5 text-xl">Slack Standup Bot</div>
       <div className="mb-10">
         <div className="mb-3 grid grid-cols-[auto_1fr] items-center gap-4">
-          <div className="inline-block bg-[#6D4B26] px-1 text-[#F2C744]">
+          <Link
+            href="https://thibaultjanbeyer.com/"
+            className="inline-block bg-[#6D4B26] px-1 text-[#F2C744]"
+          >
             @Thibault
-          </div>
+          </Link>
           <motion.div
             style={{ scaleX: scrollYProgress }}
             className="h-1 w-full bg-gray-700"
