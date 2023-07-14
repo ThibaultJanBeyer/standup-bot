@@ -5,7 +5,7 @@
 @layer base {
   :root {
     --background: 244 39% 15%;
-    --foreground: 0 0% 100%;
+    --foreground: 0 0% 90%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -16,7 +16,7 @@
     --card: 0 0% 100%;
     --card-foreground: 222.2 47.4% 11.2%;
 
-    --border: 214.3 31.8% 91.4%;
+    --border: 244 39% 10%;
     --input: 214.3 31.8% 91.4%;
 
     --primary: 222.2 47.4% 11.2%;
@@ -44,8 +44,7 @@
     @apply border-border;
   }
   body {
-    @apply text-foreground;
-    background-color: var(--background);
+    @apply bg-default text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: "Inter", sans-serif;
   }
@@ -54,6 +53,9 @@
   }
   .text-blue {
     color: #00f0ff;
+  }
+  .bg-default {
+    background-color: hsl(var(--background));
   }
   .text-gradient {
     background: linear-gradient(90deg, #00f0ff 5%, #5b6fe3 30%, #de3ec4 70%);
@@ -76,8 +78,8 @@
     position: relative;
   }
   .border-gradient::after {
+    @apply bg-default;
     content: "";
-    background: hsl(var(--background));
     position: absolute;
     width: calc(100% - 2px);
     height: calc(100% - 2px);

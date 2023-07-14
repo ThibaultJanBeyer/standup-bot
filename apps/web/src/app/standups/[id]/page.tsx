@@ -83,14 +83,16 @@ export default ({ params: { id } }: { params: { id: string } }) => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-10">
       <div>
-        <h1 className="m-10 text-center text-lg">
+        <h1 className="mb-10 text-center text-lg">
           Update {data?.name || "loading…"}
         </h1>
         {Boolean(data?.id) && (
           <StandupsFormFields onSubmit={onSubmit} data={data}>
-            <div className="grid grid-cols-2 gap-10">
+            <div className="mt-10 grid grid-cols-2 gap-10">
               <Form.Submit asChild>
-                <Button type="submit">Update Standup</Button>
+                <Button type="submit" variant="outlinePrimary">
+                  Update Standup
+                </Button>
               </Form.Submit>
               <Button onClick={onDelete} type="button" variant={"destructive"}>
                 Delete Standup

@@ -4,6 +4,7 @@ import { startStandup } from "./120_startStandup";
 import { createConversationStateMember } from "./conversationState";
 
 export const initStandup = async (BOT: StandupBot) => {
+  BOT.botStateMachine.send("INIT");
   await BOT.connect();
 
   const prevConversationState = BOT.conversationState;

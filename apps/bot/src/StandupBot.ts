@@ -3,10 +3,12 @@ import { App } from "@slack/bolt";
 import { CronJob } from "cron";
 
 import {
+  initStandup,
   notWorkingClickHandler,
   startStandupClickHandler,
 } from "./methods/100_initStandup";
 import { handleUserMessage } from "./methods/120_startStandup";
+import { postStandup } from "./methods/200_postStandup";
 import { ConversationState } from "./methods/conversationState";
 import {
   BotStateMachine,
@@ -104,14 +106,14 @@ export class StandupBot {
 
     this.startJob = new CronJob(
       standup.scheduleCron,
-      () => this.botStateMachine.send("INIT"),
+      () => initStandup(this),
       null,
       true,
       // "America/Los_Angeles", can be supplied in future versions
     );
     this.postJob = new CronJob(
       standup.summaryCron,
-      () => this.botStateMachine.send("POST"),
+      () => postStandup(this),
       null,
       true,
       // "America/Los_Angeles", can be supplied in future versions

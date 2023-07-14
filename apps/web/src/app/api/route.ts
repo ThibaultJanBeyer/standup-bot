@@ -2,9 +2,9 @@ import { parse } from "url";
 import { NextRequest, NextResponse } from "next/server";
 import { WebClient } from "@slack/web-api";
 
-import { sql } from "@ssb/orm";
+import { db, Workspaces } from "@/lib/orm";
 
-import { db, Users, Workspaces } from "@/lib/orm";
+import { insertUsersFromWorkspace } from "../../lib/insertUsersFromWorkspace";
 
 export const GET = async (req: NextRequest) => {
   try {
@@ -48,36 +48,7 @@ export const GET = async (req: NextRequest) => {
       })
       .execute();
 
-    // Users from Workspace
-    const client = new WebClient(access_token);
-    const userList = await client.users.list();
-    if (!userList.ok) {
-      console.error(userList);
-      return NextResponse.error();
-    }
-    if (userList?.members?.length) {
-      const members = userList.members.flatMap((member) => {
-        if (member.is_bot || member.name === "slackbot") return [];
-        return [
-          {
-            slackId: member.id || "",
-            slackName: member.name || "",
-            workspaceId: team.id,
-          },
-        ];
-      });
-      await db
-        .insert(Users)
-        .values(members)
-        .onConflictDoUpdate({
-          target: Users.slackId,
-          set: {
-            slackName: sql`EXCLUDED.slack_name`,
-            workspaceId: team.id,
-          },
-        })
-        .execute();
-    }
+    await insertUsersFromWorkspace(team.id, new WebClient(access_token), true);
 
     const url = req.nextUrl.clone();
     return NextResponse.redirect(url.origin);

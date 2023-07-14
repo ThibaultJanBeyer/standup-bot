@@ -45,7 +45,7 @@ export default function StandupList() {
   return (
     <main className="mx-auto w-full max-w-5xl">
       <div className="text-center">
-        <Button asChild className="mx-auto my-10">
+        <Button asChild className="mx-auto my-10" variant="outlinePrimary">
           <Link href={`/standups/create`}>Create New Standup</Link>
         </Button>
       </div>

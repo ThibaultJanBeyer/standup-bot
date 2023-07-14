@@ -23,17 +23,20 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="fixed top-0 z-40 w-full">
-        <div className="m-auto grid grid-cols-[1fr_auto] p-4">
-          <div>
-            <Link href={`/`}>SSB</Link>
+      <header className="pointer-events-none fixed top-0 z-40 w-full">
+        <div className="m-auto grid grid-cols-[auto_1fr_auto] p-4">
+          <div className="pointer-events-auto">
+            <Button asChild variant="ghost">
+              <Link href={`/`}>SSB</Link>
+            </Button>
           </div>
-          <div className="flex flex-1 items-center justify-end space-x-4">
+          <div></div>
+          <div className="pointer-events-auto flex flex-1 items-center justify-end space-x-4">
             <nav className="flex items-center space-x-2">
               {isLoaded ? (
                 isSignedIn ? (
                   <>
-                    <Button asChild variant="secondary">
+                    <Button asChild variant="outline">
                       <Link href={`/standups`}>Standups</Link>
                     </Button>
                     <DropdownMenu>

@@ -4,6 +4,7 @@ import { addUserMeta } from "./addUserMeta";
 import { typeSafeUserState } from "./utils";
 
 export const postStandup = async (BOT: StandupBot) => {
+  BOT.botStateMachine.send("POST");
   await BOT.connect();
   await addUserMeta(BOT);
 
@@ -135,7 +136,11 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `<@${member}> did not participate in Standup today (${userState.meta.statusEmoji} ${userState.meta.statusText})`,
+            text: `<@${member}> did not participate in Standup today ${
+              userState.meta.statusEmoji
+                ? `(${userState.meta.statusEmoji} ${userState.meta.statusText})`
+                : ""
+            }`,
           },
         },
       ];

@@ -44,7 +44,9 @@ export default () => {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <StandupsFormFields onSubmit={onSubmit}>
         <Form.Submit asChild>
-          <Button type="submit">Create Standup</Button>
+          <Button type="submit" variant="outlinePrimary">
+            Create Standup
+          </Button>
         </Form.Submit>
       </StandupsFormFields>
     </main>

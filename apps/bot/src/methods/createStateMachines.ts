@@ -51,7 +51,6 @@ export const createBotStateMachine = (BOT: StandupBot) =>
         },
 
         InitStandup: {
-          entry: [() => initStandup(BOT)],
           on: {
             INIT_DONE: "Waiting",
           },
@@ -85,7 +84,6 @@ export const createBotStateMachine = (BOT: StandupBot) =>
         },
 
         Posting: {
-          entry: [() => postStandup(BOT)],
           on: {
             POST_DONE: "Idle",
           },

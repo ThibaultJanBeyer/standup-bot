@@ -122,24 +122,30 @@ export default ({ onSubmit, data, children }: Props) => {
   }, [data]);
 
   const errors = form.formState.errors;
-  console.log(errors);
 
   return (
     <Form.Root onSubmit={form.handleSubmit(onSubmit)}>
-      <Form.Field name="name" className="mb-5">
-        <Form.Label>Name</Form.Label>
-        {Boolean(errors.name?.message) && (
-          <Form.Message className="text-red-600">
-            {`(${errors.name?.message})`}
-          </Form.Message>
-        )}
+      <Form.Field name="name" className="mb-10">
+        <Form.Label className="mb-2 block font-bold">
+          Name
+          {Boolean(errors.name?.message) && (
+            <Form.Message className="font-normal text-red-600">
+              {` (${errors.name?.message})`}
+            </Form.Message>
+          )}
+        </Form.Label>
         <Form.Control asChild>
           <Input {...form.register("name")} />
         </Form.Control>
       </Form.Field>
-      <Form.Field name="scheduleCron" className="mb-5">
-        <Form.Label>
+      <Form.Field name="scheduleCron" className="mb-10">
+        <Form.Label className="mb-2 block font-bold">
           Cron expression to start the questionnaire (in UTC):
+          {Boolean(errors.scheduleCron?.message) && (
+            <Form.Message className="font-normal text-red-600">
+              {` (${errors.scheduleCron?.message})`}
+            </Form.Message>
+          )}
         </Form.Label>
         {Boolean(errors.scheduleCron?.message) && (
           <Form.Message className="text-red-600">
@@ -150,24 +156,28 @@ export default ({ onSubmit, data, children }: Props) => {
           <Input {...form.register("scheduleCron")} />
         </Form.Control>
       </Form.Field>
-      <Form.Field name="summaryCron" className="mb-5">
-        <Form.Label>Cron expression to send the summary (in UTC):</Form.Label>
-        {Boolean(errors.summaryCron?.message) && (
-          <Form.Message className="text-red-600">
-            {`(${errors.summaryCron?.message})`}
-          </Form.Message>
-        )}
+      <Form.Field name="summaryCron" className="mb-10">
+        <Form.Label className="mb-2 block font-bold">
+          Cron expression to send the summary (in UTC):
+          {Boolean(errors.summaryCron?.message) && (
+            <Form.Message className="font-normal text-red-600">
+              {` (${errors.summaryCron?.message})`}
+            </Form.Message>
+          )}
+        </Form.Label>
         <Form.Control asChild>
           <Input {...form.register("summaryCron")} />
         </Form.Control>
       </Form.Field>
-      <Form.Field name="questions" className="mb-5">
-        <Form.Label>Questions the BOT is asking:</Form.Label>
-        {Boolean(errors.questions?.message) && (
-          <Form.Message className="text-red-600">
-            {`(${errors.questions?.message})`}
-          </Form.Message>
-        )}
+      <Form.Field name="questions" className="mb-10">
+        <Form.Label className="mb-2 block font-bold">
+          Questions the BOT is asking:
+          {Boolean(errors.questions?.message) && (
+            <Form.Message className="font-normal text-red-600">
+              {` (${errors.questions?.message})`}
+            </Form.Message>
+          )}
+        </Form.Label>
         {questionFields.map((field, index) => (
           <React.Fragment key={field.id}>
             {Boolean((errors as any).questions?.[index]?.value?.message) && (
@@ -189,7 +199,7 @@ export default ({ onSubmit, data, children }: Props) => {
               </Form.Control>
               <Button
                 type="button"
-                variant="outline"
+                variant="ghost"
                 onClick={() => remove(index)}
               >
                 <DeleteIcon>Delete</DeleteIcon>
@@ -207,18 +217,21 @@ export default ({ onSubmit, data, children }: Props) => {
           Add Question
         </Button>
       </Form.Field>
-      <Form.Field name="channelId" className="mb-5">
-        <Form.Label>Channel (where the summary gets posted)</Form.Label>
-        {Boolean(errors.channelId?.message) && (
-          <Form.Message className="text-red-600">
-            {`(${errors.channelId?.message})`}
-          </Form.Message>
-        )}
+      <Form.Field name="channelId" className="mb-10">
+        <Form.Label className="mb-2 block font-bold">
+          Channel (where the summary gets posted)
+          {Boolean(errors.channelId?.message) && (
+            <Form.Message className="font-normal text-red-600">
+              {` (${errors.channelId?.message})`}
+            </Form.Message>
+          )}
+        </Form.Label>
         <Form.Control asChild>
           {channels.length ? (
             <select
               {...form.register("channelId")}
-              className="block w-full rounded-md border-2 border-solid border-gray-300 p-3"
+              className="bg-default block w-full p-3"
+              style={{ borderBottom: "1px dotted rgba(100,100,100,1)" }}
               defaultValue={selectedChannel}
             >
               <option key={""} value={""}>
@@ -235,13 +248,15 @@ export default ({ onSubmit, data, children }: Props) => {
           )}
         </Form.Control>
       </Form.Field>
-      <Form.Field name="members" className="mb-5">
-        <Form.Label>Select users to participate in this standup</Form.Label>
-        {Boolean(errors.members?.message) && (
-          <Form.Message className="text-red-600">
-            {`(${errors.members?.message})`}
-          </Form.Message>
-        )}
+      <Form.Field name="members" className="mb-10">
+        <Form.Label className="mb-2 block font-bold">
+          Select users to participate in this standup
+          {Boolean(errors.members?.message) && (
+            <Form.Message className="font-normal text-red-600">
+              {` (${errors.members?.message})`}
+            </Form.Message>
+          )}
+        </Form.Label>
         {!users.length ? (
           <div>
             <em>Select a channel first!</em>
@@ -251,7 +266,8 @@ export default ({ onSubmit, data, children }: Props) => {
             <select
               {...form.register("members")}
               multiple
-              className="block w-full rounded-md border-2 border-solid border-gray-300 p-3"
+              className="bg-default block w-full rounded-md p-3"
+              style={{ borderBottom: "1px dotted rgba(100,100,100,1)" }}
             >
               {users.map((user) => (
                 <option key={user.slackId} value={user.slackId}>
