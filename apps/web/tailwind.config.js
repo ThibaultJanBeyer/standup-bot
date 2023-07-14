@@ -1,3 +1,4 @@
+// @ts-nocheck
 const config = require("@ssb/ui/tailwindConfig");
 
 /** @type {import('tailwindcss').Config} */

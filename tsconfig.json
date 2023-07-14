@@ -17,5 +17,6 @@
     "incremental": true,
     "noUncheckedIndexedAccess": true
   },
-  "include": [".eslintrc.js", "prettier.config.js"]
+  "include": [".eslintrc.js", "prettier.config.js"],
+  "exclude": ["node_modules", "tailwind.config.js", "next.config.js"]
 }
