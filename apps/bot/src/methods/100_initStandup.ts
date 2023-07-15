@@ -1,6 +1,7 @@
 import { StandupBot } from "../StandupBot";
 import { notWorking } from "./110_notWorking";
 import { startStandup } from "./120_startStandup";
+import { addUserMeta } from "./addUserMeta";
 import { createConversationStateMember } from "./conversationState";
 
 export const initStandup = async (BOT: StandupBot) => {
@@ -11,6 +12,7 @@ export const initStandup = async (BOT: StandupBot) => {
 
   for (const member of BOT.members) {
     BOT.conversationState.users[member] = createConversationStateMember();
+    await addUserMeta(BOT, member);
     // open private message
     const conversation = await BOT.app!.client.conversations.open({
       token: BOT.token,

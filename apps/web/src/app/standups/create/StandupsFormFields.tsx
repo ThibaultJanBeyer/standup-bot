@@ -9,6 +9,7 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
+import { Cron } from "react-js-cron";
 import * as zod from "zod";
 
 import { Button } from "@ssb/ui/button";
@@ -167,6 +168,7 @@ export default ({ onSubmit, data, children }: Props) => {
         </Form.Label>
         <Form.Control asChild>
           <Input {...form.register("summaryCron")} />
+          {/* <Cron value={value} setValue={setValue} /> */}
         </Form.Control>
       </Form.Field>
       <Form.Field name="questions" className="mb-10">

@@ -1,12 +1,10 @@
 import { StandupBot } from "@/StandupBot";
 
-import { addUserMeta } from "./addUserMeta";
 import { typeSafeUserState } from "./utils";
 
 export const postStandup = async (BOT: StandupBot) => {
   BOT.botStateMachine.send("POST");
   await BOT.connect();
-  await addUserMeta(BOT);
 
   if (!BOT.conversationState.report.ts) {
     const result = await BOT.app!.client.chat.postMessage({

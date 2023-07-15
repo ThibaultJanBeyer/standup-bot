@@ -9,8 +9,6 @@ import {
 
 import { StandupBot } from "@/StandupBot";
 
-import { initStandup } from "./100_initStandup";
-import { postStandup } from "./200_postStandup";
 import { Typegen0 } from "./createStateMachines.typegen";
 
 export type BotStateMachine = Interpreter<
@@ -53,6 +51,7 @@ export const createBotStateMachine = (BOT: StandupBot) =>
         InitStandup: {
           on: {
             INIT_DONE: "Waiting",
+            POST: "Posting",
           },
         },
 
@@ -80,6 +79,7 @@ export const createBotStateMachine = (BOT: StandupBot) =>
                 actions: [(context) => context.submitted++],
               },
             ],
+            POST: "Posting",
           },
         },
 

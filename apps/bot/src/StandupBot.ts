@@ -14,6 +14,8 @@ import {
   BotStateMachine,
   createBotStateMachine,
 } from "./methods/createStateMachines";
+import { subtractMinutes } from "./methods/modifyCron";
+import { remindUsers } from "./methods/remindUsers";
 import { db, eq, Standups } from "./orm";
 
 let validator = {
@@ -45,6 +47,7 @@ export class StandupBot {
   app?: App;
   startJob?: CronJob;
   postJob?: CronJob;
+  postReminder?: CronJob;
   isConnected: boolean = false;
   botStateMachine: BotStateMachine;
 
@@ -111,6 +114,14 @@ export class StandupBot {
       true,
       // "America/Los_Angeles", can be supplied in future versions
     );
+
+    this.postReminder = new CronJob(
+      subtractMinutes(standup.summaryCron, 45),
+      () => remindUsers(this),
+      null,
+      true,
+      // "America/Los_Angeles", can be supplied in future versions
+    );
     this.postJob = new CronJob(
       standup.summaryCron,
       () => postStandup(this),
@@ -125,6 +136,7 @@ export class StandupBot {
     if (this.botStateMachine) this.botStateMachine.stop();
     if (this.startJob) this.startJob.stop();
     if (this.postJob) this.postJob.stop();
+    if (this.postReminder) this.postReminder.stop();
   }
 
   connect = async () => {

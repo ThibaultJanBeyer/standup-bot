@@ -22,6 +22,9 @@ export type UserState = {
     REPORT: {
       ts: string;
     }[];
+    REMINDER: {
+      ts: string;
+    }[];
   };
   answers: Answer[] | null;
   meta: {
@@ -46,6 +49,7 @@ export const createConversationStateMember = () =>
       NOT_WORKING: [],
       START_STANDUP: [],
       REPORT: [],
+      REMINDER: [],
     },
     answers: [],
     meta: {
