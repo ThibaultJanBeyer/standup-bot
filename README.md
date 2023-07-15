@@ -92,3 +92,12 @@ Happens automatically and continuously via github workflows. Basically:
 - SSH into machine
 - Stop old container, run new container (@TODO: update to have zero downtime)
   It uses the `build.sh` and `start.sh` scripts
+
+## Wallaby.js
+
+[![Wallaby.js](https://img.shields.io/badge/wallaby.js-powered-blue.svg?style=for-the-badge&logo=github)](https://wallabyjs.com/oss/)
+
+This repository contributors are welcome to use
+[Wallaby.js OSS License](https://wallabyjs.com/oss/) to get
+test results immediately as you type, and see the results in
+your editor right next to your code.
