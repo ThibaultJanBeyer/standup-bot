@@ -2,9 +2,9 @@
 
 ## TODO
 
-- Beautiful UI
-- - UI: [Implement design](https://www.behance.net/gallery/174621639/Stand-Up-Slack-Bot-Landing-Page)
+- UI
 - - UI: Loading states on polling API
+- - Human readable cron pickers
 - Would be great if Bot could pick up where it started if it crashes in between
 - Publish on Slack as official app
 - Cheap pricing on hosted (SAAS) version to cover server costs
@@ -20,6 +20,7 @@
 - Running on digitalocean instance
 - https via cloudflare
 - Using https://github.com/statelyai/xstate as state-machine for the bot
+- UI created by [Emilia Matthews](https://www.behance.net/gallery/174621639/Stand-Up-Slack-Bot-Landing-Page)
 
 ## Testing Slack integration on dev
 
