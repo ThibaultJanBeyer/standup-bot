@@ -9,4 +9,36 @@
     background-image: url("/bubble-background.png");
     background-size: cover;
   }
+  .cron-picker .ant-select-selector {
+    border: 0 !important;
+    border-radius: 0 !important;
+    border-bottom: 1px dotted rgb(100, 100, 100) !important;
+    background-color: hsl(var(--background)) !important;
+    color: hsl(var(--foreground)) !important;
+  }
+  .cron-picker .react-js-cron-field,
+  .cron-picker > div {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .cron-picker .react-js-cron-field > span {
+    margin-right: 10px;
+  }
+  .cron-picker .ant-select-clear {
+    display: none !important;
+  }
+  .cron-picker .ant-select-selector {
+    padding-left: 0.75rem !important;
+    padding-right: 2rem !important;
+    height: 2.5rem !important;
+  }
+  .cron-picker .ant-select {
+    vertical-align: middle !important;
+  }
+  .cron-picker .ant-select-selection-search + .ant-select-selection-item {
+    margin-top: 3px !important;
+  }
+  .cron-picker .ant-select-arrow {
+    color: hsl(var(--foreground)) !important;
+  }
 }

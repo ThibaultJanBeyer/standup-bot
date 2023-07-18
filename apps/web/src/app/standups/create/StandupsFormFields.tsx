@@ -72,6 +72,8 @@ type Props = {
 export default ({ onSubmit, data, children }: Props) => {
   const [channels, setChannels] = useState<Data[]>([]);
   const [users, setUsers] = useState<Data[]>([]);
+  const [scheduleCronValue, setScheduleCronValue] = useState("0 5 * * 1-5");
+  const [summaryCronValue, setSummaryCronValue] = useState("0 9 * * 1-5");
   const form = useForm({
     resolver: zodResolver(zod.object(schema).strict()),
     mode: "onChange",
@@ -141,7 +143,7 @@ export default ({ onSubmit, data, children }: Props) => {
       </Form.Field>
       <Form.Field name="scheduleCron" className="mb-10">
         <Form.Label className="mb-2 block font-bold">
-          Cron expression to start the questionnaire (in UTC):
+          Select time to send-out questionnaire (in UTC):
           {Boolean(errors.scheduleCron?.message) && (
             <Form.Message className="font-normal text-red-600">
               {` (${errors.scheduleCron?.message})`}
@@ -154,12 +156,28 @@ export default ({ onSubmit, data, children }: Props) => {
           </Form.Message>
         )}
         <Form.Control asChild>
-          <Input {...form.register("scheduleCron")} />
+          <>
+            <Cron
+              clockFormat={"24-hour-clock"}
+              defaultPeriod="week"
+              leadingZero={true}
+              className={"cron-picker"}
+              value={scheduleCronValue}
+              clearButton={false}
+              setValue={setScheduleCronValue}
+            />
+            <Input
+              {...form.register("scheduleCron")}
+              value={scheduleCronValue}
+              className="hidden"
+              aria-hidden="true"
+            />
+          </>
         </Form.Control>
       </Form.Field>
       <Form.Field name="summaryCron" className="mb-10">
         <Form.Label className="mb-2 block font-bold">
-          Cron expression to send the summary (in UTC):
+          Select time to send-out summary (in UTC):
           {Boolean(errors.summaryCron?.message) && (
             <Form.Message className="font-normal text-red-600">
               {` (${errors.summaryCron?.message})`}
@@ -167,8 +185,23 @@ export default ({ onSubmit, data, children }: Props) => {
           )}
         </Form.Label>
         <Form.Control asChild>
-          <Input {...form.register("summaryCron")} />
-          {/* <Cron value={value} setValue={setValue} /> */}
+          <>
+            <Cron
+              clockFormat={"24-hour-clock"}
+              defaultPeriod="week"
+              leadingZero={true}
+              className={"cron-picker"}
+              value={summaryCronValue}
+              clearButton={false}
+              setValue={setSummaryCronValue}
+            />
+            <Input
+              {...form.register("summaryCron")}
+              value={summaryCronValue}
+              className="hidden"
+              aria-hidden="true"
+            />
+          </>
         </Form.Control>
       </Form.Field>
       <Form.Field name="questions" className="mb-10">
