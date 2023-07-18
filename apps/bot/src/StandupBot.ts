@@ -18,15 +18,6 @@ import { subtractMinutes } from "./methods/modifyCron";
 import { remindUsers } from "./methods/remindUsers";
 import { db, eq, Standups } from "./orm";
 
-let validator = {
-  set: (target: any, key: any, value: any) => {
-    console.log(
-      `The property ${key} has been updated with ${value} in ${target}`,
-    );
-    return true;
-  },
-};
-
 export class StandupBot {
   id: string = "";
   channel: string = "";
@@ -57,86 +48,114 @@ export class StandupBot {
   }
 
   async softUpdate() {
-    const checkStatus = async (check: number): Promise<Boolean> => {
-      const status = this.botStateMachine.getSnapshot().value;
-      // 12 hours
-      if (status === "Idle" || check >= 4320) {
-        await this.init();
-        return true;
-      }
+    try {
+      const checkStatus = async (check: number): Promise<Boolean> => {
+        const status = this.botStateMachine.getSnapshot().value;
+        // 12 hours
+        if (status === "Idle" || check >= 4320) {
+          await this.init();
+          return true;
+        }
 
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-      return await checkStatus(++check);
-    };
+        await new Promise((resolve) => setTimeout(resolve, 10000));
+        return await checkStatus(++check);
+      };
 
-    return checkStatus(0);
+      return checkStatus(0);
+    } catch (error) {
+      console.error("error in soft update", error);
+    }
   }
 
   async init() {
-    await this.teardown();
+    try {
+      await this.teardown();
 
-    this.conversationState = new Proxy(this.conversationState, validator);
+      const standup = await db.query.Standups.findFirst({
+        with: {
+          workspace: true,
+        },
+        where: eq(Standups.id, this.id),
+      });
+      if (!standup?.workspace) throw new Error("No standup found");
 
-    const standup = await db.query.Standups.findFirst({
-      with: {
-        workspace: true,
-      },
-      where: eq(Standups.id, this.id),
-    });
-    if (!standup?.workspace) throw new Error("No standup found");
+      this.token = standup.workspace.botToken;
+      this.channel = standup.channelId;
+      this.members = standup.members;
+      this.questions = standup.questions;
 
-    this.token = standup.workspace.botToken;
-    this.channel = standup.channelId;
-    this.members = standup.members;
-    this.questions = standup.questions;
+      this.botStateMachine.start();
+      this.app = new App({
+        token: this.token,
+        socketMode: true,
+        appToken: process.env.SLACK_APP_TOKEN,
+      });
+      this.app.client.conversations.join({
+        token: this.token,
+        channel: this.channel,
+      });
 
-    this.botStateMachine.start();
-    this.app = new App({
-      token: this.token,
-      socketMode: true,
-      appToken: process.env.SLACK_APP_TOKEN,
-    });
-    this.app.client.conversations.join({
-      token: this.token,
-      channel: this.channel,
-    });
+      this.notButtonId = `no_${randomUUID()}`;
+      this.startButtonId = `start_${randomUUID()}`;
+      this.app!.action(this.notButtonId, notWorkingClickHandler(this));
+      this.app!.action(this.startButtonId, startStandupClickHandler(this));
+      this.app!.event("message", handleUserMessage(this));
 
-    this.notButtonId = `no_${randomUUID()}`;
-    this.startButtonId = `start_${randomUUID()}`;
-    this.app!.action(this.notButtonId, notWorkingClickHandler(this));
-    this.app!.action(this.startButtonId, startStandupClickHandler(this));
-    this.app!.event("message", handleUserMessage(this));
+      this.startJob = new CronJob(
+        standup.scheduleCron,
+        () => {
+          try {
+            initStandup(this);
+          } catch (error) {
+            console.error("error in start job", error);
+          }
+        },
+        null,
+        true,
+        // "America/Los_Angeles", can be supplied in future versions
+      );
 
-    this.startJob = new CronJob(
-      standup.scheduleCron,
-      () => initStandup(this),
-      null,
-      true,
-      // "America/Los_Angeles", can be supplied in future versions
-    );
-
-    this.postReminder = new CronJob(
-      subtractMinutes(standup.summaryCron, 45),
-      () => remindUsers(this),
-      null,
-      true,
-      // "America/Los_Angeles", can be supplied in future versions
-    );
-    this.postJob = new CronJob(
-      standup.summaryCron,
-      () => postStandup(this),
-      null,
-      true,
-      // "America/Los_Angeles", can be supplied in future versions
-    );
+      this.postReminder = new CronJob(
+        subtractMinutes(standup.summaryCron, 45),
+        () => {
+          try {
+            remindUsers(this);
+          } catch (error) {
+            console.error("error in post reminder", error);
+          }
+        },
+        null,
+        true,
+        // "America/Los_Angeles", can be supplied in future versions
+      );
+      this.postJob = new CronJob(
+        standup.summaryCron,
+        () => {
+          try {
+            postStandup(this);
+          } catch (error) {
+            console.error("error in post job", error);
+          }
+        },
+        null,
+        true,
+        // "America/Los_Angeles", can be supplied in future versions
+      );
+    } catch (e) {
+      console.error("unhandled error", e);
+    }
   }
 
   async teardown() {
-    await this.disconnect();
-    if (this.botStateMachine) this.botStateMachine.stop();
-    if (this.startJob) this.startJob.stop();
-    if (this.postJob) this.postJob.stop();
-    if (this.postReminder) this.postReminder.stop();
+    try {
+      await this.disconnect();
+      if (this.botStateMachine) this.botStateMachine.stop();
+      if (this.startJob) this.startJob.stop();
+      if (this.postJob) this.postJob.stop();
+      if (this.postReminder) this.postReminder.stop();
+    } catch (error) {
+      console.error("error in teardown", error);
+    }
   }
 
   connect = async () => {
@@ -145,7 +164,7 @@ export class StandupBot {
       this.isConnected = true;
       if (this.app) await this.app.start(0);
     } catch (e) {
-      console.log(e);
+      console.error("error while trying to connect", e);
     }
   };
   disconnect = async () => {
@@ -154,11 +173,7 @@ export class StandupBot {
       this.isConnected = false;
       if (this.app) await this.app!.stop();
     } catch (e) {
-      console.log(e);
+      console.error("error while trying to disconnect", e);
     }
-  };
-
-  stateChangeHandler = () => {
-    console.log("Object changed:", this.conversationState);
   };
 }

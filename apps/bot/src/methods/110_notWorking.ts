@@ -1,42 +1,41 @@
 import { App } from "@slack/bolt";
 
+import { postMessage } from "./postMessage";
+import { updateMessage } from "./updateMessage";
+
 type Props = {
   app: App;
   token: string;
-  step: number;
   channel: string;
   ts: string;
 };
 
-export const notWorking = async (props: Props) => {
-  const { step = 0 } = props;
-  for (let index = step; index < steps.length; index++)
-    await steps[index]!(props);
-};
-
-const steps = [
-  async ({ app, token, channel, ts }: Props) => {
-    await app.client.chat.update({
-      token,
-      channel,
-      ts,
-      text: "Marked: not working today",
-      blocks: [
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: `~~ not working today ${new Date().toDateString()} ~~`,
-          },
+export const notWorking = async ({ app, token, channel, ts }: Props) => {
+  await updateMessage({
+    app,
+    token,
+    channel,
+    ts,
+    text: "Marked: not working today",
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `~~ not working today ${new Date().toDateString()} ~~`,
         },
-      ],
-    });
-  },
-  async ({ app, token, channel }: Props) => {
-    await app.client.chat.postMessage({
+      },
+    ],
+  });
+
+  try {
+    await postMessage({
+      app,
       token,
       channel,
       text: "Ok, see you tomorrow :wave:",
     });
-  },
-];
+  } catch (error) {
+    console.error("Error in notWorking", error);
+  }
+};

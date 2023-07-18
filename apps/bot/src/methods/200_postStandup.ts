@@ -1,5 +1,9 @@
 import { StandupBot } from "@/StandupBot";
 
+import { getHistory } from "./getHistory";
+import { openConversation } from "./openConversation";
+import { postMessage } from "./postMessage";
+import { updateMessage } from "./updateMessage";
 import { typeSafeUserState } from "./utils";
 
 export const postStandup = async (BOT: StandupBot) => {
@@ -7,13 +11,13 @@ export const postStandup = async (BOT: StandupBot) => {
   await BOT.connect();
 
   if (!BOT.conversationState.report.ts) {
-    const result = await BOT.app!.client.chat.postMessage({
+    const result = await postMessage({
+      app: BOT.app!,
       token: BOT.token,
       channel: BOT.channel,
       text: "Hello team, submitted responses for Standup:",
     });
-
-    BOT.conversationState.report.ts = result.ts;
+    if (result) BOT.conversationState.report.ts = result.ts;
   }
 
   for (const member of BOT.members) {
@@ -21,7 +25,8 @@ export const postStandup = async (BOT: StandupBot) => {
     if (!userState || userState?.botMessages.REPORT.length) continue;
     const { blocks } = await getUserMessage(BOT, member);
     await handlePrivateMessages(BOT, member);
-    await BOT.app!.client.chat.postMessage({
+    await postMessage({
+      app: BOT.app!,
       token: BOT.token,
       channel: BOT.channel,
       username: userState.meta.username,
@@ -40,27 +45,28 @@ const handlePrivateMessages = async (BOT: StandupBot, member: string) => {
   const userState = typeSafeUserState(BOT, member);
   if (!userState) return;
 
-  const conversation = await BOT.app!.client.conversations.open({
+  const channel = await openConversation({
+    app: BOT.app!,
     token: BOT.token,
-    users: member,
+    member,
   });
-  const userChannel = conversation?.channel?.id;
-
   // user reported not working
-  if (!userChannel || userState.answers === null) return;
+  if (!channel || userState.answers === null) return;
 
   // user did not finish in time
   if (userState.answers.length < BOT.questions.length)
-    await BOT.app!.client.chat.postMessage({
+    await postMessage({
+      app: BOT.app!,
       token: BOT.token,
-      channel: userChannel,
+      channel,
       text: "Standup Concluded.",
     });
 
   // normal behavior
-  await BOT.app!.client.chat.update({
+  await updateMessage({
+    app: BOT.app!,
     token: BOT.token,
-    channel: userChannel,
+    channel,
     ts: userState.botMessages.INIT[0]!.ts,
     text: "Marked: standup concluded",
     blocks: [
@@ -99,11 +105,11 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
     });
 
     for (const answer of answers) {
-      const conversation = await BOT.app!.client.conversations.history({
+      const conversation = await getHistory({
+        app: BOT.app!,
         token: BOT.token,
         channel: answer.channel,
         oldest: answer.questionMessageTs,
-        inclusive: true,
       });
 
       const answerMessage = conversation?.messages?.find(

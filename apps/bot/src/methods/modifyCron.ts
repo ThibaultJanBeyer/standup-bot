@@ -10,5 +10,3 @@ export const subtractMinutes = (cronExpression: string, minutes: number) => {
   const modifiedInterval = cronParser.fieldsToExpression(fields);
   return modifiedInterval.stringify();
 };
-
-console.log(subtractMinutes("10 0 * * 1-5", 60));

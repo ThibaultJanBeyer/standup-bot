@@ -3,6 +3,9 @@ import { notWorking } from "./110_notWorking";
 import { startStandup } from "./120_startStandup";
 import { addUserMeta } from "./addUserMeta";
 import { createConversationStateMember } from "./conversationState";
+import { openConversation } from "./openConversation";
+import { postMessage } from "./postMessage";
+import { updateMessage } from "./updateMessage";
 
 export const initStandup = async (BOT: StandupBot) => {
   BOT.botStateMachine.send("INIT");
@@ -13,17 +16,17 @@ export const initStandup = async (BOT: StandupBot) => {
   for (const member of BOT.members) {
     BOT.conversationState.users[member] = createConversationStateMember();
     await addUserMeta(BOT, member);
-    // open private message
-    const conversation = await BOT.app!.client.conversations.open({
+    const channel = await openConversation({
+      app: BOT.app!,
       token: BOT.token,
-      users: member,
+      member,
     });
-    const channel = conversation?.channel?.id;
     if (!channel) continue;
 
     // check previously posted message (if interrupted abruptly)
     if (prevConversationState.users[member]?.botMessages.INIT?.[0]?.ts)
-      await BOT.app!.client.chat.update({
+      await updateMessage({
+        app: BOT.app!,
         token: BOT.token,
         channel,
         ts: prevConversationState.users[member]!.botMessages.INIT[0]!.ts,
@@ -40,7 +43,8 @@ export const initStandup = async (BOT: StandupBot) => {
       });
 
     // post question
-    const initMessage = await BOT.app!.client.chat.postMessage({
+    const initMessage = await postMessage({
+      app: BOT.app!,
       token: BOT.token,
       channel,
       text: "Hello mate :wave:, it’s standup time!",
@@ -77,7 +81,7 @@ export const initStandup = async (BOT: StandupBot) => {
         },
       ],
     });
-    if (!initMessage.ts) continue;
+    if (!initMessage?.ts) continue;
 
     BOT.conversationState.users[member]?.botMessages.INIT.push({
       ts: initMessage.ts,
@@ -96,11 +100,9 @@ export const notWorkingClickHandler =
     if (!channel || !ts) return;
     await notWorking({
       app: BOT.app!,
-      channel: BOT.channel!,
-      step: BOT.conversationState.users[body.user.id]!.botMessages.NOT_WORKING
-        .length,
       token: BOT.token,
-      ts: ts,
+      channel,
+      ts,
     });
     BOT.conversationState.users[body.user.id]!.answers = null;
     BOT.botStateMachine.send("NOT_WORKING");

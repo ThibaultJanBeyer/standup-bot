@@ -1,5 +1,7 @@
 import { StandupBot } from "@/StandupBot";
 
+import { openConversation } from "./openConversation";
+import { postMessage } from "./postMessage";
 import { typeSafeUserState } from "./utils";
 
 export const remindUsers = async (BOT: StandupBot) => {
@@ -7,11 +9,11 @@ export const remindUsers = async (BOT: StandupBot) => {
   if (status !== "Waiting") return;
   for (const member of BOT.members) {
     const userState = typeSafeUserState(BOT, member);
-    const conversation = await BOT.app!.client.conversations.open({
+    const channel = await openConversation({
+      app: BOT.app!,
       token: BOT.token,
-      users: member,
+      member,
     });
-    const channel = conversation?.channel?.id;
     if (
       !channel ||
       !userState ||
@@ -22,30 +24,16 @@ export const remindUsers = async (BOT: StandupBot) => {
     )
       continue;
 
-    const remindMessage = await BOT.app.client.chat.postMessage({
+    const remindMessage = await postMessage({
+      app: BOT.app!,
       token: BOT.token,
       channel,
       text: "Please don’t forget to fill in your updates :hugging_face:",
     });
 
-    if (!remindMessage.ts) continue;
-    BOT.conversationState.users[member]?.botMessages.REMINDER.push({
-      ts: remindMessage.ts,
-    });
-  }
-};
-
-export const removeRemindUsers = (BOT: StandupBot) => {
-  for (const member of BOT.members) {
-    const userState = typeSafeUserState(BOT, member);
-    if (!userState) continue;
-    for (const message of userState.botMessages.REMINDER) {
-      BOT.app?.client.chat.delete({
-        token: BOT.token,
-        channel: BOT.channel,
-        ts: message.ts,
+    if (remindMessage?.ts)
+      BOT.conversationState.users[member]?.botMessages.REMINDER.push({
+        ts: remindMessage.ts,
       });
-    }
-    userState.botMessages.REMINDER = [];
   }
 };

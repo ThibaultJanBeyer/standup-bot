@@ -41,7 +41,10 @@ export const createBotStateMachine = (BOT: StandupBot) =>
 
       states: {
         Idle: {
-          entry: [() => BOT.disconnect()],
+          entry: [
+            () => BOT.disconnect(),
+            () => console.info(`${new Date().toISOString()} idle`),
+          ],
           on: {
             INIT: "InitStandup",
             POST: "Posting",
@@ -49,6 +52,9 @@ export const createBotStateMachine = (BOT: StandupBot) =>
         },
 
         InitStandup: {
+          entry: [
+            () => console.info(`${new Date().toISOString()} init standup`),
+          ],
           on: {
             INIT_DONE: "Waiting",
             POST: "Posting",
@@ -56,27 +62,61 @@ export const createBotStateMachine = (BOT: StandupBot) =>
         },
 
         Waiting: {
+          entry: [() => console.info(`${new Date().toISOString()} waiting`)],
           on: {
             QUESTIONS_ANSWERED: [
               {
                 target: "Idle",
+                // -1 because the person answering the first question is not included
                 cond: (context) => context.submitted >= BOT.members.length - 1,
+                actions: [
+                  (context) =>
+                    console.info(
+                      `${new Date().toISOString()} questions answered ${
+                        context?.submitted
+                      }/${BOT.members.length - 1}}`,
+                    ),
+                ],
                 internal: false,
               },
               {
                 target: "Waiting",
-                actions: [(context) => context.submitted++],
+                actions: [
+                  (context) => context.submitted++,
+                  (context) =>
+                    console.info(
+                      `${new Date().toISOString()} questions answered ${
+                        context?.submitted
+                      }/${BOT.members.length - 1}}`,
+                    ),
+                ],
               },
             ],
             NOT_WORKING: [
               {
                 target: "Idle",
                 cond: (context) => context.submitted >= BOT.members.length - 1,
+                actions: [
+                  (context) =>
+                    console.info(
+                      `${new Date().toISOString()} questions answered NOT_WORKING ${
+                        context?.submitted
+                      }/${BOT.members.length - 1}}`,
+                    ),
+                ],
                 internal: false,
               },
               {
                 target: "Waiting",
-                actions: [(context) => context.submitted++],
+                actions: [
+                  (context) => context.submitted++,
+                  (context) =>
+                    console.info(
+                      `${new Date().toISOString()} questions answered ${
+                        context?.submitted
+                      }/${BOT.members.length - 1}}`,
+                    ),
+                ],
               },
             ],
             POST: "Posting",
@@ -84,6 +124,7 @@ export const createBotStateMachine = (BOT: StandupBot) =>
         },
 
         Posting: {
+          entry: [() => console.info(`${new Date().toISOString()} posting`)],
           on: {
             POST_DONE: "Idle",
           },
