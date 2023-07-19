@@ -38,11 +38,12 @@ export class StandupBot {
   app?: App;
   startJob?: CronJob;
   postJob?: CronJob;
-  postReminder?: CronJob;
+  remindJob?: CronJob;
   isConnected: boolean = false;
   botStateMachine: BotStateMachine;
 
   constructor({ standupId }: { standupId: string }) {
+    console.info(`${new Date().toISOString()} constructor`, this.id);
     this.id = standupId;
     this.botStateMachine = createBotStateMachine(this);
   }
@@ -79,6 +80,7 @@ export class StandupBot {
       });
       if (!standup?.workspace) throw new Error("No standup found");
 
+      console.info(`${new Date().toISOString()} init`, standup.id);
       this.token = standup.workspace.botToken;
       this.channel = standup.channelId;
       this.members = standup.members;
@@ -101,10 +103,16 @@ export class StandupBot {
       this.app!.action(this.startButtonId, startStandupClickHandler(this));
       this.app!.event("message", handleUserMessage(this));
 
+      if (this.startJob) this.startJob.stop();
       this.startJob = new CronJob(
         standup.scheduleCron,
         () => {
           try {
+            console.info(
+              `${new Date().toISOString()} start job`,
+              this.conversationState,
+              this.id,
+            );
             initStandup(this);
           } catch (error) {
             console.error("error in start job", error);
@@ -115,10 +123,16 @@ export class StandupBot {
         // "America/Los_Angeles", can be supplied in future versions
       );
 
-      this.postReminder = new CronJob(
+      if (this.remindJob) this.remindJob.stop();
+      this.remindJob = new CronJob(
         subtractMinutes(standup.summaryCron, 45),
         () => {
           try {
+            console.info(
+              `${new Date().toISOString()} remind job`,
+              this.conversationState,
+              this.id,
+            );
             remindUsers(this);
           } catch (error) {
             console.error("error in post reminder", error);
@@ -128,10 +142,17 @@ export class StandupBot {
         true,
         // "America/Los_Angeles", can be supplied in future versions
       );
+
+      if (this.postJob) this.postJob.stop();
       this.postJob = new CronJob(
         standup.summaryCron,
         () => {
           try {
+            console.info(
+              `${new Date().toISOString()} post job`,
+              this.conversationState,
+              this.id,
+            );
             postStandup(this);
           } catch (error) {
             console.error("error in post job", error);
@@ -152,7 +173,7 @@ export class StandupBot {
       if (this.botStateMachine) this.botStateMachine.stop();
       if (this.startJob) this.startJob.stop();
       if (this.postJob) this.postJob.stop();
-      if (this.postReminder) this.postReminder.stop();
+      if (this.remindJob) this.remindJob.stop();
     } catch (error) {
       console.error("error in teardown", error);
     }
