@@ -65,9 +65,9 @@ export function SiteHeader() {
                   </>
                 ) : (
                   <>
-                    <Button variant="outline" asChild className="mr-5">
+                    {/* <Button variant="outline" asChild className="mr-5">
                       <Link href={`/auth/sign-in`}>Login</Link>
-                    </Button>
+                    </Button> */}
                   </>
                 )
               ) : (

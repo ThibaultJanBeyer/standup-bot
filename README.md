@@ -1,13 +1,23 @@
 # Work in Progress
 
+NOTE: currently the bot can’t work on multiple workspaces due to wrong implementation
+
 ## TODO
 
 - UI
 - - UI: Loading states on polling API
 - - Human readable cron pickers
-- Would be great if Bot could pick up where it started if it crashes in between
-- Publish on Slack as official app
-- Cheap pricing on hosted (SAAS) version to cover server costs
+- BOT
+- - Rewrite the bot to work on multiple workspaces and use HTTP api, see:
+- - - https://api.slack.com/apis/connections/events-api
+- - - https://slack.dev/bolt-js/concepts#authorization
+- - - https://slack.dev/bolt-js/tutorial/getting-started-http#setting-up-events-with-http
+- - - https://api.slack.com/start/distributing#multi_workspace_apps
+- Nice to have
+- - Would be great if Bot could pick up where it started if it crashes in between
+- - Host it on vercel? https://github.com/vercel/vercel/discussions/6039
+- - Publish on Slack as official app
+- - Cheap pricing on hosted (SAAS) version to cover server costs
 
 ## Info
 

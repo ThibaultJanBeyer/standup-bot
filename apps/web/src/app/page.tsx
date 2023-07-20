@@ -20,7 +20,7 @@ export default function Home() {
         <SectionFeatures className="m-auto mb-[10rem] max-w-5xl lg:mb-[20rem]" />
         <SectionShowcase className="m-auto mb-[5rem] max-w-5xl" />
       </main>
-      <BottomCTA />
+      {/* <BottomCTA /> */}
     </>
   );
 }

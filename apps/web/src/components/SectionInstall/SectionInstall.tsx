@@ -34,7 +34,8 @@ export const SectionInstall = ({
           to catch up with projects.
         </p>
         <div className="grid gap-10 md:grid-cols-2" id="install-cta">
-          <CTAButtons />
+          {/* <CTAButtons /> */}
+          Currently not ready for public use.
         </div>
       </div>
       <div className="relative h-[200px]">
