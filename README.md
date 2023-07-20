@@ -4,9 +4,10 @@ NOTE: currently the bot can’t work on multiple workspaces due to wrong impleme
 
 ## TODO
 
-- UI
-- - UI: Loading states on polling API
-- - Human readable cron pickers
+- UI & UX
+- - Loading states on polling API
+- - Human readable cron pickers (currently not working)
+- - Custom Timezones (local by default)
 - BOT
 - - Rewrite the bot to work on multiple workspaces and use HTTP api, see:
 - - - https://api.slack.com/apis/connections/events-api
@@ -16,6 +17,7 @@ NOTE: currently the bot can’t work on multiple workspaces due to wrong impleme
 - Nice to have
 - - Would be great if Bot could pick up where it started if it crashes in between
 - - Host it on vercel? https://github.com/vercel/vercel/discussions/6039
+- When Stable
 - - Publish on Slack as official app
 - - Cheap pricing on hosted (SAAS) version to cover server costs
 
