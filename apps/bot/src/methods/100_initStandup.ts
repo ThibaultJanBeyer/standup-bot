@@ -9,15 +9,13 @@ import { updateMessage } from "./updateMessage";
 
 export const initStandup = async (BOT: StandupBot) => {
   BOT.botStateMachine.send("INIT");
-  await BOT.connect();
-
   const prevConversationState = BOT.conversationState;
 
   for (const member of BOT.members) {
     BOT.conversationState.users[member] = createConversationStateMember();
     await addUserMeta(BOT, member);
     const channel = await openConversation({
-      app: BOT.app!,
+      app: BOT.app,
       token: BOT.token,
       member,
     });
@@ -26,7 +24,7 @@ export const initStandup = async (BOT: StandupBot) => {
     // check previously posted message (if interrupted abruptly)
     if (prevConversationState.users[member]?.botMessages.INIT?.[0]?.ts)
       await updateMessage({
-        app: BOT.app!,
+        app: BOT.app,
         token: BOT.token,
         channel,
         ts: prevConversationState.users[member]!.botMessages.INIT[0]!.ts,
@@ -44,7 +42,7 @@ export const initStandup = async (BOT: StandupBot) => {
 
     // post question
     const initMessage = await postMessage({
-      app: BOT.app!,
+      app: BOT.app,
       token: BOT.token,
       channel,
       text: "Hello mate :wave:, it’s standup time!",
@@ -94,9 +92,15 @@ export const initStandup = async (BOT: StandupBot) => {
 export const notWorkingClickHandler =
   (BOT: StandupBot) =>
   async ({ body, ack }: any) => {
-    await ack();
     const channel = body?.channel?.id;
     const ts = (body as any).message.ts;
+    console.info(
+      `${new Date().toISOString()} click not working`,
+      channel,
+      ts,
+      BOT.id,
+    );
+    await ack();
     if (!channel || !ts) return;
     await notWorking({
       app: BOT.app!,
@@ -111,9 +115,15 @@ export const notWorkingClickHandler =
 export const startStandupClickHandler =
   (BOT: StandupBot) =>
   async ({ body, ack }: any) => {
-    await ack();
     const channel = body?.channel?.id;
     const ts = (body as any).message.ts;
+    console.info(
+      `${new Date().toISOString()} click start`,
+      channel,
+      ts,
+      BOT.id,
+    );
+    await ack();
     if (!channel || !ts) return;
     await startStandup(BOT, { channel, ts, member: body.user.id });
   };

@@ -8,7 +8,6 @@ import { typeSafeUserState } from "./utils";
 
 export const postStandup = async (BOT: StandupBot) => {
   BOT.botStateMachine.send("POST");
-  await BOT.connect();
 
   if (!BOT.conversationState.report.ts) {
     const result = await postMessage({
@@ -26,7 +25,7 @@ export const postStandup = async (BOT: StandupBot) => {
     const { blocks } = await getUserMessage(BOT, member);
     await handlePrivateMessages(BOT, member);
     await postMessage({
-      app: BOT.app!,
+      app: BOT.app,
       token: BOT.token,
       channel: BOT.channel,
       username: userState.meta.username,
@@ -46,7 +45,7 @@ const handlePrivateMessages = async (BOT: StandupBot, member: string) => {
   if (!userState) return;
 
   const channel = await openConversation({
-    app: BOT.app!,
+    app: BOT.app,
     token: BOT.token,
     member,
   });
@@ -106,7 +105,7 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
 
     for (const answer of answers) {
       const conversation = await getHistory({
-        app: BOT.app!,
+        app: BOT.app,
         token: BOT.token,
         channel: answer.channel,
         oldest: answer.questionMessageTs,

@@ -1,15 +1,17 @@
 import { StandupBot } from "@/StandupBot";
 
+import { isMyAnswerMessage } from "./isMyAnswerMessage";
 import { postMessage } from "./postMessage";
 import { updateMessage } from "./updateMessage";
-import { typeSafeUserState } from "./utils";
+import { SlackMessage, typeSafeUserState } from "./utils";
 
 export const startStandup = async (
   BOT: StandupBot,
   { channel, ts, member }: { channel: string; ts: string; member: string },
 ) => {
+  console.log("startStandup", { channel, ts, member });
   await updateMessage({
-    app: BOT.app!,
+    app: BOT.app,
     token: BOT.token,
     channel,
     ts,
@@ -29,24 +31,17 @@ export const startStandup = async (
 };
 
 export const handleUserMessage = (BOT: StandupBot) => async (props: any) => {
-  const { event, message } = props;
-  const userState = typeSafeUserState(BOT, event.user);
-  if (!userState) return;
+  if (!isMyAnswerMessage(BOT)(props)) return;
 
+  // we know that the message is for us as it was vetted using isMyAnswer
+  console.log("handleUserMessage");
+  const { event, message } = props;
+  const userState = typeSafeUserState(BOT, event.user)!;
   const botMessages = userState.botMessages.START_STANDUP;
   const question = botMessages[botMessages.length - 1];
   const answers = userState.answers;
 
-  if (
-    !answers ||
-    event.channel_type !== "im" || // we don't want to track group messages
-    event.thread_ts || // we don't want to track thread messages
-    !message.client_msg_id || // already tracked answer
-    answers.some((answer) => answer.client_msg_id === message.client_msg_id) // not the same answer message
-  )
-    return;
-
-  answers.push({
+  answers?.push({
     client_msg_id: message.client_msg_id,
     question: question?.message || "",
     channel: event.channel,
@@ -85,7 +80,7 @@ const postNextQuestion = async (
   if (!BOT.questions[nextMessage]) return;
 
   const message = await postMessage({
-    app: BOT.app!,
+    app: BOT.app,
     token: BOT.token,
     channel,
     text: BOT.questions[nextMessage] || "",
@@ -105,7 +100,7 @@ const postFinal = async (
   if (!userState) return;
 
   const message = await postMessage({
-    app: BOT.app!,
+    app: BOT.app,
     token: BOT.token,
     channel,
     text: "Thanks! Got it :muscle:",

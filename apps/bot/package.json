@@ -15,6 +15,7 @@
     "@slack/bolt": "^3.13.1",
     "@ssb/orm": "workspace:*",
     "@ssb/ui": "workspace:*",
+    "@ssb/utils": "workspace:*",
     "body-parser": "^1.20.2",
     "cron": "^2.3.1",
     "cron-parser": "^4.8.1",

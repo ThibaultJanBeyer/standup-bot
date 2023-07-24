@@ -168,9 +168,9 @@ export default ({ onSubmit, data, children }: Props) => {
             />
             <Input
               {...form.register("scheduleCron")}
-              value={scheduleCronValue}
-              style={{ visibility: "hidden", height: 0 }}
-              aria-hidden="true"
+              // value={scheduleCronValue}
+              // style={{ visibility: "hidden", height: 0 }}
+              // aria-hidden="true"
             />
           </>
         </Form.Control>
@@ -197,9 +197,9 @@ export default ({ onSubmit, data, children }: Props) => {
             />
             <Input
               {...form.register("summaryCron")}
-              value={summaryCronValue}
-              style={{ visibility: "hidden", height: 0 }}
-              aria-hidden="true"
+              // value={summaryCronValue}
+              // style={{ visibility: "hidden", height: 0 }}
+              // aria-hidden="true"
             />
           </>
         </Form.Control>

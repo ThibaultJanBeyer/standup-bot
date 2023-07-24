@@ -1,0 +1,19 @@
+{
+  "name": "@ssb/utils",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint \"**/*.ts*\"",
+    "type-check": "tsc --noEmit --incremental false"
+  },
+  "dependencies": {
+    "@slack/web-api": "^6.8.1",
+    "@ssb/orm": "workspace:*"
+  },
+  "devDependencies": {
+    "eslint": "^8.45.0",
+    "typescript": "^5.1.6"
+  }
+}

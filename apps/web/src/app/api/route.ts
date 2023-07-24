@@ -2,9 +2,9 @@ import { parse } from "url";
 import { NextRequest, NextResponse } from "next/server";
 import { WebClient } from "@slack/web-api";
 
-import { db, Workspaces } from "@/lib/orm";
+import { insertUsersFromWorkspace } from "@ssb/utils";
 
-import { insertUsersFromWorkspace } from "../../lib/insertUsersFromWorkspace";
+import { db, Workspaces } from "@/lib/orm";
 
 export const GET = async (req: NextRequest) => {
   try {

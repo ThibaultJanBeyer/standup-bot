@@ -1,3 +1,4 @@
+import { type Installation } from "@slack/bolt";
 import { InferModel, relations } from "drizzle-orm";
 import {
   customType,
@@ -62,6 +63,7 @@ export const Workspaces = pgTable(
     id: uuid("id").defaultRandom().notNull().primaryKey(),
     workspaceId: text("workspace_id").notNull(),
     botToken: text("bot_token").notNull(),
+    installation: jsonb("installation").notNull(),
     // members => relation
     // standups => relation
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -74,7 +76,9 @@ export const Workspaces = pgTable(
   },
 );
 
-export type Workspace = InferModel<typeof Workspaces>;
+export type Workspace = InferModel<typeof Workspaces> & {
+  installation: Installation<"v1" | "v2", boolean>;
+};
 export type NewWorkspace = InferModel<typeof Workspaces, "insert">;
 
 export const WorkspaceRelations = relations(Workspaces, ({ many }) => ({
@@ -88,6 +92,7 @@ export const Users = pgTable(
     id: uuid("id").defaultRandom().notNull().primaryKey(),
     slackId: text("slack_id"),
     slackName: text("slack_name"),
+    email: text("email"),
     clerkId: text("clerk_id"),
     workspaceId: text("workspace_id"),
     createdAt: timestamp("created_at").defaultNow().notNull(),

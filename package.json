@@ -14,8 +14,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "migrate": "turbo run migrate",
-    "generate": "turbo run generate",
+    "db:migrate": "turbo run migrate",
+    "db:generate": "turbo run generate",
     "docker:build": "./build.sh",
     "docker:start": "./start.sh"
   },

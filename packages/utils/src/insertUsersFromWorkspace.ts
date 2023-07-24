@@ -2,8 +2,8 @@ import { WebClient } from "@slack/web-api";
 
 import { eq, sql, Workspaces } from "@ssb/orm";
 
-import { db, Users } from "@/lib/orm";
-import { cacheItem, hasCachedItem } from "@/lib/simpleMemoryCache";
+import { db, Users } from "./lib/orm";
+import { cacheItem, hasCachedItem } from "./simpleMemoryCache";
 
 export const insertUsersFromWorkspace = async (
   workspaceId: string,
@@ -34,11 +34,12 @@ export const insertUsersFromWorkspace = async (
 
   if (userList?.members?.length) {
     const members = userList.members.flatMap((member) => {
-      if (member.is_bot || member.name === "slackbot") return [];
+      if (member.is_bot || member.name === "slackbot" || !member.id) return [];
       return [
         {
-          slackId: member.id || "",
+          slackId: member.id,
           slackName: member.name || "",
+          email: member.profile?.email || "",
           workspaceId,
         },
       ];

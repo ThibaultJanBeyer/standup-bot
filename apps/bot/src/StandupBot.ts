@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { App } from "@slack/bolt";
 import { CronJob } from "cron";
 
+import { SlackApp } from "./app";
 import {
   initStandup,
   notWorkingClickHandler,
@@ -35,16 +36,18 @@ export class StandupBot {
     report: {},
   };
   token: string = "";
-  app?: App;
+  app: SlackApp;
   startJob?: CronJob;
   postJob?: CronJob;
   remindJob?: CronJob;
   isConnected: boolean = false;
   botStateMachine: BotStateMachine;
+  workspaceId: string = "";
 
-  constructor({ standupId }: { standupId: string }) {
+  constructor({ standupId, APP }: { standupId: string; APP: SlackApp }) {
     console.info(`${new Date().toISOString()} constructor`, this.id);
     this.id = standupId;
+    this.app = APP;
     this.botStateMachine = createBotStateMachine(this);
   }
 
@@ -71,7 +74,6 @@ export class StandupBot {
   async init() {
     try {
       await this.teardown();
-
       const standup = await db.query.Standups.findFirst({
         with: {
           workspace: true,
@@ -79,19 +81,16 @@ export class StandupBot {
         where: eq(Standups.id, this.id),
       });
       if (!standup?.workspace) throw new Error("No standup found");
-
       console.info(`${new Date().toISOString()} init`, standup.id);
+
+      this.app.registerStandup(this);
+      this.workspaceId = standup.workspaceId;
       this.token = standup.workspace.botToken;
       this.channel = standup.channelId;
       this.members = standup.members;
       this.questions = standup.questions;
 
       this.botStateMachine.start();
-      this.app = new App({
-        token: this.token,
-        socketMode: true,
-        appToken: process.env.SLACK_APP_TOKEN,
-      });
       this.app.client.conversations.join({
         token: this.token,
         channel: this.channel,
@@ -99,11 +98,12 @@ export class StandupBot {
 
       this.notButtonId = `no_${randomUUID()}`;
       this.startButtonId = `start_${randomUUID()}`;
-      this.app!.action(this.notButtonId, notWorkingClickHandler(this));
-      this.app!.action(this.startButtonId, startStandupClickHandler(this));
-      this.app!.event("message", handleUserMessage(this));
+      this.app.action(this.notButtonId, notWorkingClickHandler(this));
+      this.app.action(this.startButtonId, startStandupClickHandler(this));
+      this.app.event("message", async (message) => {
+        if (message.ack) await (message as any).ack();
+      });
 
-      if (this.startJob) this.startJob.stop();
       this.startJob = new CronJob(
         standup.scheduleCron,
         () => {
@@ -123,7 +123,6 @@ export class StandupBot {
         // "America/Los_Angeles", can be supplied in future versions
       );
 
-      if (this.remindJob) this.remindJob.stop();
       this.remindJob = new CronJob(
         subtractMinutes(standup.summaryCron, 45),
         () => {
@@ -143,7 +142,6 @@ export class StandupBot {
         // "America/Los_Angeles", can be supplied in future versions
       );
 
-      if (this.postJob) this.postJob.stop();
       this.postJob = new CronJob(
         standup.summaryCron,
         () => {
@@ -169,7 +167,6 @@ export class StandupBot {
 
   async teardown() {
     try {
-      await this.disconnect();
       if (this.botStateMachine) this.botStateMachine.stop();
       if (this.startJob) this.startJob.stop();
       if (this.postJob) this.postJob.stop();
@@ -179,22 +176,5 @@ export class StandupBot {
     }
   }
 
-  connect = async () => {
-    try {
-      if (this.isConnected) await this.disconnect();
-      this.isConnected = true;
-      if (this.app) await this.app.start(0);
-    } catch (e) {
-      console.error("error while trying to connect", e);
-    }
-  };
-  disconnect = async () => {
-    try {
-      if (!this.isConnected) return;
-      this.isConnected = false;
-      if (this.app) await this.app!.stop();
-    } catch (e) {
-      console.error("error while trying to disconnect", e);
-    }
-  };
+  message = handleUserMessage(this);
 }

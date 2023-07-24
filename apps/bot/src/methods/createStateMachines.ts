@@ -41,10 +41,7 @@ export const createBotStateMachine = (BOT: StandupBot) =>
 
       states: {
         Idle: {
-          entry: [
-            () => BOT.disconnect(),
-            () => console.info(`${new Date().toISOString()} idle`),
-          ],
+          entry: [() => console.info(`${new Date().toISOString()} idle`)],
           on: {
             INIT: "InitStandup",
             POST: "Posting",

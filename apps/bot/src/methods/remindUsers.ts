@@ -10,7 +10,7 @@ export const remindUsers = async (BOT: StandupBot) => {
   for (const member of BOT.members) {
     const userState = typeSafeUserState(BOT, member);
     const channel = await openConversation({
-      app: BOT.app!,
+      app: BOT.app,
       token: BOT.token,
       member,
     });

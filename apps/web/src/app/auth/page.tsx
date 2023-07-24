@@ -1,13 +1,15 @@
 import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
 
-import { insertUsersFromWorkspace } from "@/lib/insertUsersFromWorkspace";
+import { insertUsersFromWorkspace } from "@ssb/utils";
+
 import { db, Users } from "@/lib/orm";
 
 const getData = async () => {
   const user = await currentUser();
 
   if (!user) return "no_user";
+  console.log(user, user.externalAccounts[0]!.externalId);
 
   const item = await db
     .insert(Users)
@@ -37,12 +39,7 @@ export default async () => {
   const data = await getData();
   if (data === "no_user") redirect("/auth/sign-in");
   if (data === "no_workspace")
-    redirect(
-      `https://slack.com/oauth/v2/authorize?scope=channels%3Ahistory%2Cchannels%3Ajoin%2Cchannels%3Aread%2Cchat%3Awrite%2Cchat%3Awrite.customize%2Cim%3Ahistory%2Cim%3Aread%2Cim%3Awrite%2Cusers%3Aread&user_scope=&redirect_uri=${encodeURIComponent(
-        process.env.SLACK_REDIRECT_URI!,
-      )}&client_id=${process.env.SLACK_CLIENT_ID!}&state=${process.env
-        .SLACK_CODE!}`,
-    );
+    redirect(`${process.env.SLACK_REDIRECT_URI}/slack`);
   if (data === "success")
     redirect(process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL || "/");
   return (
