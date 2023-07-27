@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "deleted_records" (
 CREATE TABLE IF NOT EXISTS "standups" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
-	"workspace_id" text NOT NULL,
+	"slack_workspace_id" text NOT NULL,
 	"channel_id" text NOT NULL,
 	"schedule_cron" text NOT NULL,
 	"summary_cron" text NOT NULL,
@@ -25,22 +25,24 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"slack_id" text UNIQUE,
 	"slack_name" text,
-	"clerk_id" text UNIQUE,
-	"workspace_id" text,
+	"email" text,
+	"slack_workspace_id" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "users_slack_id_unique" UNIQUE("slack_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "workspaces" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"workspace_id" text NOT NULL UNIQUE,
+	"slack_workspace_id" text NOT NULL UNIQUE,
 	"bot_token" text NOT NULL,
+	"installation" jsonb NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "workspaces_slack_workspace_id_unique" UNIQUE("slack_workspace_id")
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX IF NOT EXISTS "unique_idx" ON "users" ("slack_id","clerk_id","workspace_id");--> statement-breakpoint
-CREATE UNIQUE INDEX IF NOT EXISTS "unique_idx" ON "workspaces" ("workspace_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "unique_idx" ON "workspaces" ("slack_workspace_id");
 
 -- BASE FUNCTIONS
 --> Create a timestamp function

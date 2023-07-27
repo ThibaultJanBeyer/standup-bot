@@ -16,8 +16,8 @@ export const GET = async (req: NextRequest) => {
   if (simpleMemoryCache.hasCachedItem(key))
     users = simpleMemoryCache.getCachedItem(key);
   else {
-    const user = await getUser(req);
-    if (user instanceof NextResponse) return user;
+    const user = await getUser();
+    if (!user) return null;
 
     const client = new WebClient(user.workspace.botToken);
     users = await getUsersByChannel(client, channelId);

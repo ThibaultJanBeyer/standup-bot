@@ -42,7 +42,7 @@ export class StandupBot {
   remindJob?: CronJob;
   isConnected: boolean = false;
   botStateMachine: BotStateMachine;
-  workspaceId: string = "";
+  slackWorkspaceId: string = "";
 
   constructor({ standupId, APP }: { standupId: string; APP: SlackApp }) {
     console.info(`${new Date().toISOString()} constructor`, this.id);
@@ -84,7 +84,7 @@ export class StandupBot {
       console.info(`${new Date().toISOString()} init`, standup.id);
 
       this.app.registerStandup(this);
-      this.workspaceId = standup.workspaceId;
+      this.slackWorkspaceId = standup.slackWorkspaceId;
       this.token = standup.workspace.botToken;
       this.channel = standup.channelId;
       this.members = standup.members;

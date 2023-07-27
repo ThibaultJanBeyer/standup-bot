@@ -1,83 +1,41 @@
-"use client";
+import { Skeleton } from "@ssb/ui/skeleton";
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import * as Form from "@radix-ui/react-form";
-import { SubmitHandler } from "react-hook-form";
+import getUser from "@/lib/getUser";
+import { and, db, eq, Standups } from "@/lib/orm";
 
-import { Button } from "@ssb/ui/button";
+import { StandupUpdateForm } from "./StandupUpdateForm";
 
-import { NewStandup } from "@/lib/orm";
+const getData = async (id: string) => {
+  if (!id) return null;
+  const user = await getUser();
+  if (!user) return null;
+  const standup = await db.query.Standups.findFirst({
+    with: {
+      author: true,
+    },
+    // make sure user can only retrieve standups from their workspace
+    where: and(
+      eq(Standups.id, id),
+      eq(Standups.slackWorkspaceId, user.slackWorkspaceId),
+    ),
+  });
+  if (!standup) return null;
 
-import StandupsFormFields, { FormData } from "../create/StandupsFormFields";
-
-type APIStandupData = FormData & {
-  id: string;
+  return {
+    ...standup,
+    author: {
+      id: standup.author?.id || standup.authorId,
+    },
+  };
 };
 
-export default ({ params: { id } }: { params: { id: string } }) => {
-  const [data, setData] = useState<APIStandupData>();
-  const router = useRouter();
+export default async ({ params: { id } }: { params: { id: string } }) => {
+  const data = await getData(id);
+  if (!data) return "Standup Not Found";
 
-  // @TODO refactor to server action for SSR
-  useEffect(() => {
-    fetch(`/api/standups/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
-      .then((ok) => ok.json())
-      .then((data) =>
-        setData({
-          ...data,
-          questions: data.questions.map((q: string) => ({ value: q })),
-        }),
-      )
-      .catch((err) => console.error(err));
-  }, []);
-
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const updateStandup: Omit<NewStandup, "workspaceId" | "authorId"> = {
-      id,
-      name: data.name,
-      channelId: data.channelId,
-      scheduleCron: data.scheduleCron,
-      summaryCron: data.summaryCron,
-      members: data.members,
-      questions: data.questions.map((q) => q.value),
-    };
-
-    fetch("/api/standups/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(updateStandup),
-    })
-      .then((ok) => ok.json())
-      .then((ok) => router.push(`/standups`))
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const onDelete = () => {
-    if (!confirm("Are you sure you want to delete this standup?")) return;
-    fetch(`/api/standups/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
-      .then((ok) => ok.json())
-      .then((ok) => router.push(`/standups`))
-      .catch((err) => {
-        console.error(err);
-      });
+  const formData = {
+    ...data,
+    questions: data.questions.map((q: string) => ({ value: q })),
   };
 
   return (
@@ -86,19 +44,14 @@ export default ({ params: { id } }: { params: { id: string } }) => {
         <h1 className="mb-10 text-center text-lg">
           Update {data?.name || "loading…"}
         </h1>
-        {Boolean(data?.id) && (
-          <StandupsFormFields onSubmit={onSubmit} data={data}>
-            <div className="mt-10 grid grid-cols-2 gap-10">
-              <Form.Submit asChild>
-                <Button type="submit" variant="outlinePrimary">
-                  Update Standup
-                </Button>
-              </Form.Submit>
-              <Button onClick={onDelete} type="button" variant={"destructive"}>
-                Delete Standup
-              </Button>
-            </div>
-          </StandupsFormFields>
+        {data?.name ? (
+          <StandupUpdateForm id={id} data={formData} />
+        ) : (
+          <>
+            <Skeleton className="w-full" />
+            <Skeleton className="w-full" />
+            <Skeleton className="w-full" />
+          </>
         )}
       </div>
     </main>

@@ -2,13 +2,13 @@ import "@/styles/globals.css";
 
 import React from "react";
 import { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
 
 import { cn } from "@ssb/ui/utils";
 
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { fontSans } from "@/lib/fonts";
 
+import { SessionProvider } from "./SessionProvider";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
 
@@ -74,18 +74,13 @@ export default async function RootLayout({
           fontSans.variable,
         )}
       >
-        <ClerkProvider
-          signInUrl={`/auth/sign-in`}
-          signUpUrl={`/auth/sign-in`}
-          afterSignInUrl={`/`}
-          afterSignUpUrl={`/`}
-        >
+        <SessionProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <SiteHeader />
             {children}
             <SiteFooter />
           </ThemeProvider>
-        </ClerkProvider>
+        </SessionProvider>
       </body>
     </html>
   );

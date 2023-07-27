@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { ParamsIncomingMessage } from "@slack/bolt/dist/receivers/ParamsIncomingMessage";
 
-export const handlePost = async (
+export const handleBody = async (
   req: ParamsIncomingMessage,
   res: ServerResponse<IncomingMessage>,
 ): Promise<any> => {

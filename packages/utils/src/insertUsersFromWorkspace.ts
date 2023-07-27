@@ -6,11 +6,11 @@ import { db, Users } from "./lib/orm";
 import { cacheItem, hasCachedItem } from "./simpleMemoryCache";
 
 export const insertUsersFromWorkspace = async (
-  workspaceId: string,
+  slackWorkspaceId: string,
   webClient?: WebClient,
   force?: boolean,
 ) => {
-  if (!force && hasCachedItem(`insertUsersFromWorkspace:${workspaceId}`))
+  if (!force && hasCachedItem(`insertUsersFromWorkspace:${slackWorkspaceId}`))
     return;
 
   let client = webClient;
@@ -18,7 +18,7 @@ export const insertUsersFromWorkspace = async (
     const workspaces = await db
       .select()
       .from(Workspaces)
-      .where(eq(Workspaces.workspaceId, workspaceId))
+      .where(eq(Workspaces.slackWorkspaceId, slackWorkspaceId))
       .execute();
     const token = workspaces[0]?.botToken;
     if (!token) return;
@@ -40,7 +40,7 @@ export const insertUsersFromWorkspace = async (
           slackId: member.id,
           slackName: member.name || "",
           email: member.profile?.email || "",
-          workspaceId,
+          slackWorkspaceId,
         },
       ];
     });
@@ -51,11 +51,15 @@ export const insertUsersFromWorkspace = async (
         target: Users.slackId,
         set: {
           slackName: sql`EXCLUDED.slack_name`,
-          workspaceId,
+          slackWorkspaceId,
         },
       })
       .execute();
   }
 
-  cacheItem(`insertUsersFromWorkspace:${workspaceId}`, true, 5 * 60 * 1000);
+  cacheItem(
+    `insertUsersFromWorkspace:${slackWorkspaceId}`,
+    true,
+    5 * 60 * 1000,
+  );
 };

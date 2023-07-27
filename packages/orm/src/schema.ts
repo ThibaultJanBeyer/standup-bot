@@ -31,7 +31,7 @@ export type NewDeletedRecord = InferModel<typeof DeletedRecords, "insert">;
 export const Standups = pgTable("standups", {
   id: uuid("id").defaultRandom().notNull().primaryKey(),
   name: text("name").notNull(),
-  workspaceId: text("workspace_id").notNull(),
+  slackWorkspaceId: text("slack_workspace_id").notNull(),
   channelId: text("channel_id").notNull(),
   scheduleCron: text("schedule_cron").notNull(),
   summaryCron: text("summary_cron").notNull(),
@@ -49,8 +49,8 @@ export const StandupsRelations = relations(Standups, ({ many, one }) => ({
     references: [Users.id],
   }),
   workspace: one(Workspaces, {
-    fields: [Standups.workspaceId],
-    references: [Workspaces.workspaceId],
+    fields: [Standups.slackWorkspaceId],
+    references: [Workspaces.slackWorkspaceId],
   }),
 }));
 
@@ -61,7 +61,7 @@ export const Workspaces = pgTable(
   "workspaces",
   {
     id: uuid("id").defaultRandom().notNull().primaryKey(),
-    workspaceId: text("workspace_id").notNull(),
+    slackWorkspaceId: text("slack_workspace_id").notNull().unique(),
     botToken: text("bot_token").notNull(),
     installation: jsonb("installation").notNull(),
     // members => relation
@@ -71,7 +71,7 @@ export const Workspaces = pgTable(
   },
   (workspaces) => {
     return {
-      uniqueIdx: uniqueIndex("unique_idx").on(workspaces.workspaceId),
+      uniqueIdx: uniqueIndex("unique_idx").on(workspaces.slackWorkspaceId),
     };
   },
 );
@@ -86,28 +86,15 @@ export const WorkspaceRelations = relations(Workspaces, ({ many }) => ({
   members: many(Users),
 }));
 
-export const Users = pgTable(
-  "users",
-  {
-    id: uuid("id").defaultRandom().notNull().primaryKey(),
-    slackId: text("slack_id"),
-    slackName: text("slack_name"),
-    email: text("email"),
-    clerkId: text("clerk_id"),
-    workspaceId: text("workspace_id"),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  },
-  (users) => {
-    return {
-      uniqueIdx: uniqueIndex("unique_idx").on(
-        users.slackId,
-        users.clerkId,
-        users.workspaceId,
-      ),
-    };
-  },
-);
+export const Users = pgTable("users", {
+  id: uuid("id").defaultRandom().notNull().primaryKey(),
+  slackId: text("slack_id").unique(),
+  slackName: text("slack_name"),
+  email: text("email"),
+  slackWorkspaceId: text("slack_workspace_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
 
 export type User = InferModel<typeof Users>;
 export type NewUser = InferModel<typeof Users, "insert">;
@@ -115,7 +102,7 @@ export type NewUser = InferModel<typeof Users, "insert">;
 export const UsersRelations = relations(Users, ({ many, one }) => ({
   standups: many(Standups),
   workspace: one(Workspaces, {
-    fields: [Users.workspaceId],
-    references: [Workspaces.workspaceId],
+    fields: [Users.slackWorkspaceId],
+    references: [Workspaces.slackWorkspaceId],
   }),
 }));

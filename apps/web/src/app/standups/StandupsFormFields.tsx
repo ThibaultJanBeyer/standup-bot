@@ -3,12 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Form from "@radix-ui/react-form";
-import {
-  FieldValues,
-  SubmitHandler,
-  useFieldArray,
-  useForm,
-} from "react-hook-form";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { Cron } from "react-js-cron";
 import * as zod from "zod";
 
@@ -91,7 +86,6 @@ export default ({ onSubmit, data, children }: Props) => {
     control: form.control,
   });
 
-  // @TODO refactor to server action for SSR
   useEffect(() => {
     fetch(`/api/slack/channels`, {
       method: "GET",

@@ -39,11 +39,11 @@ export const GET = async (req: NextRequest) => {
     await db
       .insert(Workspaces)
       .values({
-        workspaceId: team.id,
+        slackWorkspaceId: team.id,
         botToken: access_token,
       })
       .onConflictDoUpdate({
-        target: Workspaces.workspaceId,
+        target: Workspaces.slackWorkspaceId,
         set: { botToken: access_token },
       })
       .execute();

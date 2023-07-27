@@ -1,9 +1,12 @@
+import { IncomingMessage, ServerResponse } from "http";
 import { App } from "@slack/bolt";
+import { ParamsIncomingMessage } from "@slack/bolt/dist/receivers/ParamsIncomingMessage";
 
 import { insertUsersFromWorkspace } from "@ssb/utils";
+import { AFTER_SIGN_IN_URI } from "@ssb/utils/src/constants";
 
 import { db, eq, Standups, Workspace, Workspaces } from "./orm";
-import { postStandupHandler } from "./routes/postStandupHandler";
+import { handlers } from "./routes";
 import { StandupBot } from "./StandupBot";
 
 const port = Number(process.env.BOT_PORT || 3001);
@@ -16,14 +19,16 @@ export class SlackApp extends App {
     if (this.standups.has(standup.id)) return;
     this.standups.set(standup.id, standup);
 
-    if (this.standupIdsByWorkspaceId.has(standup.workspaceId)) {
-      const standups = this.standupIdsByWorkspaceId.get(standup.workspaceId);
-      this.standupIdsByWorkspaceId.set(standup.workspaceId, [
+    if (this.standupIdsByWorkspaceId.has(standup.slackWorkspaceId)) {
+      const standups = this.standupIdsByWorkspaceId.get(
+        standup.slackWorkspaceId,
+      );
+      this.standupIdsByWorkspaceId.set(standup.slackWorkspaceId, [
         ...standups!,
         standup.id,
       ]);
     } else {
-      this.standupIdsByWorkspaceId.set(standup.workspaceId, [standup.id]);
+      this.standupIdsByWorkspaceId.set(standup.slackWorkspaceId, [standup.id]);
     }
   }
 
@@ -39,12 +44,14 @@ export class SlackApp extends App {
 
     this.event("message", async (message) => {
       if (message.ack) (message as any).ack();
-      const workspaceId = message.body.team_id;
-      this.standupIdsByWorkspaceId.get(workspaceId)?.forEach((standupId) => {
-        const standup = APP.standups.get(standupId);
-        if (standup?.token !== message.context.botToken) return;
-        standup?.message(message);
-      });
+      const slackWorkspaceId = message.body.team_id;
+      this.standupIdsByWorkspaceId
+        .get(slackWorkspaceId)
+        ?.forEach((standupId) => {
+          const standup = APP.standups.get(standupId);
+          if (standup?.token !== message.context.botToken) return;
+          standup?.message(message);
+        });
     });
 
     return super.start();
@@ -58,17 +65,18 @@ export class SlackApp extends App {
       appToken: process.env.SLACK_APP_TOKEN,
       stateSecret: process.env.SLACK_CODE,
       socketMode: true,
-      customRoutes: [
-        {
-          path: "/bot/slack/init",
-          method: ["POST"],
-          handler: async (req, res) => postStandupHandler(this, req, res),
-        },
-      ],
-      redirectUri: `${process.env.SLACK_REDIRECT_URI}/slack`,
+      customRoutes: handlers.map(({ path, method, handler }) => ({
+        path,
+        method,
+        handler: async (
+          req: ParamsIncomingMessage,
+          res: ServerResponse<IncomingMessage>,
+        ) => handler(this, req, res),
+      })),
+      redirectUri: `${process.env.BOT_URI}/install/slack`,
       installerOptions: {
         port,
-        redirectUriPath: "/slack",
+        redirectUriPath: "/install/slack",
         directInstall: true,
         callbackOptions: {
           success: (installation, installOptions, req, res) => {
@@ -76,7 +84,7 @@ export class SlackApp extends App {
 
             // @todo: send user a thank you message on slack
             res.writeHead(302, {
-              Location: `${process.env.WEB_URI}${process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL}`,
+              Location: AFTER_SIGN_IN_URI,
             });
             res.end();
           },
@@ -92,13 +100,13 @@ export class SlackApp extends App {
 
             // Bolt will pass your handler an installation object
             // Change the lines below so they save to your database
-            const workspaceId =
+            const slackWorkspaceId =
               installation.isEnterpriseInstall &&
               installation.enterprise !== undefined
                 ? installation.enterprise.id
                 : installation.team?.id;
 
-            if (!workspaceId) {
+            if (!slackWorkspaceId) {
               throw new Error("Workspace ID not found", {
                 cause: installation,
               });
@@ -108,17 +116,17 @@ export class SlackApp extends App {
             await db
               .insert(Workspaces)
               .values({
-                workspaceId,
+                slackWorkspaceId,
                 botToken,
                 installation,
               })
               .onConflictDoUpdate({
-                target: Workspaces.workspaceId,
+                target: Workspaces.slackWorkspaceId,
                 set: { botToken, installation },
               })
               .execute();
 
-            await insertUsersFromWorkspace(workspaceId, undefined, true);
+            await insertUsersFromWorkspace(slackWorkspaceId, undefined, true);
             return;
           } catch (error: any) {
             console.error(
@@ -137,13 +145,13 @@ export class SlackApp extends App {
               installQuery,
             );
             // Bolt will pass your handler an installQuery object
-            const workspaceId =
+            const slackWorkspaceId =
               installQuery.isEnterpriseInstall &&
               installQuery.enterpriseId !== undefined
                 ? installQuery.enterpriseId
                 : installQuery.teamId;
 
-            if (!workspaceId) {
+            if (!slackWorkspaceId) {
               throw new Error("Workspace ID not found", {
                 cause: installQuery,
               });
@@ -152,7 +160,7 @@ export class SlackApp extends App {
             const workspaces = await db
               .select()
               .from(Workspaces)
-              .where(eq(Workspaces.workspaceId, workspaceId))
+              .where(eq(Workspaces.slackWorkspaceId, slackWorkspaceId))
               .execute();
             const workspace = workspaces[0] as Workspace | undefined;
             if (!workspace) {
@@ -179,13 +187,13 @@ export class SlackApp extends App {
               installQuery,
             );
             // Bolt will pass your handler an installQuery object
-            const workspaceId =
+            const slackWorkspaceId =
               installQuery.isEnterpriseInstall &&
               installQuery.enterpriseId !== undefined
                 ? installQuery.enterpriseId
                 : installQuery.teamId;
 
-            if (!workspaceId) {
+            if (!slackWorkspaceId) {
               throw new Error("Workspace ID not found", {
                 cause: installQuery,
               });
@@ -193,7 +201,7 @@ export class SlackApp extends App {
 
             const workspaces = await db
               .delete(Workspaces)
-              .where(eq(Workspaces.workspaceId, workspaceId))
+              .where(eq(Workspaces.slackWorkspaceId, slackWorkspaceId))
               .returning()
               .execute();
             return workspaces[0];

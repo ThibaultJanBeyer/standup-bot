@@ -1,53 +1,34 @@
+// @TODO: fix issue with bot login
+
 "use client";
 
-import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as Form from "@radix-ui/react-form";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import * as zod from "zod";
+import { startTransition } from "react";
+import { Submit } from "@radix-ui/react-form";
 
 import { Button } from "@ssb/ui/button";
 
-import { NewStandup } from "@/lib/orm";
-
-import StandupsFormFields, { FormData } from "./StandupsFormFields";
+import StandupsFormFields, { FormData } from "../StandupsFormFields";
+import { createAction } from "./createAction";
 
 export default () => {
-  const router = useRouter();
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    const newStandup: Omit<NewStandup, "workspaceId" | "authorId"> = {
-      name: data.name,
-      channelId: data.channelId,
-      scheduleCron: data.scheduleCron,
-      summaryCron: data.summaryCron,
-      members: data.members,
-      questions: data.questions.map((q) => q.value),
-    };
-
-    // @TODO refactor to server action for SSR
-    fetch("/api/standups/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(newStandup),
-    })
-      .then((ok) => ok.json())
-      .then((ok) => router.push(`/standups`))
-      .catch((err) => {
-        console.error(err);
-      });
+  const onSubmit = (data: FormData) => {
+    startTransition(() => {
+      createAction(data)
+        .then((ok) => (location.href = "/standups"))
+        .catch((error) => {
+          console.log("error", error);
+        });
+    });
   };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <StandupsFormFields onSubmit={onSubmit}>
-        <Form.Submit asChild>
+        <Submit asChild>
           <Button type="submit" variant="outlinePrimary">
             Create Standup
           </Button>
-        </Form.Submit>
+        </Submit>
       </StandupsFormFields>
     </main>
   );

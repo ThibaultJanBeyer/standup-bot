@@ -14,9 +14,10 @@ NOTE: currently the bot can’t work on multiple workspaces due to wrong impleme
 - - - https://slack.dev/bolt-js/concepts#authorization
 - - - https://slack.dev/bolt-js/tutorial/getting-started-http#setting-up-events-with-http
 - - - https://api.slack.com/start/distributing#multi_workspace_apps
+- - Cloudflare worker that checks if Bot is up and reboots it if down
 - Nice to have
+- - Zero downtime on updates
 - - Add link to website in the bot on slack itself
-- - Add user-email to DB for point in time recoveries with clerk
 - - Would be great if Bot could pick up where it started if it crashes in between
 - - Host it on vercel? https://github.com/vercel/vercel/discussions/6039
 - When Stable
