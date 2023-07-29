@@ -88,7 +88,29 @@ server {
 ```
 
 ```
+nano /etc/nginx/sites-available/bot.standup-bot.com
+```
+
+```
+server {
+  listen 80;
+  listen [::]:80;
+  server_name bot.standup-bot.com;
+  location / {
+    proxy_pass http://127.0.0.1:3001;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+    add_header X-Robots-Tag "noindex, nofollow, nosnippet, noarchive";
+  }
+}
+```
+
+```
 ln -s /etc/nginx/sites-available/standup-bot.com /etc/nginx/sites-enabled/
+ln -s /etc/nginx/sites-available/bot.standup-bot.com /etc/nginx/sites-enabled/
 
 nano /etc/nginx/nginx.conf
 ```
@@ -104,6 +126,17 @@ http {
 ```
 systemctl restart nginx
 nginx -s reload
+systemctl restart nginx
+```
+
+### Cloudflare configs
+
+I used cloudflare to get https. I added following DNS records:
+
+```
+A     bot             SERVER.IP.ADDRESS Proxied   Auto
+A     standup-bot.com SERVER.IP.ADDRESS Proxied   Auto
+CNAME www             standup-bot.com   Proxied   Auto
 ```
 
 ### Continuous Deployment
