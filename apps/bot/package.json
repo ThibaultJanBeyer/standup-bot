@@ -1,6 +1,5 @@
 {
   "name": "ssb",
-  "version": "1.0.0",
   "description": "Dead Simple Standup Bot for Slack",
   "main": "src/app.ts",
   "scripts": {
