@@ -68,7 +68,6 @@ export class SlackApp extends App {
       clientSecret: process.env.SLACK_CLIENT_SECRET,
       appToken: process.env.SLACK_APP_TOKEN,
       stateSecret: process.env.SLACK_CODE,
-      socketMode: true,
       scopes: [
         "channels:history",
         "channels:join",

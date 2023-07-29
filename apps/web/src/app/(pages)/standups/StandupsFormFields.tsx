@@ -162,7 +162,7 @@ export default ({ onSubmit, data, children }: Props) => {
             />
             <Input
               {...form.register("scheduleCron")}
-              // value={scheduleCronValue}
+              value={scheduleCronValue}
               // style={{ visibility: "hidden", height: 0 }}
               // aria-hidden="true"
             />
