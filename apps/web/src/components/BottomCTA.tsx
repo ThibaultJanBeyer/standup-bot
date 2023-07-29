@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
+import { signIn } from "next-auth/react";
 
 import { Button } from "@ssb/ui/button";
 import { BotIcon } from "@ssb/ui/icons";
@@ -28,11 +28,13 @@ export default function BottomCTA() {
               : {}
           }
         >
-          <Button variant="outlinePrimary" asChild className="p-8">
-            <Link href={`/auth/sign-in`}>
-              <BotIcon className="mr-1 w-4" />
-              Start Now For Free!
-            </Link>
+          <Button
+            variant="outlinePrimary"
+            className="p-8"
+            onClick={() => signIn()}
+          >
+            <BotIcon className="mr-1 w-4" />
+            Start Now For Free!
           </Button>
         </motion.div>
       </div>

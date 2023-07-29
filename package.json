@@ -1,11 +1,12 @@
 {
   "name": "simple-standup-bot",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Dead Simple Standup Bot for Slack",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
+    "ports": "lt --port 3000 & lt --port 3001",
     "clean": "turbo daemon clean && rm -rf node_modules",
     "clean:workspaces": "turbo clean",
     "build": "turbo run build",

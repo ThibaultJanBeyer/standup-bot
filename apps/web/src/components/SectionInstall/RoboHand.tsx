@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-import RoboHandImage from "../../../public/robo-hand.png";
+import RoboHandImage from "../../../public/robo-hand.webp";
 
 export const handTranslate = {
   x: 100,

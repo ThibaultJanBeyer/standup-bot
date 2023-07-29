@@ -3,7 +3,11 @@ import { App } from "@slack/bolt";
 import { ParamsIncomingMessage } from "@slack/bolt/dist/receivers/ParamsIncomingMessage";
 
 import { insertUsersFromWorkspace } from "@ssb/utils";
-import { AFTER_SIGN_IN_URI } from "@ssb/utils/src/constants";
+import {
+  AFTER_SIGN_IN_URI,
+  INSTALL_SLACK_PATH,
+  INSTALL_SLACK_URI,
+} from "@ssb/utils/src/constants";
 
 import { db, eq, Standups, Workspace, Workspaces } from "./orm";
 import { handlers } from "./routes";
@@ -65,6 +69,17 @@ export class SlackApp extends App {
       appToken: process.env.SLACK_APP_TOKEN,
       stateSecret: process.env.SLACK_CODE,
       socketMode: true,
+      scopes: [
+        "channels:history",
+        "channels:join",
+        "channels:read",
+        "chat:write",
+        "chat:write.customize",
+        "im:history",
+        "im:read",
+        "im:write",
+        "users:read",
+      ],
       customRoutes: handlers.map(({ path, method, handler }) => ({
         path,
         method,
@@ -73,10 +88,10 @@ export class SlackApp extends App {
           res: ServerResponse<IncomingMessage>,
         ) => handler(this, req, res),
       })),
-      redirectUri: `${process.env.BOT_URI}/install/slack`,
+      redirectUri: INSTALL_SLACK_URI,
       installerOptions: {
         port,
-        redirectUriPath: "/install/slack",
+        redirectUriPath: INSTALL_SLACK_PATH,
         directInstall: true,
         callbackOptions: {
           success: (installation, installOptions, req, res) => {

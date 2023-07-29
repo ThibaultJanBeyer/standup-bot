@@ -9,8 +9,6 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { fontSans } from "@/lib/fonts";
 
 import { SessionProvider } from "./SessionProvider";
-import { SiteFooter } from "./SiteFooter";
-import { SiteHeader } from "./SiteHeader";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -76,9 +74,7 @@ export default async function RootLayout({
       >
         <SessionProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <SiteHeader />
             {children}
-            <SiteFooter />
           </ThemeProvider>
         </SessionProvider>
       </body>

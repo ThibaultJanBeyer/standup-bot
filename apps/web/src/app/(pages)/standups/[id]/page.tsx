@@ -1,4 +1,7 @@
+import { redirect } from "next/navigation";
+
 import { Skeleton } from "@ssb/ui/skeleton";
+import { AUTH_PATH } from "@ssb/utils/src/constants";
 
 import getUser from "@/lib/getUser";
 import { and, db, eq, Standups } from "@/lib/orm";
@@ -8,7 +11,7 @@ import { StandupUpdateForm } from "./StandupUpdateForm";
 const getData = async (id: string) => {
   if (!id) return null;
   const user = await getUser();
-  if (!user) return null;
+  if (!user) return redirect(AUTH_PATH);
   const standup = await db.query.Standups.findFirst({
     with: {
       author: true,

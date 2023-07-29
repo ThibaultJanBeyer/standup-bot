@@ -13,21 +13,20 @@ import {
   TableHeader,
   TableRow,
 } from "@ssb/ui/table";
+import { AUTH_PATH } from "@ssb/utils/src/constants";
 
 import getUser from "@/lib/getUser";
 import { db } from "@/lib/orm";
 
 export default async function StandupList() {
   const user = await getUser();
-  if (!user) return redirect("/"); // redirect to auth
+  if (!user) return redirect(AUTH_PATH);
   const standups = await db.query.Standups.findMany({
     with: {
       author: true,
     },
     where: eq(Standups.slackWorkspaceId, user.slackWorkspaceId),
   }).execute();
-
-  console.log(standups, user.workspace.id);
 
   return (
     <main className="mx-auto w-full max-w-5xl">

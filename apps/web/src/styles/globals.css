@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    background-image: url("/bubble-background.png");
+    background-image: url("/bubble-background.webp");
     background-size: cover;
   }
   .cron-picker .ant-select-selector {

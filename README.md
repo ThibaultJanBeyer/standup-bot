@@ -7,15 +7,15 @@ NOTE: currently the bot can’t work on multiple workspaces due to wrong impleme
 - UI & UX
 - - Loading states on polling API
 - - Human readable cron pickers (currently not working)
-- - Custom Timezones (local by default)
+- - Custom Timezones (should be local by default)
 - BOT
 - - Rewrite the bot to work on multiple workspaces and use HTTP api, see:
 - - - https://api.slack.com/apis/connections/events-api
 - - - https://slack.dev/bolt-js/concepts#authorization
 - - - https://slack.dev/bolt-js/tutorial/getting-started-http#setting-up-events-with-http
 - - - https://api.slack.com/start/distributing#multi_workspace_apps
-- - Cloudflare worker that checks if Bot is up and reboots it if down
 - Nice to have
+- - Cloudflare worker that checks if Bot is up and reboots it if down
 - - Zero downtime on updates
 - - Add link to website in the bot on slack itself
 - - Would be great if Bot could pick up where it started if it crashes in between

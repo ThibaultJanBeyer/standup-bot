@@ -16,8 +16,6 @@ import { Skeleton } from "@ssb/ui/skeleton";
 
 export function SiteHeader() {
   const { data, status } = useSession();
-  console.log("data", data);
-
   return (
     <>
       <header className="pointer-events-none fixed top-0 z-40 w-full">

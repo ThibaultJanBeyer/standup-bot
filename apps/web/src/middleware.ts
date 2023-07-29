@@ -1,20 +1,19 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { withAuth } from "next-auth/middleware";
+
+import { AUTH_PATH } from "@ssb/utils/src/constants";
 
 export default function middleware(request: NextRequest) {
-  // console.log("DADADA", request);
+  console.log("DADADA");
 }
 
-// export default authMiddleware({
-//   publicRoutes: ["/api", "/api/i", "/auth/(.*)", "/"],
-//   beforeAuth: async (req, evt) => {},
-//   afterAuth: async (auth, req, evt) => {
-//     // handle users who aren't authenticated
-//     if (!auth.userId && !auth.isPublicRoute) {
-//       return redirectToSignIn({ returnBackUrl: req.url });
-//     }
+// @TODO get this working
+// export default withAuth({
+//   pages: {
+//     signIn: AUTH_PATH,
 //   },
 // });
 
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/((?!.*\\..*|_next|api|auth|trcp).*)"],
 };

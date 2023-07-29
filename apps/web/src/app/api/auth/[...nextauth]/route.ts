@@ -2,6 +2,7 @@ import NextAuth, { AuthOptions } from "next-auth";
 import SlackProvider from "next-auth/providers/slack";
 
 import { insertUsersFromWorkspace } from "@ssb/utils";
+import { AUTH_BOT_URI } from "@ssb/utils/src/constants";
 
 import { db, eq, Users } from "@/lib/orm";
 
@@ -33,7 +34,7 @@ export const authOptions: AuthOptions = {
         .execute();
 
       const slackWorkspaceId = item[0]?.slackWorkspaceId;
-      if (!slackWorkspaceId) return `${process.env.BOT_URI}/install/slack`;
+      if (!slackWorkspaceId) return AUTH_BOT_URI;
 
       insertUsersFromWorkspace(slackWorkspaceId);
 
