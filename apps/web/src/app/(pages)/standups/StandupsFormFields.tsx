@@ -124,8 +124,6 @@ export default ({ onSubmit, data, children }: Props) => {
 
   const errors = form.formState.errors;
 
-  console.log("change", form.getValues());
-
   return (
     <FormProvider {...form}>
       <Form.Root onSubmit={form.handleSubmit(onSubmit)}>
