@@ -4,7 +4,7 @@ import { withAuth } from "next-auth/middleware";
 import { AUTH_PATH } from "@ssb/utils/src/constants";
 
 export default function middleware(request: NextRequest) {
-  console.log("DADADA");
+  // console.log("DADADA");
 }
 
 // @TODO get this working
