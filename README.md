@@ -14,6 +14,7 @@ NOTE: currently the bot can’t work on multiple workspaces due to wrong impleme
 - - Add link to website in the bot on slack itself
 - - Would be great if Bot could pick up where it started if it crashes in between
 - - Host it on vercel? https://github.com/vercel/vercel/discussions/6039
+- - dev branch environment previews (what could work is add another github workflow with credentials for dev, simply run the app under another port with nginx subdomain)
 - When Stable
 - - Publish on Slack as official app
 - - Cheap pricing on hosted (SAAS) version to cover server costs

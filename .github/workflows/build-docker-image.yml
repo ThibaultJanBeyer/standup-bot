@@ -34,9 +34,13 @@ jobs:
           envkey_SLACK_CLIENT_ID: ${{secrets.PROD_SLACK_CLIENT_ID}}
           envkey_SLACK_CLIENT_SECRET: ${{secrets.PROD_SLACK_CLIENT_SECRET}}
           envkey_SLACK_CODE: ${{secrets.PROD_SLACK_CODE}}
+          envkey_SLACK_SIGNING_SECRET: ${{secrets.PROD_SLACK_SIGNING_SECRET}}
           envkey_DATABASE_URL: ${{secrets.PROD_DATABASE_URL}}
+          envkey_NEXTAUTH_SECRET: ${{secrets.PROD_NEXTAUTH_SECRET}}
+          envkey_PROTOCOL: ${{secrets.PROD_PROTOCOL}}
           envkey_COMMUNICATION_TOKEN: ${{secrets.PROD_COMMUNICATION_TOKEN}}
-          envkey_SLACK_REDIRECT_URI: https://standup-bot.com/api
+          envkey_BOT_URI: ${{secrets.PROD_BOT_URI}}
+          envkey_WEB_URI: ${{secrets.PROD_WEB_URI}}
           file_name: .env.production
           directory: ./
           fail_on_empty: true
