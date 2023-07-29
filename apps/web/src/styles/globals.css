@@ -9,6 +9,9 @@
     background-image: url("/bubble-background.webp");
     background-size: cover;
   }
+  .cron-picker {
+    margin-left: -10px;
+  }
   .cron-picker .ant-select-selector {
     border: 0 !important;
     border-radius: 0 !important;
@@ -19,9 +22,9 @@
   .cron-picker .react-js-cron-field,
   .cron-picker > div {
     display: inline-block;
-    margin-right: 10px;
   }
   .cron-picker .react-js-cron-field > span {
+    margin-left: 10px;
     margin-right: 10px;
   }
   .cron-picker .ant-select-clear {
