@@ -8,5 +8,5 @@ export const AUTH_BOT_URI = `${process.env.PROTOCOL}${process.env.WEB_URI}${AUTH
 // BOT
 export const UPDATE_STANDUP_SLACK_PATH = "/standups/slack";
 export const UPDATE_STANDUP_SLACK_URI = `${process.env.PROTOCOL}${process.env.BOT_URI}${UPDATE_STANDUP_SLACK_PATH}`;
-export const INSTALL_SLACK_PATH = "/slack/install";
+export const INSTALL_SLACK_PATH = "/slack/oauth_redirect";
 export const INSTALL_SLACK_URI = `${process.env.PROTOCOL}${process.env.BOT_URI}${INSTALL_SLACK_PATH}`;

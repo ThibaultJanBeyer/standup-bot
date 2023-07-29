@@ -87,14 +87,14 @@ export class SlackApp extends App {
           res: ServerResponse<IncomingMessage>,
         ) => handler(this, req, res),
       })),
-      redirectUri: INSTALL_SLACK_URI,
+      // redirectUri: INSTALL_SLACK_URI,
       installerOptions: {
         port,
-        redirectUriPath: INSTALL_SLACK_PATH,
+        // redirectUriPath: INSTALL_SLACK_PATH,
         directInstall: true,
         callbackOptions: {
           success: (installation, installOptions, req, res) => {
-            console.info("Successful install", installation, installOptions);
+            console.info(`${new Date().toISOString()} Successful install`, installation, installOptions);
 
             // @todo: send user a thank you message on slack
             res.writeHead(302, {

@@ -87,6 +87,8 @@ server {
 }
 ```
 
+Note that `location /_bot {` is optional in case you want to run the bot on the same domain under a sub-path `/_bot`, if you prefer a sub-domain `bot.` then you’ll need to add a new site instead:
+
 ```
 nano /etc/nginx/sites-available/bot.standup-bot.com
 ```
@@ -148,6 +150,20 @@ Happens automatically and continuously via github workflows. Basically:
 - SSH into machine
 - Stop old container, run new container (@TODO: update to have zero downtime)
   It uses the `build.sh` and `start.sh` scripts
+
+## Bot Settings
+
+Set the URI of your app under `Settings > Event Subscriptions > Request URL` to:
+
+- `https://bot.standup-bot.com/slack/events`.
+
+Add the redirect URLs under `Settings > OAuth & Permissions > Redirect URLs`, adding:
+
+- `https://www.standup-bot.com`
+- `https://standup-bot.com`
+- `https://bot.standup-bot.com`
+
+Add the scopes under `Settings > OAuth & Permissions > Scopes` to the same scopes as in the [app.ts](https://github.com/ThibaultJanBeyer/standup-bot/blob/main/apps/bot/src/app.ts#L71)
 
 ## Wallaby.js
 

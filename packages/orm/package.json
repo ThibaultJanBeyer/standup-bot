@@ -6,7 +6,7 @@
   "scripts": {
     "ts-node": "ts-node -O \"{\\\"module\\\":\\\"commonjs\\\"}\"",
     "generate": "pnpm with-env drizzle-kit generate:pg --config=drizzle.config.ts",
-    "build": "pnpm generate & pnpm migrate",
+    "build": "pnpm generate && pnpm migrate",
     "migrate": "pnpm with-env ts-node --transpile-only ./src/migrate.ts",
     "push": "pnpm with-env drizzle-kit push:pg --config=drizzle.config.ts",
     "pull": "pnpm with-env drizzle-kit introspect:pg --config=drizzle.config.ts",
