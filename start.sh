@@ -10,4 +10,3 @@ docker rm $(docker ps -aq)
 # docker rmi $(docker images -aq)
 docker run -d -p 3000:3000 -p 3001:3001 --restart unless-stopped --name ssb ${HOST}/${IMG_NAME}:${IMG_VER}
 docker image prune -af
-docker rmi $(docker images -aq)
