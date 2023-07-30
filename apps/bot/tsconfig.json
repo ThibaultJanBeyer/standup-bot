@@ -1,14 +1,18 @@
 {
-  "extends": "../../tsconfig",
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"]
     },
     "rootDir": "./src",
     "outDir": "./dist",
-    "target": "ES6"
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "noEmit": true
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["node_modules"]

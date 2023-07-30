@@ -10,7 +10,6 @@ NOTE: currently the bot can’t work on multiple workspaces due to wrong impleme
 - - Loading states on polling API
 - - Custom Timezones (should be local by default)
 - Other
-- - Transpile ts to js
 - - Cloudflare worker that checks if Bot is up and reboots it if down
 - - Zero downtime on updates
 - - Add link to website in the bot on slack itself
