@@ -6,6 +6,7 @@ import { createConversationStateMember } from "./conversationState";
 import { openConversation } from "./openConversation";
 import { postMessage } from "./postMessage";
 import { updateMessage } from "./updateMessage";
+import { logInfo } from "./utils";
 
 export const initStandup = async (BOT: StandupBot) => {
   BOT.botStateMachine.send("INIT");
@@ -94,12 +95,7 @@ export const notWorkingClickHandler =
   async ({ body, ack }: any) => {
     const channel = body?.channel?.id;
     const ts = (body as any).message.ts;
-    console.info(
-      `${new Date().toISOString()} click not working`,
-      channel,
-      ts,
-      BOT.id,
-    );
+    logInfo("click: not working", BOT.slackWorkspaceId);
     await ack();
     if (!channel || !ts) return;
     await notWorking({
@@ -117,12 +113,7 @@ export const startStandupClickHandler =
   async ({ body, ack }: any) => {
     const channel = body?.channel?.id;
     const ts = (body as any).message.ts;
-    console.info(
-      `${new Date().toISOString()} click start`,
-      channel,
-      ts,
-      BOT.id,
-    );
+    logInfo("click: start", BOT.slackWorkspaceId);
     await ack();
     if (!channel || !ts) return;
     await startStandup(BOT, { channel, ts, member: body.user.id });

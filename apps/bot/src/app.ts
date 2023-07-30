@@ -10,6 +10,7 @@ import {
   REDIRECT_SLACK_URI,
 } from "@ssb/utils/src/constants";
 
+import { logInfo } from "./methods/utils";
 import { db, eq, Standups, Workspace, Workspaces } from "./orm";
 import { handlers } from "./routes";
 import { StandupBot } from "./StandupBot";
@@ -25,11 +26,10 @@ export class SlackApp extends App {
     this.standups.set(standup.id, standup);
 
     if (this.standupIdsByWorkspaceId.has(standup.slackWorkspaceId)) {
-      const standups = this.standupIdsByWorkspaceId.get(
-        standup.slackWorkspaceId,
-      );
+      const standups =
+        this.standupIdsByWorkspaceId.get(standup.slackWorkspaceId) || [];
       this.standupIdsByWorkspaceId.set(standup.slackWorkspaceId, [
-        ...standups!,
+        ...standups,
         standup.id,
       ]);
     } else {
@@ -48,12 +48,12 @@ export class SlackApp extends App {
     }
 
     this.event("message", async (message) => {
-      if (message.ack) (message as any).ack();
+      if (message.ack) await (message as any).ack();
       const slackWorkspaceId = message.body.team_id;
       this.standupIdsByWorkspaceId
         .get(slackWorkspaceId)
         ?.forEach((standupId) => {
-          const standup = APP.standups.get(standupId);
+          const standup = this.standups.get(standupId);
           if (standup?.token !== message.context.botToken) return;
           standup?.message(message);
         });
@@ -96,11 +96,8 @@ export class SlackApp extends App {
         directInstall: true,
         callbackOptions: {
           success: (installation, installOptions, req, res) => {
-            console.info(
-              `${new Date().toISOString()} Successful install`,
-              installation,
-              installOptions,
-            );
+            const teamId = installation.team?.id || installation.enterprise?.id;
+            logInfo("Successful install", teamId);
 
             // @todo: send user a thank you message on slack
             res.writeHead(302, {
@@ -113,11 +110,6 @@ export class SlackApp extends App {
       installationStore: {
         storeInstallation: async (installation) => {
           try {
-            console.info(
-              `${new Date().toISOString()} installing`,
-              installation,
-            );
-
             // Bolt will pass your handler an installation object
             // Change the lines below so they save to your database
             const slackWorkspaceId =
@@ -125,6 +117,7 @@ export class SlackApp extends App {
               installation.enterprise !== undefined
                 ? installation.enterprise.id
                 : installation.team?.id;
+            logInfo("Installing", slackWorkspaceId);
 
             if (!slackWorkspaceId) {
               throw new Error("Workspace ID not found", {
@@ -149,27 +142,22 @@ export class SlackApp extends App {
             await insertUsersFromWorkspace(slackWorkspaceId, undefined, true);
             return;
           } catch (error: any) {
-            console.error(
-              `${new Date().toISOString()} Failed saving installation data to installationStore`,
+            logInfo(
+              "Failed saving installation data to installationStore",
               error?.message,
-              error?.cause,
-              error,
             );
             throw error;
           }
         },
         fetchInstallation: async (installQuery) => {
           try {
-            console.info(
-              `${new Date().toISOString()} fetchInstallation`,
-              installQuery,
-            );
             // Bolt will pass your handler an installQuery object
             const slackWorkspaceId =
               installQuery.isEnterpriseInstall &&
               installQuery.enterpriseId !== undefined
                 ? installQuery.enterpriseId
                 : installQuery.teamId;
+            logInfo("FetchInstallation", slackWorkspaceId);
 
             if (!slackWorkspaceId) {
               throw new Error("Workspace ID not found", {
@@ -191,27 +179,23 @@ export class SlackApp extends App {
 
             return workspace.installation;
           } catch (error: any) {
-            console.error(
-              `${new Date().toISOString()} Failed saving installation data to installationStore`,
+            logInfo(
+              "Failed saving installation data to installationStore",
               error?.message,
-              error?.cause,
-              error,
             );
             return null as any;
           }
         },
         deleteInstallation: async (installQuery) => {
           try {
-            console.info(
-              `${new Date().toISOString()} deleteInstallation`,
-              installQuery,
-            );
             // Bolt will pass your handler an installQuery object
             const slackWorkspaceId =
               installQuery.isEnterpriseInstall &&
               installQuery.enterpriseId !== undefined
                 ? installQuery.enterpriseId
                 : installQuery.teamId;
+
+            logInfo("deleteInstallation", slackWorkspaceId);
 
             if (!slackWorkspaceId) {
               throw new Error("Workspace ID not found", {
@@ -226,12 +210,7 @@ export class SlackApp extends App {
               .execute();
             return workspaces[0];
           } catch (error: any) {
-            console.error(
-              `${new Date().toISOString()} Failed deleting workspace`,
-              error?.message,
-              error?.cause,
-              error,
-            );
+            logInfo("Failed deleting workspace", error?.message);
             return null as any;
           }
         },

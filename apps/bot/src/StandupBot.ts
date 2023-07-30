@@ -17,6 +17,7 @@ import {
 } from "./methods/createStateMachines";
 import { subtractMinutes } from "./methods/modifyCron";
 import { remindUsers } from "./methods/remindUsers";
+import { logInfo } from "./methods/utils";
 import { db, eq, Standups } from "./orm";
 
 export class StandupBot {
@@ -45,7 +46,7 @@ export class StandupBot {
   slackWorkspaceId: string = "";
 
   constructor({ standupId, APP }: { standupId: string; APP: SlackApp }) {
-    console.info(`${new Date().toISOString()} constructor`, this.id);
+    logInfo("constructor", this.id);
     this.id = standupId;
     this.app = APP;
     this.botStateMachine = createBotStateMachine(this);
@@ -81,10 +82,9 @@ export class StandupBot {
         where: eq(Standups.id, this.id),
       });
       if (!standup?.workspace) throw new Error("No standup found");
-      console.info(`${new Date().toISOString()} init`, standup.id);
 
-      this.app.registerStandup(this);
       this.slackWorkspaceId = standup.slackWorkspaceId;
+      logInfo("init job", this.slackWorkspaceId);
       this.token = standup.workspace.botToken;
       this.channel = standup.channelId;
       this.members = standup.members;
@@ -100,19 +100,12 @@ export class StandupBot {
       this.startButtonId = `start_${randomUUID()}`;
       this.app.action(this.notButtonId, notWorkingClickHandler(this));
       this.app.action(this.startButtonId, startStandupClickHandler(this));
-      this.app.event("message", async (message) => {
-        if (message.ack) await (message as any).ack();
-      });
 
       this.startJob = new CronJob(
         standup.scheduleCron,
         () => {
           try {
-            console.info(
-              `${new Date().toISOString()} start job`,
-              this.conversationState,
-              this.id,
-            );
+            logInfo("start job", this.slackWorkspaceId);
             initStandup(this);
           } catch (error) {
             console.error("error in start job", error);
@@ -127,11 +120,7 @@ export class StandupBot {
         subtractMinutes(standup.summaryCron, 45),
         () => {
           try {
-            console.info(
-              `${new Date().toISOString()} remind job`,
-              this.conversationState,
-              this.id,
-            );
+            logInfo("remind job", this.slackWorkspaceId);
             remindUsers(this);
           } catch (error) {
             console.error("error in post reminder", error);
@@ -146,11 +135,7 @@ export class StandupBot {
         standup.summaryCron,
         () => {
           try {
-            console.info(
-              `${new Date().toISOString()} post job`,
-              this.conversationState,
-              this.id,
-            );
+            logInfo("post job", this.slackWorkspaceId);
             postStandup(this);
           } catch (error) {
             console.error("error in post job", error);
@@ -160,6 +145,8 @@ export class StandupBot {
         true,
         // "America/Los_Angeles", can be supplied in future versions
       );
+
+      this.app.registerStandup(this);
     } catch (e) {
       console.error("unhandled error", e);
     }

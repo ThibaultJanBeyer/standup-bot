@@ -16,7 +16,7 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.info(`${new Date().toISOString()} login`, user);
+      console.info("login", user.id);
 
       const item = await db
         .insert(Users)
@@ -43,8 +43,6 @@ export const authOptions: AuthOptions = {
       return true;
     },
     async session({ session, token }) {
-      console.info(`${new Date().toISOString()} session`, session);
-
       const user = await db.query.Users.findFirst({
         where: eq(Users.slackId, token.sub || ""),
       });

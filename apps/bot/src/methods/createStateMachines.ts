@@ -10,6 +10,7 @@ import {
 import { StandupBot } from "@/StandupBot";
 
 import { Typegen0 } from "./createStateMachines.typegen";
+import { logInfo } from "./utils";
 
 export type BotStateMachine = Interpreter<
   {
@@ -41,7 +42,7 @@ export const createBotStateMachine = (BOT: StandupBot) =>
 
       states: {
         Idle: {
-          entry: [() => console.info(`${new Date().toISOString()} idle`)],
+          entry: [() => logInfo("idle", BOT.slackWorkspaceId)],
           on: {
             INIT: "InitStandup",
             POST: "Posting",
@@ -49,9 +50,7 @@ export const createBotStateMachine = (BOT: StandupBot) =>
         },
 
         InitStandup: {
-          entry: [
-            () => console.info(`${new Date().toISOString()} init standup`),
-          ],
+          entry: [() => logInfo("init", BOT.slackWorkspaceId)],
           on: {
             INIT_DONE: "Waiting",
             POST: "Posting",
@@ -59,7 +58,7 @@ export const createBotStateMachine = (BOT: StandupBot) =>
         },
 
         Waiting: {
-          entry: [() => console.info(`${new Date().toISOString()} waiting`)],
+          entry: [() => logInfo("waiting", BOT.slackWorkspaceId)],
           on: {
             QUESTIONS_ANSWERED: [
               {
@@ -68,10 +67,11 @@ export const createBotStateMachine = (BOT: StandupBot) =>
                 cond: (context) => context.submitted >= BOT.members.length - 1,
                 actions: [
                   (context) =>
-                    console.info(
-                      `${new Date().toISOString()} questions answered ${
-                        context?.submitted
-                      }/${BOT.members.length - 1}}`,
+                    logInfo(
+                      `questions answered ${context?.submitted}/${
+                        BOT.members.length - 1
+                      }}`,
+                      BOT.slackWorkspaceId,
                     ),
                 ],
                 internal: false,
@@ -81,10 +81,11 @@ export const createBotStateMachine = (BOT: StandupBot) =>
                 actions: [
                   (context) => context.submitted++,
                   (context) =>
-                    console.info(
-                      `${new Date().toISOString()} questions answered ${
-                        context?.submitted
-                      }/${BOT.members.length - 1}}`,
+                    logInfo(
+                      `questions answered ${context?.submitted}/${
+                        BOT.members.length - 1
+                      }}`,
+                      BOT.slackWorkspaceId,
                     ),
                 ],
               },
@@ -95,10 +96,11 @@ export const createBotStateMachine = (BOT: StandupBot) =>
                 cond: (context) => context.submitted >= BOT.members.length - 1,
                 actions: [
                   (context) =>
-                    console.info(
-                      `${new Date().toISOString()} questions answered NOT_WORKING ${
-                        context?.submitted
-                      }/${BOT.members.length - 1}}`,
+                    logInfo(
+                      `questions answered NOT WORKING ${context?.submitted}/${
+                        BOT.members.length - 1
+                      }}`,
+                      BOT.slackWorkspaceId,
                     ),
                 ],
                 internal: false,
@@ -108,10 +110,11 @@ export const createBotStateMachine = (BOT: StandupBot) =>
                 actions: [
                   (context) => context.submitted++,
                   (context) =>
-                    console.info(
-                      `${new Date().toISOString()} questions answered ${
-                        context?.submitted
-                      }/${BOT.members.length - 1}}`,
+                    logInfo(
+                      `questions answered ${context?.submitted}/${
+                        BOT.members.length - 1
+                      }}`,
+                      BOT.slackWorkspaceId,
                     ),
                 ],
               },
@@ -121,7 +124,7 @@ export const createBotStateMachine = (BOT: StandupBot) =>
         },
 
         Posting: {
-          entry: [() => console.info(`${new Date().toISOString()} posting`)],
+          entry: [() => logInfo("posting", BOT.slackWorkspaceId)],
           on: {
             POST_DONE: "Idle",
           },

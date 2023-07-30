@@ -3,7 +3,7 @@ import { StandupBot } from "@/StandupBot";
 import { isMyAnswerMessage } from "./isMyAnswerMessage";
 import { postMessage } from "./postMessage";
 import { updateMessage } from "./updateMessage";
-import { SlackMessage, typeSafeUserState } from "./utils";
+import { logInfo, SlackMessage, typeSafeUserState } from "./utils";
 
 export const startStandup = async (
   BOT: StandupBot,
@@ -32,10 +32,11 @@ export const startStandup = async (
 
 export const handleUserMessage = (BOT: StandupBot) => async (props: any) => {
   if (!isMyAnswerMessage(BOT)(props)) return;
-
   // we know that the message is for us as it was vetted using isMyAnswer
-  console.log("handleUserMessage");
   const { event, message } = props;
+
+  logInfo("handleUserMessage", BOT.slackWorkspaceId);
+
   const userState = typeSafeUserState(BOT, event.user)!;
   const botMessages = userState.botMessages.START_STANDUP;
   const question = botMessages[botMessages.length - 1];

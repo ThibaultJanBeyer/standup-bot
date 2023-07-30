@@ -12,7 +12,7 @@ module.exports = {
   },
   plugins: [
     typescript({
-      tsconfig: "tsconfig.json",
+      tsconfig: "tsconfig.build.json",
     }),
     resolve({
       extensions: [".js", ".ts"],
