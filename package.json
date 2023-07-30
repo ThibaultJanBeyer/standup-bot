@@ -1,6 +1,6 @@
 {
   "name": "simple-standup-bot",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Dead Simple Standup Bot for Slack",
   "engines": {
     "node": ">=20"
