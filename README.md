@@ -6,21 +6,20 @@ NOTE: currently the bot can’t work on multiple workspaces due to wrong impleme
 
 ### Memory issue
 
-- Don’t use node-ts to run the app as it consumes a hell lot of memory. Transpile to JS and run normal node for the bot. (https://medium.com/aspecto/ts-node-ram-consumption-12c257e09e13).
-- Don’t keep states in memory, store them in the DB
-- Use a real cache, don’t use the simple memory cache
-
 - UI & UX
 - - Loading states on polling API
 - - Custom Timezones (should be local by default)
-- Nice to have
+- Other
+- - Transpile ts to js
 - - Cloudflare worker that checks if Bot is up and reboots it if down
 - - Zero downtime on updates
 - - Add link to website in the bot on slack itself
-- - Would be great if Bot could pick up where it started if it crashes in between
-- - Host it on vercel? https://github.com/vercel/vercel/discussions/6039
+- - Would be great if Bot could pick up where it started if it crashes in
+    between
 - - dev branch environment previews (what could work is add another github workflow with credentials for dev, simply run the app under another port with nginx subdomain)
 - - Better CronPicker
+- - Don’t keep states in memory, store them in the DB
+- - Use a real cache, don’t use the simple memory cache
 - When Stable
 - - Publish on Slack as official app
 - When Popular
