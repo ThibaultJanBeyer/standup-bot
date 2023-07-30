@@ -159,7 +159,7 @@ Happens automatically and continuously via github workflows. Basically:
 
 ## Bot Settings
 
-Set the URI of your app under `Settings > Event Subscriptions > Request URL` to:
+Set the URI of your app under `Settings > Event Subscriptions > Request URL` & under `Settings >  Interactivity & Shortcuts > Interactivity` to:
 
 - `https://bot.standup-bot.com/slack/events`.
 
