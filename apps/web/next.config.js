@@ -9,12 +9,13 @@ module.exports = async (phase, { defaultConfig }) => {
   const nextConfig = {
     ...defaultConfig,
     reactStrictMode: true,
+
     experimental: {
       serverActions: true,
     },
     transpilePackages: ["@ssb/ui"],
     images: {
-      domains: ["cataas.com", "cdn.sanity.io"],
+      unoptimized: true,
     },
   };
   return withBundleAnalyzer(nextConfig);
