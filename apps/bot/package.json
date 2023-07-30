@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "pnpm with-env nodemon src/app.ts",
     "start": "pnpm with-env ts-node --transpile-only src/app.ts",
-    "build": "pnpm with-env tsc src/app.ts",
     "production": "pm2 start npm --name 'ssb' -- start",
     "with-env": "dotenv -e ../../.env --",
     "clean": "rm -rf .turbo node_modules"
