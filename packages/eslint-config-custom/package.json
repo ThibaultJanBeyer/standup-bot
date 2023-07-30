@@ -7,10 +7,10 @@
     "clean": "rm -rf node_modules"
   },
   "dependencies": {
-    "eslint-config-next": "^13.4.5",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-react": "7.32.2",
-    "eslint-config-turbo": "^1.10.3"
+    "eslint-config-next": "^13.4.12",
+    "eslint-config-prettier": "^8.9.0",
+    "eslint-plugin-react": "7.33.1",
+    "eslint-config-turbo": "^1.10.12"
   },
   "publishConfig": {
     "access": "public"

@@ -5,7 +5,6 @@ import { Metadata } from "next";
 
 import { cn } from "@ssb/ui/utils";
 
-import { ThemeProvider } from "@/components/ThemeProvider";
 import { fontSans } from "@/lib/fonts";
 
 import { SessionProvider } from "./SessionProvider";
@@ -41,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ],
     },
     // the manifest will 401 in vercel preview environments and generate repeating console errors
-    ...(process.env.VERCEL_ENV === "production"
+    ...(process.env.NODE_ENV === "production"
       ? { manifest: "/webmanifest.json" }
       : {}),
   };
@@ -55,12 +54,6 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
         <link
           href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Inter:wght@400;600&display=swap"
           rel="stylesheet"
@@ -73,9 +66,7 @@ export default async function RootLayout({
         )}
       >
         <SessionProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
-          </ThemeProvider>
+          {children}
         </SessionProvider>
       </body>
     </html>

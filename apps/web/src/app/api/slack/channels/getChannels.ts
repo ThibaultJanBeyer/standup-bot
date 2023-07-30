@@ -1,6 +1,6 @@
 import { WebClient } from "@slack/web-api";
 
-export default async (client: WebClient) => {
+export default async function getChannels(client: WebClient) {
   const channelList = await client.conversations.list();
   if (!channelList.ok) return [];
   const channels = channelList?.channels?.flatMap((channel) => [

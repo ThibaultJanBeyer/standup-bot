@@ -10,7 +10,7 @@ import { Button } from "@ssb/ui/button";
 import StandupsFormFields, { FormData } from "../StandupsFormFields";
 import { createAction } from "./createAction";
 
-export default () => {
+export default function Page() {
   const onSubmit = (data: FormData) => {
     startTransition(() => {
       createAction(data)

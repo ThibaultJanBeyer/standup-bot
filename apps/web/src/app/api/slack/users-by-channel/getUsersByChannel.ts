@@ -2,7 +2,7 @@ import { WebClient } from "@slack/web-api";
 
 import { db, Users } from "@/lib/orm";
 
-export default async (client: WebClient, channelId: string) => {
+export default async function getUsersByChannel(client: WebClient, channelId: string) {
   const userList = await db.select().from(Users).execute();
   const channelIds = await client.conversations.members({
     channel: channelId, // Replace with the ID of the channel you want to list members for

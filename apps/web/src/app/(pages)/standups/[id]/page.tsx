@@ -32,7 +32,7 @@ const getData = async (id: string) => {
   };
 };
 
-export default async ({ params: { id } }: { params: { id: string } }) => {
+export default async function Page({ params: { id } }: { params: { id: string } }) {
   const data = await getData(id);
   if (!data) return "Standup Not Found";
 

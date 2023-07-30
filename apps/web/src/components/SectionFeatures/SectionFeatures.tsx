@@ -17,7 +17,7 @@ export const SectionFeatures = ({
           Why Choose Stand-Up Bot?
         </h3>
         <p className="mb-10 text-lg">
-          Boost your team's productivity and collaboration with Stand-Up Bot for
+          Boost your team’s productivity and collaboration with Stand-Up Bot for
           Slack. Say goodbye to time-consuming and inefficient stand-up meetings
           and hello to streamlined updates that keep everyone on track. Try
           Stand-Up Bot today and experience the difference!

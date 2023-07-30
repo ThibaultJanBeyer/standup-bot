@@ -4,7 +4,7 @@ import { db, eq, Users } from "@/lib/orm";
 
 import { authOptions } from "../app/api/auth/[...nextauth]/route";
 
-export default async () => {
+export default async function getUser() {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
   if (!userId) return null;

@@ -1,10 +1,10 @@
 FROM        node:20.3.1-alpine3.17
 
 RUN         npm install -g pnpm
-RUN         npm install -g pm2
 
 ENV         BOT_PORT=3001
 ENV         PORT=3000
+ENV         NODE_ENV=production
 
 WORKDIR     /var/www
 COPY        . .

@@ -38,7 +38,7 @@ type Props = {
   data?: FormData;
 };
 
-export default ({ onSubmit, data, children }: Props) => {
+export default function StandupsFormFields({ onSubmit, data, children }: Props) {
   const [channels, setChannels] = useState<Data[]>([]);
   const [users, setUsers] = useState<Data[]>([]);
   const form = useForm({
@@ -88,7 +88,7 @@ export default ({ onSubmit, data, children }: Props) => {
   useEffect(() => {
     if (!data) return;
     form.reset(getDefaultValues(data));
-  }, [data]);
+  }, [data, form]);
 
   const errors = form.formState.errors;
 

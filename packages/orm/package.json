@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "dotenv-cli": "^7.2.1",
-    "drizzle-kit": "^0.19.9",
+    "drizzle-kit": "^0.19.12",
     "ts-node": "^10.9.1"
   },
   "optionalDependencies": {
