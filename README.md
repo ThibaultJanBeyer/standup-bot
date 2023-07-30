@@ -4,6 +4,12 @@ NOTE: currently the bot can’t work on multiple workspaces due to wrong impleme
 
 ## TODO
 
+### Memory issue
+
+- Don’t use node-ts to run the app as it consumes a hell lot of memory. Transpile to JS and run normal node for the bot. (https://medium.com/aspecto/ts-node-ram-consumption-12c257e09e13).
+- Don’t keep states in memory, store them in the DB
+- Use a real cache, don’t use the simple memory cache
+
 - UI & UX
 - - Loading states on polling API
 - - Custom Timezones (should be local by default)

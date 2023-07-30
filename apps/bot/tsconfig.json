@@ -5,8 +5,11 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "target": "ES6"
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["./src/**/*.ts"],
   "exclude": ["node_modules"]
 }
