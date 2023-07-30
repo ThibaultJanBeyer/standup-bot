@@ -46,7 +46,13 @@ export function SiteHeader() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onSelect={() => signOut()}>
+                      <DropdownMenuItem
+                        onSelect={() =>
+                          signOut({
+                            callbackUrl: "/",
+                          })
+                        }
+                      >
                         <LogOutIcon className="mr-2" />
                         Logout
                       </DropdownMenuItem>
