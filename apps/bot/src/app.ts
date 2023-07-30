@@ -6,7 +6,8 @@ import { insertUsersFromWorkspace } from "@ssb/utils";
 import {
   AFTER_SIGN_IN_URI,
   INSTALL_SLACK_PATH,
-  INSTALL_SLACK_URI,
+  REDIRECT_SLACK_PATH,
+  REDIRECT_SLACK_URI,
 } from "@ssb/utils/src/constants";
 
 import { db, eq, Standups, Workspace, Workspaces } from "./orm";
@@ -87,8 +88,11 @@ export class SlackApp extends App {
           res: ServerResponse<IncomingMessage>,
         ) => handler(this, req, res),
       })),
+      redirectUri: REDIRECT_SLACK_URI,
       installerOptions: {
         port,
+        redirectUriPath: REDIRECT_SLACK_PATH,
+        installPath: INSTALL_SLACK_PATH,
         directInstall: true,
         callbackOptions: {
           success: (installation, installOptions, req, res) => {

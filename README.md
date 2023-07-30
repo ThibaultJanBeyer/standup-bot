@@ -6,7 +6,6 @@ NOTE: currently the bot can’t work on multiple workspaces due to wrong impleme
 
 - UI & UX
 - - Loading states on polling API
-- - Human readable cron pickers (currently not working)
 - - Custom Timezones (should be local by default)
 - Nice to have
 - - Cloudflare worker that checks if Bot is up and reboots it if down
@@ -15,9 +14,11 @@ NOTE: currently the bot can’t work on multiple workspaces due to wrong impleme
 - - Would be great if Bot could pick up where it started if it crashes in between
 - - Host it on vercel? https://github.com/vercel/vercel/discussions/6039
 - - dev branch environment previews (what could work is add another github workflow with credentials for dev, simply run the app under another port with nginx subdomain)
+- - Better CronPicker
 - When Stable
 - - Publish on Slack as official app
-- - Cheap pricing on hosted (SAAS) version to cover server costs
+- When Popular
+- - Cheap pricing (1$/m or less) on hosted (SAAS) version to cover server costs
 
 ## Info
 
