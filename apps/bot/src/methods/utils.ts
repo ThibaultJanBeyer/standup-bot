@@ -7,8 +7,15 @@ export const typeSafeUserState = (
   member?: string,
 ): UserState | undefined => BOT.conversationState.users[member || ""];
 
-export const logInfo = (message: string, slackWorkspaceId?: string) =>
-  console.info(`${new Date().toISOString()} ${slackWorkspaceId} ${message}`);
+export const logInfo = (
+  message: string,
+  slackWorkspaceId?: string,
+  extraInfo?: any,
+) =>
+  console.info(
+    `${new Date().toISOString()} ${slackWorkspaceId} ${message}`,
+    extraInfo,
+  );
 
 export type SlackMessage = {
   body: {
