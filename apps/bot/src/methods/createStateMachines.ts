@@ -97,7 +97,7 @@ export const createBotStateMachine = (BOT: StandupBot) =>
                 actions: [
                   (context) =>
                     logInfo(
-                      `questions answered NOT WORKING ${context?.submitted}/${
+                      `questions answered (NOT WORKING) ${context?.submitted}/${
                         BOT.members.length - 1
                       }}`,
                       BOT.slackWorkspaceId,
@@ -111,7 +111,7 @@ export const createBotStateMachine = (BOT: StandupBot) =>
                   (context) => context.submitted++,
                   (context) =>
                     logInfo(
-                      `questions answered ${context?.submitted}/${
+                      `questions answered (NOT WORKING) ${context?.submitted}/${
                         BOT.members.length - 1
                       }}`,
                       BOT.slackWorkspaceId,

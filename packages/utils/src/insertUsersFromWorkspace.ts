@@ -44,6 +44,9 @@ export const insertUsersFromWorkspace = async (
         },
       ];
     });
+
+    console.info("insertUsersFromWorkspace", members);
+
     await db
       .insert(Users)
       .values(members)

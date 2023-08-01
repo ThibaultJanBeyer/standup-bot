@@ -9,7 +9,7 @@ export const startStandup = async (
   BOT: StandupBot,
   { channel, ts, member }: { channel: string; ts: string; member: string },
 ) => {
-  console.log("startStandup", { channel, ts, member });
+  console.info("startStandup", { channel, member });
   await updateMessage({
     app: BOT.app,
     token: BOT.token,

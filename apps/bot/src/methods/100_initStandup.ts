@@ -10,7 +10,12 @@ import { logInfo } from "./utils";
 
 export const initStandup = async (BOT: StandupBot) => {
   BOT.botStateMachine.send("INIT");
-  const prevConversationState = BOT.conversationState;
+
+  // reset conversation state
+  BOT.conversationState = {
+    users: {},
+    report: {},
+  };
 
   for (const member of BOT.members) {
     BOT.conversationState.users[member] = createConversationStateMember();
@@ -21,25 +26,6 @@ export const initStandup = async (BOT: StandupBot) => {
       member,
     });
     if (!channel) continue;
-
-    // check previously posted message (if interrupted abruptly)
-    if (prevConversationState.users[member]?.botMessages.INIT?.[0]?.ts)
-      await updateMessage({
-        app: BOT.app,
-        token: BOT.token,
-        channel,
-        ts: prevConversationState.users[member]!.botMessages.INIT[0]!.ts,
-        text: "---",
-        blocks: [
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: `---`,
-            },
-          },
-        ],
-      });
 
     // post question
     const initMessage = await postMessage({
