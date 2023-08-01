@@ -274,10 +274,10 @@ const getDefaultValues = (data?: FormData): FormData => ({
   members: data?.members || [],
   scheduleCron:
     data?.scheduleCron ||
-    `0 5 * * 1-5 {${Intl.DateTimeFormat().resolvedOptions().timeZone}}`,
+    `30 6 * * 1-5 {${Intl.DateTimeFormat().resolvedOptions().timeZone}}`,
   summaryCron:
     data?.summaryCron ||
-    `0 9 * * 1-5 {${Intl.DateTimeFormat().resolvedOptions().timeZone}}`,
+    `0 11 * * 1-5 {${Intl.DateTimeFormat().resolvedOptions().timeZone}}`,
   name: data?.name || "",
   questions: data?.questions || [
     { value: ":arrow_left: What did you do since last standup?" },
