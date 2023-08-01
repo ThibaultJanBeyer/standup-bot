@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto";
-import { App } from "@slack/bolt";
 import { CronJob } from "cron";
+
+import { parseCustomCronString } from "@ssb/utils";
 
 import { SlackApp } from "./app";
 import {
@@ -101,8 +102,10 @@ export class StandupBot {
       this.app.action(this.notButtonId, notWorkingClickHandler(this));
       this.app.action(this.startButtonId, startStandupClickHandler(this));
 
+      const scheduleCron = parseCustomCronString(standup.scheduleCron);
+      const summaryCron = parseCustomCronString(standup.summaryCron);
       this.startJob = new CronJob(
-        standup.scheduleCron,
+        scheduleCron.cron,
         () => {
           try {
             logInfo("start job", this.slackWorkspaceId);
@@ -113,11 +116,11 @@ export class StandupBot {
         },
         null,
         true,
-        // "America/Los_Angeles", can be supplied in future versions
+        scheduleCron.timeZone,
       );
 
       this.remindJob = new CronJob(
-        subtractMinutes(standup.summaryCron, 45),
+        subtractMinutes(summaryCron.cron, 45),
         () => {
           try {
             logInfo("remind job", this.slackWorkspaceId);
@@ -128,11 +131,11 @@ export class StandupBot {
         },
         null,
         true,
-        // "America/Los_Angeles", can be supplied in future versions
+        summaryCron.timeZone,
       );
 
       this.postJob = new CronJob(
-        standup.summaryCron,
+        summaryCron.cron,
         () => {
           try {
             logInfo("post job", this.slackWorkspaceId);
@@ -143,7 +146,7 @@ export class StandupBot {
         },
         null,
         true,
-        // "America/Los_Angeles", can be supplied in future versions
+        summaryCron.timeZone,
       );
 
       this.app.registerStandup(this);

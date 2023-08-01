@@ -62,6 +62,7 @@ export function SiteHeader() {
               ) : (
                 <Button
                   variant="outline"
+                  loading={false}
                   onClick={() => signIn("slack")}
                   className="mr-5"
                 >

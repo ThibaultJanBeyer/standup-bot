@@ -41,11 +41,16 @@ export const StandupUpdateForm = ({
     <StandupsFormFields onSubmit={onSubmit} data={data}>
       <div className="mt-10 grid grid-cols-2 gap-10">
         <Form.Submit asChild>
-          <Button type="submit" variant="outlinePrimary">
+          <Button type="submit" variant="outlinePrimary" loading={false}>
             Update Standup
           </Button>
         </Form.Submit>
-        <Button onClick={onDelete} type="button" variant={"destructive"}>
+        <Button
+          onClick={onDelete}
+          type="button"
+          variant={"destructive"}
+          loading={false}
+        >
           Delete Standup
         </Button>
       </div>

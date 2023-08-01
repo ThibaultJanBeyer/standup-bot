@@ -1,29 +1,4 @@
-# Work in Progress
-
-NOTE: currently the bot can’t work on multiple workspaces due to wrong implementation
-
-## TODO
-
-### Memory issue
-
-- UI & UX
-- - Loading states on polling API
-- - Custom Timezones (should be local by default)
-- Other
-- - Add Axiom for logs
-- - Cloudflare worker that checks if Bot is up and reboots it if down
-- - Zero downtime on updates
-- - Add link to website in the bot on slack itself
-- - Would be great if Bot could pick up where it started if it crashes in
-    between
-- - dev branch environment previews (what could work is add another github workflow with credentials for dev, simply run the app under another port with nginx subdomain)
-- - Better CronPicker
-- - Don’t keep states in memory, store them in the DB
-- - Use a real cache, don’t use the simple memory cache
-- When Stable
-- - Publish on Slack as official app
-- When Popular
-- - Cheap pricing (1$/m or less) on hosted (SAAS) version to cover server costs
+# Standup Bot
 
 ## Info
 

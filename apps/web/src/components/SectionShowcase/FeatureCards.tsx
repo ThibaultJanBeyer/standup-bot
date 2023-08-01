@@ -34,16 +34,10 @@ const CartTextBlock = ({ title }: { title: string }) => {
       </motion.div>
       <ul className="list-disc p-3">
         <li>
-          <motion.div
-            style={{ scaleX: scrollYProgress }}
-            className="mb-1 inline-block h-1 w-full bg-gray-700"
-          />
+          <CardTextInline className="mb-1 inline-block w-full" />
         </li>
         <li>
-          <motion.div
-            style={{ scaleX: scrollYProgress }}
-            className="mb-1 inline-block h-1 w-1/3 bg-gray-700"
-          />
+          <CardTextInline className="mb-1 inline-block w-1/3" />
         </li>
       </ul>
     </div>
@@ -63,20 +57,19 @@ const CartTextBlockTitle = () => {
           >
             @Thibault
           </Link>
-          <motion.div
-            style={{ scaleX: scrollYProgress }}
-            className="h-1 w-full bg-gray-700"
-          />
+          <CardTextInline />
         </div>
-        <motion.div
-          style={{ scaleX: scrollYProgress }}
-          className="mb-5 h-1 w-full bg-gray-700"
-        />
-        <motion.div
-          style={{ scaleX: scrollYProgress }}
-          className="h-1 w-1/3 bg-gray-700"
-        />
+        <CardTextInline className="mb-5" />
+        <CardTextInline className="w-1/3" />
       </div>
     </>
+  );
+};
+
+const CardTextInline = ({ className = "w-full" }) => {
+  const { scrollY } = useScroll();
+  const scaleX = useTransform(scrollY, [0, 1000, 1750], [0, 0.001, 1]);
+  return (
+    <motion.div style={{ scaleX }} className={`${className} h-1 bg-gray-700`} />
   );
 };
