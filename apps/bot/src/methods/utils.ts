@@ -11,11 +11,15 @@ export const logInfo = (
   message: string,
   slackWorkspaceId?: string,
   extraInfo?: any,
-) =>
-  console.info(
-    `${new Date().toISOString()} ${slackWorkspaceId} ${message}`,
-    extraInfo,
-  );
+) => {
+  if (extraInfo)
+    console.info(
+      `${new Date().toISOString()} ${slackWorkspaceId} ${message}`,
+      extraInfo,
+    );
+  else
+    console.info(`${new Date().toISOString()} ${slackWorkspaceId} ${message}`);
+};
 
 export type SlackMessage = {
   body: {
