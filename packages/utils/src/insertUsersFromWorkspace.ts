@@ -33,6 +33,7 @@ export const insertUsersFromWorkspace = async (
   }
 
   if (userList?.members?.length) {
+    console.info("insertUsersFromWorkspace", userList.members);
     const members = userList.members.flatMap((member) => {
       if (member.is_bot || member.name === "slackbot" || !member.id) return [];
       return [
@@ -44,9 +45,6 @@ export const insertUsersFromWorkspace = async (
         },
       ];
     });
-
-    console.info("insertUsersFromWorkspace", members);
-
     await db
       .insert(Users)
       .values(members)
