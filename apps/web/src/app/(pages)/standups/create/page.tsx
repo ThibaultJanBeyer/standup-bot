@@ -25,11 +25,11 @@ export default function Page() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <StandupsFormFields onSubmit={onSubmit}>
         <Submit asChild>
-          <Button type="submit" variant="outlinePrimary">
+          <Button type="submit" variant="outlinePrimary" loading={false}>
             Create Standup
           </Button>
         </Submit>
       </StandupsFormFields>
     </main>
   );
-};
+}

@@ -8,6 +8,7 @@ export const AddToSlack = () => (
   <Button
     variant="ghost"
     className="hover:box-shadow inline-block bg-white text-center text-sm font-medium text-black  shadow-md  transition-transform hover:scale-105 hover:underline"
+    loading={false}
     asChild
   >
     <Link href={INSTALL_SLACK_URI}>

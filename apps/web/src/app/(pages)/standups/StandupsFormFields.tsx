@@ -38,7 +38,11 @@ type Props = {
   data?: FormData;
 };
 
-export default function StandupsFormFields({ onSubmit, data, children }: Props) {
+export default function StandupsFormFields({
+  onSubmit,
+  data,
+  children,
+}: Props) {
   const [channels, setChannels] = useState<Data[]>([]);
   const [users, setUsers] = useState<Data[]>([]);
   const form = useForm({
@@ -219,7 +223,7 @@ export default function StandupsFormFields({ onSubmit, data, children }: Props) 
       </Form.Root>
     </FormProvider>
   );
-};
+}
 
 const FormField = <T extends keyof FormData>({
   key,
@@ -268,8 +272,12 @@ const schema = {
 const getDefaultValues = (data?: FormData): FormData => ({
   channelId: data?.channelId || "",
   members: data?.members || [],
-  scheduleCron: data?.scheduleCron || "0 5 * * 1-5",
-  summaryCron: data?.summaryCron || "0 9 * * 1-5",
+  scheduleCron:
+    data?.scheduleCron ||
+    `0 5 * * 1-5 {${Intl.DateTimeFormat().resolvedOptions().timeZone}}`,
+  summaryCron:
+    data?.summaryCron ||
+    `0 9 * * 1-5 {${Intl.DateTimeFormat().resolvedOptions().timeZone}}`,
   name: data?.name || "",
   questions: data?.questions || [
     { value: ":arrow_left: What did you do since last standup?" },

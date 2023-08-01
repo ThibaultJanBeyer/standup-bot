@@ -9,6 +9,14 @@
     background-image: url("/bubble-background.webp");
     background-size: cover;
   }
+  .grid-areas-imageTextSlim {
+    grid-template-areas: "text" "image";
+  }
+  @screen lg {
+    .grid-areas-imageTextSlim {
+      grid-template-areas: "image text";
+    }
+  }
   .cron-picker {
     margin-left: -10px;
   }

@@ -195,11 +195,15 @@ export const LineAnimationBottom = () => {
   const [anchor, setAnchor] = useState(null as { x: number; y: number } | null);
   const [isInView, setIsInView] = useState(false);
 
+  console.log(anchor);
+
   const updatePos = () => {
     const primary = document.querySelector("#showcase-primary") as HTMLElement;
     setAnchor(() => ({
-      y: primary.offsetTop + primary.offsetHeight / 2,
-      x: primary.offsetLeft,
+      y:
+        primary.parentElement?.offsetTop ||
+        0 + (primary.parentElement?.offsetHeight || 0) / 2,
+      x: primary.parentElement?.offsetLeft || 0,
     }));
   };
 

@@ -1,13 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cva, VariantProps } from "class-variance-authority";
 
 import { cn } from "../utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:scale-105 hover:underline  hover:box-shadow",
+  "relative inline-flex items-center justify-center text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:scale-105 hover:underline hover:box-shadow",
   {
     variants: {
       variant: {
@@ -40,17 +40,51 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  loading?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  (
+    {
+      className,
+      onClick,
+      variant,
+      loading,
+      size,
+      asChild = false,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
     const Comp = asChild ? Slot : "button";
+    const [isLoading, setIsLoading] = React.useState(loading);
+
+    const handleClick = (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+      if (!isLoading && loading !== undefined) {
+        setIsLoading(true);
+        setTimeout(() => setIsLoading(false), 10000);
+      }
+      if (onClick) onClick(e);
+    };
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
+        onClick={handleClick}
         ref={ref}
         {...props}
-      />
+      >
+        {isLoading && (
+          <>
+            <span className="absolute left-4 animate-spin">⟲</span>
+            <span className="mr-4" />
+          </>
+        )}
+        <Slottable>{children}</Slottable>
+      </Comp>
     );
   },
 );

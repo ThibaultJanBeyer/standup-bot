@@ -32,6 +32,7 @@ export default function BottomCTA() {
             variant="outlinePrimary"
             className="p-8"
             onClick={() => signIn()}
+            loading={false}
           >
             <BotIcon className="mr-1 w-4" />
             Start Now For Free!
