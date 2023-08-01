@@ -81,8 +81,10 @@ export const CronPicker = ({ registered, onChange }: Props) => {
             onChangeTimeZone(parseTimezone(e.currentTarget.value).value)
           }
         >
-          {options.map((option) => (
-            <option value={option.value}>{option.label}</option>
+          {options.map((option, index) => (
+            <option value={option.value} key={index}>
+              {option.label}
+            </option>
           ))}
         </select>
       </div>
