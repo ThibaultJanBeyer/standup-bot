@@ -61,4 +61,4 @@ jobs:
           script: |
             cd simple-standup-bot
             git pull
-            ./start.sh
+            DOCKERHUB_USERNAME=${{ secrets.DEV_DOCKERHUB_USERNAME }} bash -c ./start.sh

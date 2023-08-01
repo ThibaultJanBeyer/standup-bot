@@ -13,7 +13,10 @@ export const isMyAnswerMessage = (BOT: StandupBot) => (props: SlackMessage) => {
   if (!userState) return false;
 
   const botMessages = userState.botMessages.START_STANDUP;
+  // questions asked matches answers recorded
   if (userState.answers?.length !== botMessages.length - 1) return false;
+  // all questions answered
+  if (userState.answers?.length === BOT.questions.length) return false;
 
   const answers = userState.answers;
   if (
