@@ -35,7 +35,7 @@ export const handleUserMessage = (BOT: StandupBot) => async (props: any) => {
   // we know that the message is for us as it was vetted using isMyAnswer
   const { event, message } = props;
 
-  logInfo("handleUserMessage", BOT.slackWorkspaceId);
+  logInfo("handleUserMessage", BOT.slackWorkspaceId, event.user);
 
   const userState = typeSafeUserState(BOT, event.user)!;
   const botMessages = userState.botMessages.START_STANDUP;

@@ -50,7 +50,12 @@ export const createBotStateMachine = (BOT: StandupBot) =>
         },
 
         InitStandup: {
-          entry: [() => logInfo("init", BOT.slackWorkspaceId)],
+          entry: [
+            (context) => {
+              context.submitted = 0;
+              logInfo("init", BOT.slackWorkspaceId, context.submitted);
+            },
+          ],
           on: {
             INIT_DONE: "Waiting",
             POST: "Posting",
@@ -67,26 +72,23 @@ export const createBotStateMachine = (BOT: StandupBot) =>
                 cond: (context) => context.submitted >= BOT.members.length - 1,
                 actions: [
                   (context) =>
-                    logInfo(
-                      `questions answered ${context?.submitted}/${
-                        BOT.members.length - 1
-                      }}`,
-                      BOT.slackWorkspaceId,
-                    ),
+                    logInfo(`answered final`, BOT.slackWorkspaceId, {
+                      submitted: context?.submitted,
+                      members: BOT.members.length,
+                    }),
                 ],
                 internal: false,
               },
               {
                 target: "Waiting",
                 actions: [
-                  (context) => context.submitted++,
-                  (context) =>
-                    logInfo(
-                      `questions answered ${context?.submitted}/${
-                        BOT.members.length - 1
-                      }}`,
-                      BOT.slackWorkspaceId,
-                    ),
+                  (context) => {
+                    context.submitted++;
+                    logInfo(`answered`, BOT.slackWorkspaceId, {
+                      submitted: context?.submitted,
+                      members: BOT.members.length,
+                    });
+                  },
                 ],
               },
             ],
@@ -96,26 +98,23 @@ export const createBotStateMachine = (BOT: StandupBot) =>
                 cond: (context) => context.submitted >= BOT.members.length - 1,
                 actions: [
                   (context) =>
-                    logInfo(
-                      `questions answered (NOT WORKING) ${context?.submitted}/${
-                        BOT.members.length - 1
-                      }}`,
-                      BOT.slackWorkspaceId,
-                    ),
+                    logInfo(`answered final (nw)`, BOT.slackWorkspaceId, {
+                      submitted: context?.submitted,
+                      members: BOT.members.length,
+                    }),
                 ],
                 internal: false,
               },
               {
                 target: "Waiting",
                 actions: [
-                  (context) => context.submitted++,
-                  (context) =>
-                    logInfo(
-                      `questions answered (NOT WORKING) ${context?.submitted}/${
-                        BOT.members.length - 1
-                      }}`,
-                      BOT.slackWorkspaceId,
-                    ),
+                  (context) => {
+                    context.submitted++;
+                    logInfo(`answered (nw)`, BOT.slackWorkspaceId, {
+                      submitted: context?.submitted,
+                      members: BOT.members.length,
+                    });
+                  },
                 ],
               },
             ],

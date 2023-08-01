@@ -49,6 +49,7 @@ export class SlackApp extends App {
 
     this.event("message", async (message) => {
       if (message.ack) await (message as any).ack();
+      logInfo("message", message.body.team_id, message.body.user_id);
       const slackWorkspaceId = message.body.team_id;
       this.standupIdsByWorkspaceId
         .get(slackWorkspaceId)
