@@ -2,6 +2,7 @@
 
 - When Stable
 - - Publish on Slack as official app
+
 - Nice to have
 - - Add Axiom for logs
 - - Cloudflare worker that checks if Bot is up and reboots it if down
@@ -13,5 +14,6 @@
 - - Better CronPicker
 - - Don’t keep states in memory, store them in the DB
 - - Use a real cache, don’t use the simple memory cache
+
 - When Popular
-- - Cheap pricing (1$/m or less) on hosted (SAAS) version to cover server costs
+- - Cheap pricing (1$/m or less) on hosted (SAAS) version to cover our server costs

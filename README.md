@@ -1,10 +1,13 @@
 # Standup Bot
 
+All you need to know on:
+[https://www.standup-bot.com](https://www.standup-bot.com)
+
 ## Info
 
 - A dead simple open source standup bot
 - Based on the [Getting Started ⚡️ Bolt](https://github.com/slackapi/bolt-js-getting-started-app) and [github copilot chat](https://github.com/github-copilot/chat_waitlist_signup/join) output
-- Rushed in a week
+- Rushed in a week, stabilized in 3 month
 - neon.tech as db and drizzle as orm
 - Icons using https://icones.js.org/collection/lucide via unplugin icons
 - next.js for the app using mostly https://ui.shadcn.com/ for components
@@ -15,13 +18,15 @@
 
 ## Testing Slack integration on dev
 
-- Run a local-tunnel on `:3000`
-- Add to `SLACK_REDIRECT_URI` in `.env` file
-- Add redirect url in [the bots Redirect URLs list under oauth](https://api.slack.com/apps/A05D19MGCTC/oauth?)
+- Create local-tunnels
+- Add them respectively to `.env` and to your bots settings
 
 ## Building locally
 
+(make sure `.env` and `.env.production` are ready)
+
 - Run `./build.sh`
+- Run `./start.sh`
 
 ## Server resources
 
