@@ -45,8 +45,7 @@ const handlePrivateMessages = async (BOT: StandupBot, member: string) => {
   if (!userState) return;
 
   const channel = await openConversation({
-    app: BOT.app,
-    token: BOT.token,
+    BOT,
     member,
   });
   // user reported not working
@@ -63,8 +62,7 @@ const handlePrivateMessages = async (BOT: StandupBot, member: string) => {
 
   // normal behavior
   await updateMessage({
-    app: BOT.app!,
-    token: BOT.token,
+    BOT,
     channel,
     ts: userState.botMessages.INIT[0]!.ts,
     text: "Marked: standup concluded",
@@ -105,8 +103,7 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
 
     for (const answer of answers) {
       const conversation = await getHistory({
-        app: BOT.app,
-        token: BOT.token,
+        BOT,
         channel: answer.channel,
         oldest: answer.questionMessageTs,
       });

@@ -2,9 +2,10 @@ import NextAuth, { AuthOptions } from "next-auth";
 import SlackProvider from "next-auth/providers/slack";
 
 import { insertUsersFromWorkspace } from "@ssb/utils";
-import { AUTH_BOT_URI } from "@ssb/utils/src/constants";
+import { AFTER_SIGN_IN_URI, AUTH_BOT_URI } from "@ssb/utils/src/constants";
 
-import { db, eq, Users } from "@/lib/orm";
+import { isTokenValid } from "@/lib/helpers";
+import { db, eq, Users, Workspaces } from "@/lib/orm";
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
@@ -40,15 +41,28 @@ export const authOptions: AuthOptions = {
 
       insertUsersFromWorkspace(slackWorkspaceId);
 
-      return true;
+      const workspace = await db.query.Workspaces.findFirst({
+        where: eq(Workspaces.slackWorkspaceId, slackWorkspaceId),
+      });
+
+      if (!(await isTokenValid(workspace?.botToken))) return AUTH_BOT_URI;
+
+      return AFTER_SIGN_IN_URI;
     },
     async session({ session, token }) {
       const user = await db.query.Users.findFirst({
         where: eq(Users.slackId, token.sub || ""),
       });
       if (!user) throw new Error("User not found");
-      // (session as any).blob = "blob";
-      return { ...session, user: { ...session.user, id: user.id } };
+
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+          slackWorkspaceId: user.slackWorkspaceId,
+        },
+      };
     },
   },
 };

@@ -73,7 +73,7 @@ export function SiteHeader() {
           </div>
         </div>
       </header>
-      <div className="mb-36"></div>
+      <div className="mb-28"></div>
     </>
   );
 }

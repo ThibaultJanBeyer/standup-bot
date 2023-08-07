@@ -1,9 +1,18 @@
 import { StandupBot } from "@/StandupBot";
 
+import { checkToken } from "./checkToken";
 import { typeSafeUserState } from "./utils";
 
 export const addUserMeta = async (BOT: StandupBot, member: string) => {
   try {
+    if (
+      !(await checkToken({
+        slackWorkspaceId: BOT.slackWorkspaceId,
+        token: BOT.token,
+        APP: BOT.app,
+      }))
+    )
+      return;
     const userState = typeSafeUserState(BOT, member);
     if (!userState) return;
     const result = await BOT.app!.client.users.info({

@@ -10,6 +10,8 @@ import {
   REDIRECT_SLACK_URI,
 } from "@ssb/utils/src/constants";
 
+import { deleteWorkspace } from "./methods/deleteWorkspace";
+import { postWelcomeMessage } from "./methods/postMessage";
 import { logInfo } from "./methods/utils";
 import { db, eq, Standups, Workspace, Workspaces } from "./orm";
 import { handlers } from "./routes";
@@ -60,6 +62,16 @@ export class SlackApp extends App {
         });
     });
 
+    this.event("app_home_opened", async (message) => {
+      if (message.ack) await (message as any).ack();
+      logInfo("app_home_opened", message.body.team_id, message.context.userId);
+      postWelcomeMessage({
+        app: this,
+        token: message.body.token,
+        channel: message.context.userId,
+      });
+    });
+
     return super.start();
   }
 
@@ -100,7 +112,12 @@ export class SlackApp extends App {
             const teamId = installation.team?.id || installation.enterprise?.id;
             logInfo("Successful install", teamId);
 
-            // @todo: send user a thank you message on slack
+            postWelcomeMessage({
+              app: this,
+              token: installation.bot?.token,
+              channel: installation.user.id,
+            });
+
             res.writeHead(302, {
               Location: AFTER_SIGN_IN_URI,
             });
@@ -188,32 +205,13 @@ export class SlackApp extends App {
           }
         },
         deleteInstallation: async (installQuery) => {
-          try {
-            // Bolt will pass your handler an installQuery object
-            const slackWorkspaceId =
-              installQuery.isEnterpriseInstall &&
-              installQuery.enterpriseId !== undefined
-                ? installQuery.enterpriseId
-                : installQuery.teamId;
-
-            logInfo("deleteInstallation", slackWorkspaceId);
-
-            if (!slackWorkspaceId) {
-              throw new Error("Workspace ID not found", {
-                cause: installQuery,
-              });
-            }
-
-            const workspaces = await db
-              .delete(Workspaces)
-              .where(eq(Workspaces.slackWorkspaceId, slackWorkspaceId))
-              .returning()
-              .execute();
-            return workspaces[0];
-          } catch (error: any) {
-            logInfo("Failed deleting workspace", error?.message);
-            return null as any;
-          }
+          // Bolt will pass your handler an installQuery object
+          const slackWorkspaceId =
+            installQuery.isEnterpriseInstall &&
+            installQuery.enterpriseId !== undefined
+              ? installQuery.enterpriseId
+              : installQuery.teamId;
+          deleteWorkspace({ slackWorkspaceId, APP: this });
         },
       },
       ...options,

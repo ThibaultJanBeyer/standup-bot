@@ -33,7 +33,6 @@ export const insertUsersFromWorkspace = async (
   }
 
   if (userList?.members?.length) {
-    console.info("insertUsersFromWorkspace userList", userList.members);
     const members = userList.members.flatMap((member) => {
       if (
         member.is_bot ||

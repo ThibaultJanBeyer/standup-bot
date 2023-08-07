@@ -11,6 +11,7 @@ import {
 } from "./methods/100_initStandup";
 import { handleUserMessage } from "./methods/120_startStandup";
 import { postStandup } from "./methods/200_postStandup";
+import { checkToken } from "./methods/checkToken";
 import { ConversationState } from "./methods/conversationState";
 import {
   BotStateMachine,
@@ -85,11 +86,20 @@ export class StandupBot {
       if (!standup?.workspace) throw new Error("No standup found");
 
       this.slackWorkspaceId = standup.slackWorkspaceId;
-      logInfo("init job", this.slackWorkspaceId);
       this.token = standup.workspace.botToken;
       this.channel = standup.channelId;
       this.members = standup.members;
       this.questions = standup.questions;
+      logInfo("init job", this.slackWorkspaceId);
+
+      if (
+        !(await checkToken({
+          slackWorkspaceId: this.slackWorkspaceId,
+          token: this.token,
+          APP: this.app,
+        }))
+      )
+        return;
 
       this.botStateMachine.start();
       this.app.client.conversations.join({
@@ -120,7 +130,7 @@ export class StandupBot {
       );
 
       this.remindJob = new CronJob(
-        subtractMinutes(summaryCron.cron, 45),
+        subtractMinutes(summaryCron.cron, 40),
         () => {
           try {
             logInfo("remind job", this.slackWorkspaceId);

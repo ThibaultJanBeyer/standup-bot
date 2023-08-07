@@ -1,8 +1,9 @@
-import { type App } from "@slack/bolt";
+import { type StandupBot } from "@/StandupBot";
+
+import { checkToken } from "./checkToken";
 
 type Props = {
-  app: App;
-  token: string;
+  BOT: StandupBot;
   channel: string;
   ts: string;
   text: string;
@@ -10,16 +11,23 @@ type Props = {
 };
 
 export const updateMessage = async ({
-  app,
-  token,
+  BOT,
   channel,
   ts,
   text,
   blocks,
 }: Props) => {
   try {
-    return await app.client.chat.update({
-      token,
+    if (
+      !(await checkToken({
+        slackWorkspaceId: BOT.slackWorkspaceId,
+        token: BOT.token,
+        APP: BOT.app,
+      }))
+    )
+      return;
+    return await BOT.app.client.chat.update({
+      token: BOT.token,
       channel,
       ts,
       text,

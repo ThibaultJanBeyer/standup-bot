@@ -3,7 +3,7 @@ import { StandupBot } from "@/StandupBot";
 import { isMyAnswerMessage } from "./isMyAnswerMessage";
 import { postMessage } from "./postMessage";
 import { updateMessage } from "./updateMessage";
-import { logInfo, SlackMessage, typeSafeUserState } from "./utils";
+import { logInfo, typeSafeUserState } from "./utils";
 
 export const startStandup = async (
   BOT: StandupBot,
@@ -11,8 +11,7 @@ export const startStandup = async (
 ) => {
   console.info("startStandup", { channel, member });
   await updateMessage({
-    app: BOT.app,
-    token: BOT.token,
+    BOT,
     channel,
     ts,
     text: "Marked: standup started",
@@ -31,7 +30,7 @@ export const startStandup = async (
 };
 
 export const handleUserMessage = (BOT: StandupBot) => async (props: any) => {
-  if (!isMyAnswerMessage(BOT)(props)) return;
+  if (!(await isMyAnswerMessage(BOT)(props))) return;
   // we know that the message is for us as it was vetted using isMyAnswer
   const { event, message } = props;
 

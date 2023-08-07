@@ -1,6 +1,7 @@
 // WEB
 export const AFTER_SIGN_IN_PATH = "/standups";
 export const AFTER_SIGN_IN_URI = `${process.env.PROTOCOL}${process.env.WEB_URI}${AFTER_SIGN_IN_PATH}`;
+export const SIGN_OUT_PATH = "/auth/sign-out";
 export const AUTH_PATH = "/auth/sign-in";
 export const AUTH_URI = `${process.env.PROTOCOL}${process.env.WEB_URI}${AUTH_PATH}`;
 export const AUTH_BOT_PATH = "/auth/sign-bot";

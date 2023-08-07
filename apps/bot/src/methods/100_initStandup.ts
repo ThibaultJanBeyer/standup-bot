@@ -1,11 +1,10 @@
-import { StandupBot } from "../StandupBot";
+import { type StandupBot } from "../StandupBot";
 import { notWorking } from "./110_notWorking";
 import { startStandup } from "./120_startStandup";
 import { addUserMeta } from "./addUserMeta";
 import { createConversationStateMember } from "./conversationState";
 import { openConversation } from "./openConversation";
 import { postMessage } from "./postMessage";
-import { updateMessage } from "./updateMessage";
 import { logInfo } from "./utils";
 
 export const initStandup = async (BOT: StandupBot) => {
@@ -21,8 +20,7 @@ export const initStandup = async (BOT: StandupBot) => {
     BOT.conversationState.users[member] = createConversationStateMember();
     await addUserMeta(BOT, member);
     const channel = await openConversation({
-      app: BOT.app,
-      token: BOT.token,
+      BOT,
       member,
     });
     if (!channel) continue;
@@ -85,8 +83,7 @@ export const notWorkingClickHandler =
     await ack();
     if (!channel || !ts) return;
     await notWorking({
-      app: BOT.app!,
-      token: BOT.token,
+      BOT,
       channel,
       ts,
     });

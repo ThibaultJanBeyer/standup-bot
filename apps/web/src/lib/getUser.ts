@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { db, eq, Users } from "@/lib/orm";
 
 import { authOptions } from "../app/api/auth/[...nextauth]/route";
+import { isTokenValid } from "./helpers";
 
 export default async function getUser() {
   const session = await getServerSession(authOptions);
@@ -14,7 +15,13 @@ export default async function getUser() {
     },
     where: eq(Users.id, userId),
   }).execute();
-  if (!user?.workspace || !user.slackWorkspaceId) return null;
+  if (
+    !user?.workspace ||
+    !user.slackWorkspaceId ||
+    !(await isTokenValid(user.workspace.botToken))
+  )
+    return null;
+
   return {
     ...user,
     slackWorkspaceId: user.slackWorkspaceId,

@@ -1,15 +1,24 @@
-import { type App } from "@slack/bolt";
+import { type StandupBot } from "@/StandupBot";
+
+import { checkToken } from "./checkToken";
 
 type Props = {
-  app: App;
-  token: string;
+  BOT: StandupBot;
   member: string;
 };
 
-export const openConversation = async ({ app, member, token }: Props) => {
+export const openConversation = async ({ member, BOT }: Props) => {
   try {
-    const conversation = await app.client.conversations.open({
-      token,
+    if (
+      !(await checkToken({
+        slackWorkspaceId: BOT.slackWorkspaceId,
+        token: BOT.token,
+        APP: BOT.app,
+      }))
+    )
+      return;
+    const conversation = await BOT.app.client.conversations.open({
+      token: BOT.token,
       users: member,
     });
     return conversation?.channel?.id;

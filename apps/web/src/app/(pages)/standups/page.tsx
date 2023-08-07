@@ -13,14 +13,14 @@ import {
   TableHeader,
   TableRow,
 } from "@ssb/ui/table";
-import { AUTH_PATH } from "@ssb/utils/src/constants";
+import { SIGN_OUT_PATH } from "@ssb/utils/src/constants";
 
 import getUser from "@/lib/getUser";
 import { db } from "@/lib/orm";
 
 export default async function StandupList() {
   const user = await getUser();
-  if (!user) return redirect(AUTH_PATH);
+  if (!user) return redirect(SIGN_OUT_PATH);
   const standups = await db.query.Standups.findMany({
     with: {
       author: true,

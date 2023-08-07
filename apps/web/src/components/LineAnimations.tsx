@@ -33,10 +33,6 @@ export const LineAnimationTop = () => {
 
   if (!anchor) return null;
 
-  const initHeight = 585;
-  const height =
-    anchor.y - initHeight > 0 ? initHeight + anchor.y - initHeight : initHeight;
-
   return (
     <>
       <svg
@@ -46,8 +42,8 @@ export const LineAnimationTop = () => {
           left: `${anchor.x / 2 - 1.5}px`,
         }}
         width="3"
-        height={height}
-        viewBox={`0 0 3 ${height}`}
+        height={anchor.y}
+        viewBox={`0 0 3 ${anchor.y}`}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -55,7 +51,7 @@ export const LineAnimationTop = () => {
           x1="1.5"
           y1="-3.03916e-10"
           x2="1.5"
-          y2={height}
+          y2={anchor.y}
           stroke="url(#paint0_linear_479_26)"
           strokeWidth="3"
           initial={{ pathLength: 0 }}
@@ -98,9 +94,6 @@ export const LineAnimationTop = () => {
 export const LinearAnimationMiddle = () => {
   const [anchor, setAnchor] = useState(null as { x: number; y: number } | null);
   const [isInView, setIsInView] = useState(false);
-  const { scrollY } = useScroll();
-  // const sizeAnim = useTransform(scrollY, [0, 400, 700], [0, 0.0001, 1]);
-  // const sizeAnim2 = useTransform(scrollY, [0, 600, 700], [0, 0.0001, 1]);
 
   const updatePos = () => {
     const anchor = document.querySelector("#feature-anchor") as HTMLElement;
@@ -119,12 +112,8 @@ export const LinearAnimationMiddle = () => {
 
   if (!anchor) return null;
 
-  const initLength = 1100;
-  const length =
-    initLength + document.body.offsetWidth - initLength - anchor.x / 2;
-
-  const initHeight = 400;
-  const height = initHeight;
+  const length = document.body.offsetWidth - anchor.x / 2;
+  const height = 400;
 
   return (
     <>
@@ -195,15 +184,11 @@ export const LineAnimationBottom = () => {
   const [anchor, setAnchor] = useState(null as { x: number; y: number } | null);
   const [isInView, setIsInView] = useState(false);
 
-  console.log(anchor);
-
   const updatePos = () => {
     const primary = document.querySelector("#showcase-primary") as HTMLElement;
     setAnchor(() => ({
-      y:
-        primary.parentElement?.offsetTop ||
-        0 + (primary.parentElement?.offsetHeight || 0) / 2,
-      x: primary.parentElement?.offsetLeft || 0,
+      y: primary.parentElement?.offsetTop!,
+      x: primary.parentElement?.offsetLeft!,
     }));
   };
 
@@ -220,7 +205,7 @@ export const LineAnimationBottom = () => {
       <svg
         className="absolute opacity-60"
         style={{
-          top: `${anchor.y - 684}px`,
+          top: `${anchor.y - 400}px`,
           left: `${anchor.x / 2 - 1.5}px`,
         }}
         width="3"
@@ -266,7 +251,10 @@ export const LineAnimationBottom = () => {
           damping: 8,
           type: "spring",
         }}
-        style={{ left: `${anchor.x / 2 - 5}px`, top: `${anchor.y - 5}px` }}
+        style={{
+          left: `${anchor.x / 2 - 5}px`,
+          top: `${anchor.y + 280 - 5}px`,
+        }}
         className="ball-shadow-dark absolute h-[10px] w-[10px] rounded-full border bg-purple-200"
       />
     </>

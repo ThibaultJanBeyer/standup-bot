@@ -12,7 +12,7 @@ export const SectionShowcase = ({
 }: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>) => {
   return (
     <section
-      className={`grid-areas-imageTextSlim lg:grid-areas-imageText grid items-start gap-24 ${className}`}
+      className={`grid-areas-imageTextSlim lg:grid-areas-imageText grid items-start gap-32 md:gap-24 ${className}`}
       {...props}
     >
       <FeatureCards style={{ gridArea: "image" }} />

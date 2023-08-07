@@ -1,19 +1,17 @@
-import { App } from "@slack/bolt";
+import { type StandupBot } from "@/StandupBot";
 
 import { postMessage } from "./postMessage";
 import { updateMessage } from "./updateMessage";
 
 type Props = {
-  app: App;
-  token: string;
+  BOT: StandupBot;
   channel: string;
   ts: string;
 };
 
-export const notWorking = async ({ app, token, channel, ts }: Props) => {
+export const notWorking = async ({ BOT, channel, ts }: Props) => {
   await updateMessage({
-    app,
-    token,
+    BOT,
     channel,
     ts,
     text: "Marked: not working today",
@@ -30,8 +28,8 @@ export const notWorking = async ({ app, token, channel, ts }: Props) => {
 
   try {
     await postMessage({
-      app,
-      token,
+      app: BOT.app,
+      token: BOT.token,
       channel,
       text: "Ok, see you tomorrow :wave:",
     });

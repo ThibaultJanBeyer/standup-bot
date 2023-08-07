@@ -99,11 +99,11 @@ export default function StandupsFormFields({
   return (
     <FormProvider {...form}>
       <Form.Root onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField key="name" errors={errors} label="Name">
+        <FormField name="name" errors={errors} label="Name">
           <Input {...form.register("name")} />
         </FormField>
         <FormField
-          key="scheduleCron"
+          name="scheduleCron"
           errors={errors}
           label="Select time to send-out questionnaire (in UTC):"
         >
@@ -113,7 +113,7 @@ export default function StandupsFormFields({
           />
         </FormField>
         <FormField
-          key="summaryCron"
+          name="summaryCron"
           errors={errors}
           label="Select time to send-out summary (in UTC):"
         >
@@ -123,7 +123,7 @@ export default function StandupsFormFields({
           />
         </FormField>
         <FormField
-          key="questions"
+          name="questions"
           errors={errors}
           label="Questions the BOT is asking:"
         >
@@ -171,7 +171,7 @@ export default function StandupsFormFields({
           </>
         </FormField>
         <FormField
-          key="channelId"
+          name="channelId"
           errors={errors}
           label="Channel (where the summary gets posted)"
         >
@@ -196,7 +196,7 @@ export default function StandupsFormFields({
           )}
         </FormField>
         <FormField
-          key="members"
+          name="members"
           errors={errors}
           label="Select users to participate in this standup"
         >
@@ -226,19 +226,19 @@ export default function StandupsFormFields({
 }
 
 const FormField = <T extends keyof FormData>({
-  key,
+  name,
   label,
   errors,
   children,
 }: {
-  key: T;
+  name: T;
   label: string;
   errors: FieldErrors<FormData>;
   children: React.ReactNode;
 }) => {
-  const error = errors[key]?.message;
+  const error = errors[name]?.message;
   return (
-    <Form.Field name={key} className="mb-10">
+    <Form.Field name={name} className="mb-10">
       <Form.Label className="mb-2 block font-bold">
         {label}
         {error && (
