@@ -2,7 +2,7 @@ import NextAuth, { AuthOptions } from "next-auth";
 import SlackProvider from "next-auth/providers/slack";
 
 import { insertUsersFromWorkspace } from "@ssb/utils";
-import { AFTER_SIGN_IN_URI, AUTH_BOT_URI } from "@ssb/utils/src/constants";
+import { AUTH_BOT_URI } from "@ssb/utils/src/constants";
 
 import { isTokenValid } from "@/lib/helpers";
 import { db, eq, Users, Workspaces } from "@/lib/orm";
@@ -47,7 +47,7 @@ export const authOptions: AuthOptions = {
 
       if (!(await isTokenValid(workspace?.botToken))) return AUTH_BOT_URI;
 
-      return AFTER_SIGN_IN_URI;
+      return true;
     },
     async session({ session, token }) {
       const user = await db.query.Users.findFirst({

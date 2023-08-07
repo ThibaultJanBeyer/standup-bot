@@ -4,7 +4,7 @@ import { ParamsIncomingMessage } from "@slack/bolt/dist/receivers/ParamsIncoming
 
 import { insertUsersFromWorkspace } from "@ssb/utils";
 import {
-  AFTER_SIGN_IN_URI,
+  AUTH_URI,
   INSTALL_SLACK_PATH,
   REDIRECT_SLACK_PATH,
   REDIRECT_SLACK_URI,
@@ -119,7 +119,7 @@ export class SlackApp extends App {
             });
 
             res.writeHead(302, {
-              Location: AFTER_SIGN_IN_URI,
+              Location: AUTH_URI,
             });
             res.end();
           },
