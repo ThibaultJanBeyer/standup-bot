@@ -30,13 +30,13 @@ export const initStandup = async (BOT: StandupBot) => {
       app: BOT.app,
       token: BOT.token,
       channel,
-      text: "Hello mate :wave:, it’s standup time!",
+      text: "Hello :wave:, it’s standup time!",
       blocks: [
         {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `Hello mate :wave:, it’s standup time!`,
+            text: `Hello :wave:, it’s standup time!`,
           },
           accessory: {
             type: "button",
