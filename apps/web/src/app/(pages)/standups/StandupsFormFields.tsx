@@ -105,7 +105,7 @@ export default function StandupsFormFields({
         <FormField
           name="scheduleCron"
           errors={errors}
-          label="Select time to send-out questionnaire (in UTC):"
+          label="Select time to send-out questionnaire:"
         >
           <CronPicker
             onChange={(val: string) => form.setValue("scheduleCron", val)}
@@ -115,7 +115,7 @@ export default function StandupsFormFields({
         <FormField
           name="summaryCron"
           errors={errors}
-          label="Select time to send-out summary (in UTC):"
+          label="Select time to send-out summary:"
         >
           <CronPicker
             onChange={(val: string) => form.setValue("summaryCron", val)}
