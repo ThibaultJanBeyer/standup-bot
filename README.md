@@ -1,4 +1,4 @@
-# Standup Bot
+# Akira Standup Bot
 
 All you need to know on:
 [https://www.standup-bot.com](https://www.standup-bot.com)
