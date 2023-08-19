@@ -22,7 +22,7 @@ export const SectionInstall = ({
     >
       <div>
         <h1 className="font-headline mb-8 text-7xl">
-          Install, Your{" "}
+          Install Akira, your{" "}
           <span className="text-gradient block">
             Standup
             <br />

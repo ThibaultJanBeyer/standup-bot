@@ -22,7 +22,7 @@ export function SiteHeader() {
         <div className="m-auto grid grid-cols-[auto_1fr_auto] p-4">
           <div className="pointer-events-auto">
             <Button asChild variant="ghost">
-              <Link href={`/`}>SSB</Link>
+              <Link href={`/`}>Akira</Link>
             </Button>
           </div>
           <div></div>

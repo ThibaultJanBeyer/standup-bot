@@ -12,10 +12,10 @@ import { SessionProvider } from "./SessionProvider";
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: {
-      default: "SSB",
-      template: "%s | SSB",
+      default: "Akira – The simple standup bot",
+      template: "%s | Akira",
     },
-    description: "Simple Standup Bot",
+    description: "Akira, the simple standup bot",
     themeColor: [
       { media: "(prefers-color-scheme: light)", color: "white" },
       { media: "(prefers-color-scheme: dark)", color: "black" },
@@ -28,9 +28,9 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       locale: "en_US",
       type: "website",
-      siteName: "SSB",
-      title: "SSB",
-      description: "Simple Standup Bot",
+      siteName: "Akira",
+      title: "Akira",
+      description: "Akira, the simple standup bot",
       images: [
         {
           url: "/api/cms/og",

@@ -17,12 +17,12 @@ export const SectionShowcase = ({
     >
       <FeatureCards style={{ gridArea: "image" }} />
       <div style={{ gridArea: "text" }}>
-        <h2 className="text-gradient mb-5 inline-block">Get Upped’</h2>
+        <h2 className="text-gradient mb-5 inline-block">Get Akira</h2>
         <h3 className="font-headline mb-8 inline-block text-6xl">
-          What makes Stand-Up Bot so special?
+          What makes Akira so special?
         </h3>
         <p className="text-l mb-10">
-          Automate your entire stand-up process with Stand-Up Bot. Set up a
+          Automate your entire stand-up process with Akira, your Stand-Up Bot. Set up a
           schedule, choose your questions, and let the bot handle the rest.
         </p>
         <ShowcaseBullet
