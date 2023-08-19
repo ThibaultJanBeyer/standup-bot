@@ -6,10 +6,10 @@ IMG_NAME="ssb"
 IMG_VER=`cat ${CONFIG} | grep '"version"' | awk 'BEGIN{FS="\""} {print $4}'`
 
 docker pull ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_VER}
-if [[ $(docker ps -aq) ]]; then
-  docker stop $(docker ps -aq)
-  docker rm $(docker ps -aq)
+if [[ $(docker ps -aqf name=${IMG_NAME}) ]]; then
+  docker stop ${IMG_NAME}
+  docker rm ${IMG_NAME}
 fi
 # docker rmi $(docker images -aq)
-docker run -d -p 3000:3000 -p 3001:3001 --restart unless-stopped --name ssb ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_VER}
+docker run -d -p 3000:3000 -p 3001:3001 --restart unless-stopped --name ${IMG_NAME} ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_VER}
 docker image prune -af
