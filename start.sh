@@ -11,5 +11,5 @@ if [[ $(docker ps -aqf name=${IMG_NAME}) ]]; then
   docker rm ${IMG_NAME}
 fi
 # docker rmi $(docker images -aq)
-docker run -d -p 3000:3000 -p 3001:3001 --restart unless-stopped --name ${IMG_NAME} ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_VER}
+docker run -d -p 127.0.0.1:3000:3000 -p 127.0.0.1:3001:3001 --restart unless-stopped --name ${IMG_NAME} ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_VER}
 docker image prune -af
