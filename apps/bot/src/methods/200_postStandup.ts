@@ -97,7 +97,7 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `<@${member}> posted an update for Standup report:`,
+        text: `<@${member}> posted an update:`,
       },
     });
 
@@ -136,7 +136,7 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `<@${member}> did not participate in Standup today ${
+            text: `<@${member}> did not participate ${
               userState.meta.statusEmoji
                 ? `(${userState.meta.statusEmoji} ${userState.meta.statusText})`
                 : ""
