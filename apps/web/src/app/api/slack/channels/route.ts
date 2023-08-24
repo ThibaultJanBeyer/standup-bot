@@ -18,7 +18,7 @@ export const GET = async () => {
   else {
     const client = new WebClient(user.workspace.botToken);
     channels = await getChannels(client);
-    simpleMemoryCache.cacheItem(key, channels, 60 * 60);
+    simpleMemoryCache.cacheItem(key, channels, 60 * 5 * 1000);
   }
 
   return NextResponse.json(
