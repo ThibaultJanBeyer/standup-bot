@@ -26,14 +26,10 @@ export const notWorking = async ({ BOT, channel, ts }: Props) => {
     ],
   });
 
-  try {
-    await postMessage({
-      app: BOT.app,
-      token: BOT.token,
-      channel,
-      text: "Ok, see you tomorrow :wave:",
-    });
-  } catch (error) {
-    console.error("Error in notWorking", error);
-  }
+  return await postMessage({
+    app: BOT.app,
+    token: BOT.token,
+    channel,
+    text: "Ok, see you tomorrow :wave:",
+  });
 };

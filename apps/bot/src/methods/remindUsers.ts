@@ -14,17 +14,18 @@ export const remindUsers = async (BOT: StandupBot) => {
       member,
     });
     if (
+      !BOT.app ||
       !channel ||
       !userState ||
       userState?.answers?.length ||
-      !BOT.app ||
+      userState?.botMessages.NOT_WORKING.length ||
       userState?.meta.statusEmoji === ":face_with_thermometer:" ||
       userState?.meta.statusEmoji === ":palm_tree:"
     )
       continue;
 
     const remindMessage = await postMessage({
-      app: BOT.app!,
+      app: BOT.app,
       token: BOT.token,
       channel,
       text: "Please don’t forget to fill in your updates :hugging_face:",

@@ -82,12 +82,15 @@ export const notWorkingClickHandler =
     logInfo("click: not working", BOT.slackWorkspaceId);
     await ack();
     if (!channel || !ts) return;
-    await notWorking({
+    const notWorkingMessage = await notWorking({
       BOT,
       channel,
       ts,
     });
     BOT.conversationState.users[body.user.id]!.answers = null;
+    BOT.conversationState.users[body.user.id]!.botMessages.NOT_WORKING.push({
+      ts: notWorkingMessage?.ts || "",
+    });
     BOT.botStateMachine.send("NOT_WORKING");
   };
 
