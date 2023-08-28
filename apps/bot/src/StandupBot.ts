@@ -4,12 +4,12 @@ import { CronJob } from "cron";
 import { parseCustomCronString } from "@ssb/utils";
 
 import { SlackApp } from "./app";
+import { initStandup } from "./methods/100_initStandup";
+import { notWorkingClickHandler } from "./methods/110_notWorking";
 import {
-  initStandup,
-  notWorkingClickHandler,
+  handleUserMessage,
   startStandupClickHandler,
-} from "./methods/100_initStandup";
-import { handleUserMessage } from "./methods/120_startStandup";
+} from "./methods/120_startStandup";
 import { postStandup } from "./methods/200_postStandup";
 import { checkToken } from "./methods/checkToken";
 import { ConversationState } from "./methods/conversationState";

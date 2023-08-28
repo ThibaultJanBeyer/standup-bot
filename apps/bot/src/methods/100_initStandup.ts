@@ -1,11 +1,9 @@
 import { type StandupBot } from "../StandupBot";
-import { notWorking } from "./110_notWorking";
-import { startStandup } from "./120_startStandup";
+import { checkNotWorkingEmoji } from "./110_notWorking";
 import { addUserMeta } from "./addUserMeta";
 import { createConversationStateMember } from "./conversationState";
 import { openConversation } from "./openConversation";
 import { postMessage } from "./postMessage";
-import { logInfo } from "./utils";
 
 export const initStandup = async (BOT: StandupBot) => {
   BOT.botStateMachine.send("INIT");
@@ -19,6 +17,9 @@ export const initStandup = async (BOT: StandupBot) => {
   for (const member of BOT.members) {
     BOT.conversationState.users[member] = createConversationStateMember();
     await addUserMeta(BOT, member);
+
+    if (await checkNotWorkingEmoji(BOT, member)) continue;
+
     const channel = await openConversation({
       BOT,
       member,
@@ -73,34 +74,3 @@ export const initStandup = async (BOT: StandupBot) => {
 
   BOT.botStateMachine.send("INIT_DONE");
 };
-
-export const notWorkingClickHandler =
-  (BOT: StandupBot) =>
-  async ({ body, ack }: any) => {
-    const channel = body?.channel?.id;
-    const ts = (body as any).message.ts;
-    logInfo("click: not working", BOT.slackWorkspaceId);
-    await ack();
-    if (!channel || !ts) return;
-    const notWorkingMessage = await notWorking({
-      BOT,
-      channel,
-      ts,
-    });
-    BOT.conversationState.users[body.user.id]!.answers = null;
-    BOT.conversationState.users[body.user.id]!.botMessages.NOT_WORKING.push({
-      ts: notWorkingMessage?.ts || "",
-    });
-    BOT.botStateMachine.send("NOT_WORKING");
-  };
-
-export const startStandupClickHandler =
-  (BOT: StandupBot) =>
-  async ({ body, ack }: any) => {
-    const channel = body?.channel?.id;
-    const ts = (body as any).message.ts;
-    logInfo("click: start", BOT.slackWorkspaceId);
-    await ack();
-    if (!channel || !ts) return;
-    await startStandup(BOT, { channel, ts, member: body.user.id });
-  };

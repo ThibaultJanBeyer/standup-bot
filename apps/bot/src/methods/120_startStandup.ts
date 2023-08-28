@@ -5,6 +5,17 @@ import { postMessage } from "./postMessage";
 import { updateMessage } from "./updateMessage";
 import { logInfo, typeSafeUserState } from "./utils";
 
+export const startStandupClickHandler =
+  (BOT: StandupBot) =>
+  async ({ body, ack }: any) => {
+    const channel = body?.channel?.id;
+    const ts = (body as any).message.ts;
+    logInfo("click: start", BOT.slackWorkspaceId);
+    await ack();
+    if (!channel || !ts) return;
+    await startStandup(BOT, { channel, ts, member: body.user.id });
+  };
+
 export const startStandup = async (
   BOT: StandupBot,
   { channel, ts, member }: { channel: string; ts: string; member: string },
