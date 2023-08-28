@@ -84,12 +84,18 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
   if (!userState) return { blocks };
   const answers = userState.answers;
 
+  const emoji = `${
+    userState.meta.statusEmoji
+      ? `(${userState.meta.statusEmoji} ${userState.meta.statusText})`
+      : ""
+  }`;
+
   if (answers === null) {
     blocks.push({
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `<@${member}> is not working today`,
+        text: `<@${member}> is not working today ${emoji}`,
       },
     });
   } else {
@@ -136,11 +142,7 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `<@${member}> did not participate ${
-              userState.meta.statusEmoji
-                ? `(${userState.meta.statusEmoji} ${userState.meta.statusText})`
-                : ""
-            }`,
+            text: `<@${member}> did not participate ${emoji}`,
           },
         },
       ];
