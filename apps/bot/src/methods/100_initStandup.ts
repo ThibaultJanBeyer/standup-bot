@@ -18,7 +18,8 @@ export const initStandup = async (BOT: StandupBot) => {
     BOT.conversationState.users[member] = createConversationStateMember();
     await addUserMeta(BOT, member);
 
-    if (await checkNotWorkingEmoji(BOT, member)) continue;
+    // removing for now because the status might expire after the message
+    // if (await checkNotWorkingEmoji(BOT, member)) continue;
 
     const channel = await openConversation({
       BOT,
