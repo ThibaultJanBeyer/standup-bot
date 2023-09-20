@@ -13,7 +13,7 @@
     "@slack/web-api": "^6.9.0"
   },
   "devDependencies": {
-    "eslint": "^8.46.0",
-    "typescript": "^5.1.6"
+    "eslint": "^8.49.0",
+    "typescript": "^5.2.2"
   }
 }
