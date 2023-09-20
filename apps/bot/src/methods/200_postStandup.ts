@@ -122,12 +122,12 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
       );
 
       const textAnswer = answerMessage?.text !== "" && answerMessage?.text;
-      const imageAnswers = answerMessage?.blocks?.filter((block) =>
+      const imageBlocksAnswers = answerMessage?.blocks?.filter((block) =>
         Boolean(block.image_url),
       );
 
       const noAnswer =
-        (!textAnswer && !imageAnswers?.length) ||
+        (!textAnswer && !imageBlocksAnswers?.length && !fileAnswers?.length) ||
         !answer.question ||
         answer.question === "" ||
         (textAnswer && BOT.questions.includes(textAnswer));
@@ -137,12 +137,14 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*${answer.question}*${!imageAnswers ? `\n${textAnswer}` : ""}`,
+          text: `*${answer.question}*${
+            !imageBlocksAnswers ? `\n${textAnswer}` : ""
+          }`,
         },
       });
       // multiple images are attached as blocks
-      if (imageAnswers?.length) {
-        imageAnswers!.forEach((imgBlock, id) =>
+      if (imageBlocksAnswers?.length) {
+        imageBlocksAnswers!.forEach((imgBlock, id) =>
           blocks.push({
             type: "image",
             image_url: imgBlock.image_url,
