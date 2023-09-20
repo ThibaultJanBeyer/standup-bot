@@ -61,21 +61,22 @@ const handlePrivateMessages = async (BOT: StandupBot, member: string) => {
     });
 
   // normal behavior
-  await updateMessage({
-    BOT,
-    channel,
-    ts: userState.botMessages.INIT[0]!.ts,
-    text: "Marked: standup concluded",
-    blocks: [
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `~~ Standup Concluded ${new Date().toDateString()} ~~`,
+  if (userState.botMessages.INIT[0]!.ts)
+    await updateMessage({
+      BOT,
+      channel,
+      ts: userState.botMessages.INIT[0]!.ts,
+      text: "Marked: standup concluded",
+      blocks: [
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `~~ Standup Concluded ${new Date().toDateString()} ~~`,
+          },
         },
-      },
-    ],
-  });
+      ],
+    });
 };
 
 const getUserMessage = async (BOT: StandupBot, member: string) => {
@@ -114,26 +115,49 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
         oldest: answer.questionMessageTs,
       });
 
-      const answerMessage = conversation?.messages?.find(
-        (message) => message.client_msg_id === answer.client_msg_id,
+      const answerMessage = conversation?.messages?.find((message) =>
+        message.client_msg_id
+          ? message.client_msg_id === answer.client_msg_id
+          : message.ts === answer.ts,
+      );
+
+      const textAnswer = answerMessage?.text !== "" && answerMessage?.text;
+      const imageAnswers = answerMessage?.blocks?.filter((block) =>
+        Boolean(block.image_url),
       );
 
       const noAnswer =
-        !answerMessage ||
-        !answerMessage.text ||
-        answerMessage.text === "" ||
+        (!textAnswer && !imageAnswers?.length) ||
         !answer.question ||
         answer.question === "" ||
-        BOT.questions.includes(answerMessage.text);
+        (textAnswer && BOT.questions.includes(textAnswer));
       if (noAnswer) continue;
 
       blocks.push({
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*${answer.question}*\n${answerMessage.text}`,
+          text: `*${answer.question}*${!imageAnswers ? `\n${textAnswer}` : ""}`,
         },
       });
+      // multiple images are attached as blocks
+      if (imageAnswers?.length) {
+        imageAnswers!.forEach((imgBlock, id) =>
+          blocks.push({
+            type: "image",
+            image_url: imgBlock.image_url,
+            alt_text: imgBlock.alt_text,
+            ...(textAnswer && id === 0
+              ? {
+                  title: {
+                    type: "plain_text",
+                    text: textAnswer,
+                  },
+                }
+              : {}),
+          }),
+        );
+      }
     }
 
     if (blocks.length === 1) {

@@ -36,7 +36,8 @@ export type UserState = {
 };
 
 export type Answer = {
-  client_msg_id: string;
+  client_msg_id?: string; // id is either the msg id or the ts
+  ts?: string;
   question: string;
   channel: string;
   questionMessageTs: string;
@@ -58,4 +59,4 @@ export const createConversationStateMember = () =>
       statusEmoji: "",
       statusText: "",
     },
-  } as UserState);
+  }) as UserState;

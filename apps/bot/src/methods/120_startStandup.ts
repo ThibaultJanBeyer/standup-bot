@@ -54,6 +54,7 @@ export const handleUserMessage = (BOT: StandupBot) => async (props: any) => {
 
   answers?.push({
     client_msg_id: message.client_msg_id,
+    ts: message.ts,
     question: question?.message || "",
     channel: event.channel,
     questionMessageTs: question?.ts || "",

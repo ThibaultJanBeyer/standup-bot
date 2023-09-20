@@ -34,8 +34,11 @@ export const isMyAnswerMessage =
       !answers ||
       event.channel_type !== "im" || // we don't want to track group messages
       event.thread_ts || // we don't want to track thread messages
-      !message.client_msg_id || // already tracked answer
-      answers.some((answer) => answer.client_msg_id === message.client_msg_id) // not the same answer message
+      answers.some((answer) =>
+        message.client_msg_id
+          ? answer.client_msg_id === message.client_msg_id
+          : answer.ts === message.ts,
+      ) // not the same answer message
     )
       return false;
 
