@@ -6,12 +6,12 @@
     "node": ">=20"
   },
   "scripts": {
-    "ports": "lt --port 3000 & lt --port 3001",
+    "ports": "turbo run dev --filter=localtunnel",
     "clean": "turbo daemon clean && rm -rf node_modules",
     "clean:workspaces": "turbo clean",
     "build": "turbo run build",
     "start": "turbo run start",
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=!localtunnel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:migrate": "turbo run migrate",
@@ -21,7 +21,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "turbo": "^1.10.13"
+    "turbo": "^1.10.14"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
