@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { WebClient } from "@slack/web-api";
 
 import { simpleMemoryCache } from "@ssb/utils";
+import { AUTH_URI } from "@ssb/utils/src/constants";
 
 import getUser from "@/lib/getUser";
 
@@ -17,7 +18,7 @@ export const GET = async (req: NextRequest) => {
     users = simpleMemoryCache.getCachedItem(key);
   else {
     const user = await getUser();
-    if (!user) return null;
+    if (!user) return NextResponse.redirect(AUTH_URI);
 
     const client = new WebClient(user.workspace.botToken);
     users = await getUsersByChannel(client, channelId);
