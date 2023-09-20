@@ -138,7 +138,7 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
         text: {
           type: "mrkdwn",
           text: `*${answer.question}*${
-            !imageBlocksAnswers ? `\n${textAnswer}` : ""
+            !imageBlocksAnswers?.length ? `\n${textAnswer}` : ""
           }`,
         },
       });
