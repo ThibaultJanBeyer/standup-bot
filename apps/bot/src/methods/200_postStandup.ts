@@ -127,7 +127,7 @@ const getUserMessage = async (BOT: StandupBot, member: string) => {
       );
 
       const noAnswer =
-        (!textAnswer && !imageBlocksAnswers?.length && !fileAnswers?.length) ||
+        (!textAnswer && !imageBlocksAnswers?.length) ||
         !answer.question ||
         answer.question === "" ||
         (textAnswer && BOT.questions.includes(textAnswer));
